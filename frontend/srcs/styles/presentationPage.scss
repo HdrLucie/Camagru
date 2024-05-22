@@ -1,0 +1,50 @@
+@import 'all.scss';
+
+$black: #000000;
+$white: #FFFFFF;
+$blue-grey: #3F4C5C;
+$marine: #121435; 
+$pastel: #edebca; 
+$orange: #ff5722; 
+
+* {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	-ms-overflow-style: none;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	font-family: 'Righteous', cursive;
+	text-rendering: optimizeLegibility;
+	font-size: 18px;
+}
+
+::-webkit-scrollbar {
+	width: 0;
+	height: 0;
+	background: transparent;
+}
+
+html, 
+body {
+	display: flex;
+	flex-direction: columns;
+	width: 100vw;
+	height: 100vh;
+	font-size: 16px;
+	overflow: hidden;
+	justify-content: center;
+	align-items: center;
+}
+
+.style {
+	background-color: #000000;
+}
+
+.light-background {
+	background-color: #000000;
+}
+
+p {
+	color : red;
+}
