@@ -1,0 +1,14 @@
+version: '3.9'
+services:
+ database:
+   image: mysql:latest
+   hostname: database
+   container_name: camagruDB
+   restart: always
+   ports:
+     - "3306:3306"
+   environment:
+     - MYSQL_ROOT_PASSWORD=mdp
+     - MYSQL_DATABASE=camagruDB
+   volumes:
+     - ./init.sql:/docker-entrypoint-initdb.d/init.sql

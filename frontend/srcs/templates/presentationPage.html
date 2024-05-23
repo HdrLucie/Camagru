@@ -1,3 +1,53 @@
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"> -->
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("Je passe bien par cette fonction.\n")
+    button = document.getElementById("navigateButton");
+    button.addEventListener("click", function () {
+      window.location.href = "/register";
+    });
+  });
+</script>
+
+<!-- <!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>News App Demo</title>
+  <link rel="stylesheet" href="../styles/presentationPage.scss" type="css/text" />
+</head> -->
+
+<body>
+  <div class="ring">
+    <i style="--clr:#3ec1d3;"></i>
+    <i style="--clr:#ff9a00;"></i>
+    <i style="--clr:#ff165d;"></i>
+    <div class="login">
+      <h2>Login</h2>
+      <div class="inputBx">
+        <input type="text" placeholder="Username">
+      </div>
+      <div class="inputBx">
+        <input type="password" placeholder="Password">
+      </div>
+      <div class="inputBx">
+        <input id="navigateButton" type="submit" value="Sign in">
+      </div>
+      <div class="links">
+        <a href="#">Forget Password</a>
+        <a href="#">Signup</a>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
+
 <style>
   @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap");
 
@@ -146,3 +196,4 @@
     text-decoration: none;
   }
 </style>
+<!-- <style lang="scss" scoped srcs="../styles/presentationPage.scss"></style> -->
