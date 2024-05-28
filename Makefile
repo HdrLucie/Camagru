@@ -1,10 +1,10 @@
 all: build
 
 build:
-	docker-compose up --build --remove-orphans
+	docker compose up --build --remove-orphans
 
 down:
-	docker-compose down -v
+	docker compose down -v
 
 clear:
 	@if [ -n "$$(docker ps -a -q)" ]; then \

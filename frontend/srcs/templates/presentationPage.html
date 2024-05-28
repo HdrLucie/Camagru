@@ -4,8 +4,15 @@
   document.addEventListener("DOMContentLoaded", function () {
     console.log("Je passe bien par cette fonction.\n")
     button = document.getElementById("navigateButton");
+
     button.addEventListener("click", function () {
-      window.location.href = "/register";
+      var user = document.getElementById("Username");
+      var mdp = document.getElementById("Password");
+      
+      var login = Username.value
+      var password = mdp.value
+      console.log("Login : " + login + " Passowrd : " + password);
+      window.location.href = "/gallery";
     });
   });
 </script>
@@ -30,10 +37,10 @@
     <div class="login">
       <h2>Login</h2>
       <div class="inputBx">
-        <input type="text" placeholder="Username">
+        <input type="text" placeholder="Username" id="Username">
       </div>
       <div class="inputBx">
-        <input type="password" placeholder="Password">
+        <input type="password" placeholder="Password" id="Password">
       </div>
       <div class="inputBx">
         <input id="navigateButton" type="submit" value="Sign in">
@@ -51,7 +58,7 @@
 <style>
   @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap");
 
-  * {
+  /* * {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -ms-overflow-style: none;
@@ -67,7 +74,7 @@
     width: 0;
     height: 0;
     background: transparent;
-  }
+  } */
 
 
   body {

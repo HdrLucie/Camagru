@@ -31,9 +31,9 @@ func serveTemplate(templateName string) http.HandlerFunc {
 }
 
 func renderTemplate(mux *http.ServeMux) {
-	mux.HandleFunc("/", serveTemplate("firstPage.html"))
-	mux.HandleFunc("/presentationPage", serveTemplate("presentationPage.html")) // La page de présentation sera servie sur la racine
-	mux.HandleFunc("/register", serveTemplate("register.html"))
+	// mux.HandleFunc("/", serveTemplate("firstPage.html"))
+	mux.HandleFunc("/", serveTemplate("presentationPage.html")) // La page de présentation sera servie sur la racine
+	mux.HandleFunc("/gallery", serveTemplate("gallery.html"))
 
 	// Servir les fichiers statiques
 	fs := http.FileServer(http.Dir("../../frontend/srcs"))
