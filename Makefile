@@ -1,7 +1,7 @@
 all: build
 
 build:
-	docker compose up --build --remove-orphans
+	docker compose up --build --remove-orphans 
 
 down:
 	docker compose down -v
@@ -13,5 +13,7 @@ clear:
 		echo "No containers to remove"; \
 	fi
 
-prune:
-	docker system prune && docker volume prune
+prune: down
+	yes | docker system prune && yes | docker volume prune
+
+re: prune build

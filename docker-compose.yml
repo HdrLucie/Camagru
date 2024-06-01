@@ -1,17 +1,17 @@
 version: '3.9'
 services:
  database:
-   build: .
+   build:
+    context: .
+   command: --default-authentication-plugin=mysql_native_password
    hostname: database
    container_name: camagruDB
    restart: always
    ports:
      - "3306:3306"
    environment:
-     - MYSQL_ROOT_PASSWORD=mdp
-     - MYSQL_DATABASE=camagruDB
-     - MYSQL_USER=test
-     - MYSQL_ROOT_PASSOWRD=mdp
-     - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+     - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+     - MYSQL_DATABASE=${DB_NAME}
+     - MYSQL_USER=${DB_USER}
    volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
