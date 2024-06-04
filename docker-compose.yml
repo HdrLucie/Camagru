@@ -3,15 +3,14 @@ services:
  database:
    build:
     context: .
-   command: --default-authentication-plugin=mysql_native_password
    hostname: database
-   container_name: camagruDB
+   container_name: postgres
    restart: always
    ports:
-     - "3306:3306"
+     - "5432:5432"
    environment:
-     - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
-     - MYSQL_DATABASE=${DB_NAME}
-     - MYSQL_USER=${DB_USER}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
    volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql

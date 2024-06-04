@@ -4,41 +4,76 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"log"
 	"database/sql"
-	"github.com/go-sql-driver/mysql"
+	_ "github.com/lib/pq"
+	"github.com/joho/godotenv"
+	"strconv"
+	"log"
 )
 
-var db *sql.DB
+type DBConfig struct {
+	Host		string
+	Port		int
+	User		string
+	Password	string
+	Name		string
+	SSLMode		string
+}
+
+func getDBConfig() *DBConfig {
+	host, ok := os.LookupEnv("DB_HOST")
+	if !ok {
+		panic("DB_HOST variable not set")
+	}
+	port, ok := os.LookupEnv("DB_PORT")
+	if !ok {
+		panic("DB_PORT variable not set")
+	}
+	portInt, err := strconv.Atoi(port)
+	if err != nil {
+		panic(err)
+	}
+	user, ok := os.LookupEnv("DB_USER")
+	if !ok {
+		panic("DB_USER variable not set")
+	}
+	password, ok := os.LookupEnv("DB_PASSWORD")
+	if !ok {
+		panic("DB_PASSWORD variable not set")
+	}
+	dbname, ok := os.LookupEnv("DB_NAME")
+	if !ok {
+		panic("DB_NAME variable not set")
+	}
+	sslmode, ok := os.LookupEnv("DB_SSLMODE")
+	if !ok {
+		panic("DB_SSLMode variable not set")
+	}
+	return &DBConfig {
+		Host: host,
+		Port: portInt,
+		User: user,
+		Password: password,
+		Name: dbname,
+		SSLMode: sslmode,
+	}
+}
 
 func DBConnection() {
-    cfg := mysql.Config{
-        User:   os.Getenv("DB_USER"),
-        Passwd: os.Getenv("DB_PASSWORD"),
-        Net:    "tcp",
-        Addr:   "127.0.0.1:3306",
-        DBName: os.Getenv("DB_NAME"),
-    }
-	fmt.Println(cfg.User)
-	fmt.Println(cfg.Passwd)
-	fmt.Println(cfg.Net)
-	fmt.Println(cfg.Addr)
-	fmt.Println(cfg.DBName)
-	var err error
-	fmt.Println(cfg.FormatDSN())
-    db, err = sql.Open("mysql", "hlucie:mdp@tcp(127.0.0.1:3306)/camagru")
-    if err != nil {
-        log.Fatal(err)
-    }
-
-	fmt.Println("2")
-    pingErr := db.Ping()
-	fmt.Println("3")
-    if pingErr != nil {
-		fmt.Println("4")
-		log.Fatal(pingErr)
-    }
-    fmt.Println("Connected!")
+	dbConfig := getDBConfig()
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+ 
+	"password=%s dbname=%s sslmode=%s", 
+	dbConfig.Host, dbConfig.Port, dbConfig.User, dbConfig.Password, dbConfig.Name, dbConfig.SSLMode)
+	db, err := sql.Open("postgres", psqlInfo)
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
+	err = db.Ping()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Successfully connected!")
 }
 
 func main() {
@@ -46,7 +81,10 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
-
+	err := godotenv.Load("../../.env")
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 	fmt.Println(port)
 	DBConnection()
 	mux := http.NewServeMux()
