@@ -1,233 +1,224 @@
 <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"> -->
-
-<script>
-  // document.addEventListener("DOMContentLoaded", function () {
-  //   console.log("Je passe bien par cette fonction.\n")
-  //   button = document.getElementById("login");
-
-  //   button.addEventListener("click", function () {
-  //     var user = document.getElementById("Username");
-  //     var mdp = document.getElementById("Password");
-
-  //     var login = Username.value
-  //     var password = mdp.value
-  //     console.log("Login : " + login + " Passowrd : " + password);
-  //     if (login == "" || Username == "") {
-  //       alert("Wrong username or password")
-  //     } else {
-  //       window.location.href = "/gallery";
-  //     }
-  //   });
-  // });
-
-  function login() {
-    var user = document.getElementById("Username");
-      var mdp = document.getElementById("Password");
-
-      var login = Username.value
-      var password = mdp.value
-      console.log("Login : " + login + " Passowrd : " + password);
-      if (login == "" || Username == "") {
-        alert("Wrong username or password")
-      } else {
-        window.location.href = "/gallery";
-      }
-  }
-</script>
-
 <!DOCTYPE html>
 
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>News App Demo</title>
-  <link rel="stylesheet" href="../styles/presentationPage.scss" type="css/text" />
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>News App Demo</title>
+	<link rel="stylesheet" href="../styles/presentationPage.scss" type="css/text" />
 </head>
 
 <body>
-  <!-- <div class="ring">
-    <i style="--clr:#3ec1d3;"></i>
-    <i style="--clr:#ff9a00;"></i>
-    <i style="--clr:#ff165d;"></i>
-    <div class="login">
-      <h2>Login</h2>
-      <div class="inputBx">
-        <input type="text" placeholder="Username" id="Username">
-      </div>
-      <div class="inputBx">
-        <input type="password" placeholder="Password" id="Password">
-      </div>
-      <div class="inputBx">
-        <input id="navigateButton" type="submit" value="Sign in">
-      </div>
-      <div class="links">
-        <a href="#">Forget Password</a>
-        <a href="#">Signup</a>
-      </div>
-    </div>
-  </div> -->
-
-  <div class="main">  	
+	<div class="main">
 		<input type="checkbox" id="chk" aria-hidden="true">
+		<div class="signup">
+			<!-- <form> -->
+			<label for="chk" aria-hidden="true">Sign up</label>
+			<input type="text" id="Username" name="txt" placeholder="Username">
+			<input type="email" id="Email" name="email" placeholder="Email" required="">
+			<input type="password" id="Password" name="pswd" placeholder="Password">
+			<button class="btn" id="signUp">Sign up</button>
+			<!-- </form> -->
+		</div>
 
-			<div class="signup">
-				<form>
-					<label for="chk" aria-hidden="true">Sign up</label>
-					<input type="text" name="txt" placeholder="User name" required="">
-					<input type="email" name="email" placeholder="Email" required="">
-					<input type="password" name="pswd" placeholder="Password" required="">
-					<button>Sign up</button>
-				</form>
-			</div>
-
-			<div class="login">
-				<form>
-					<label for="chk" aria-hidden="true">Login</label>
-					<input type="text" placeholder="Username" id="Username">
-					<input type="password" placeholder="Password" id="Password">
-					<button onclick="login()">Login</button>
-				</form>
-			</div>
+		<div class="login">
+			<!-- <form> -->
+			<label for="chk" aria-hidden="true">Login</label>
+			<input type="text" placeholder="Username" id="UsernameLogin">
+			<input type="password" placeholder="Password" id="PasswordLogin">
+			<button class="btn" id="login">Sign in</button>
+			<!-- </form> -->
+		</div>
 	</div>
 </body>
+
+<script>
+	document.getElementById("login").onclick = function () {
+		var user = document.getElementById("UsernameLogin")
+		var mdp = document.getElementById("PasswordLogin")
+
+		var login = user.value
+		var password = mdp.value
+		console.log("Login : " + login + " Passowrd : " + password)
+		if (login == "" || password == "") {
+			alert("Wrong username or password")
+		} else {
+			window.location.href = "/gallery"
+		}
+	}
+	document.getElementById("signUp").onclick = function () {
+		var tmpUser = document.getElementById("Username")
+		var tmpEmail = document.getElementById("Email")
+		var tmpPassword = document.getElementById("Password")
+
+		var login = tmpUser.value
+		var email = tmpEmail.value
+		var password = tmpPassword.value
+
+		console.log("Login : " + login + " Email : " + email + " Mdp : " + password)
+		if (login == "" || email == "" || password == "") {
+			alert("Wrong username, email or password")
+		}
+		fetch("/api/signup", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				email: "user@example.com", // Remplacez par l'e-mail saisi par l'utilisateur
+				username: login,
+				password: password
+			})
+		})
+			.then(response => response.json())
+			.then(data => {
+				console.log(data.message);
+				alert("User created successfully");
+			})
+			.catch(error => {
+				console.error("Error:", error);
+				alert("Error creating user");
+			});
+	}
+</script>
 
 </html>
 
 <style>
-  @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap");
+	@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap");
 
-  /* * {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    -ms-overflow-style: none;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Righteous', cursive;
-    text-rendering: optimizeLegibility;
-    font-size: 20px;
-  }
+	/* * {
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		-ms-overflow-style: none;
+		box-sizing: border-box;
+		margin: 0;
+		padding: 0;
+		font-family: 'Righteous', cursive;
+		text-rendering: optimizeLegibility;
+		font-size: 20px;
+	}
 
-  ::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-    background: transparent;
-  } */
-
-
-  /* body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: #111;
-    width: 100%;
-    overflow: hidden;
-  } */
+	::-webkit-scrollbar {
+		width: 0;
+		height: 0;
+		background: transparent;
+	} */
 
 
-  body {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    font-family: 'Jost', sans-serif;
-    background: #111;
-  }
+	/* body {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		min-height: 100vh;
+		background: #111;
+		width: 100%;
+		overflow: hidden;
+	} */
 
-  .main {
-    width: 350px;
-    height: 500px;
-    background: #000;
-    overflow: hidden;
-    border-radius: 10px;
-    box-shadow: 5px 20px 50px #000;
-  }
 
-  #chk {
-    display: none;
-  }
+	body {
+		margin: 0;
+		padding: 0;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		min-height: 100vh;
+		font-family: 'Jost', sans-serif;
+		background: #111;
+	}
 
-  .signup {
-    position: relative;
-    width: 100%;
-    height: 100%;
-  }
+	.main {
+		width: 350px;
+		height: 500px;
+		background: #000;
+		overflow: hidden;
+		border-radius: 10px;
+		box-shadow: 5px 20px 50px #000;
+	}
 
-  label {
-    color: #fff;
-    font-size: 2.3em;
-    justify-content: center;
-    display: flex;
-    margin: 50px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: .5s ease-in-out;
-  }
+	#chk {
+		display: none;
+	}
 
-  input {
-    width: 60%;
-    height: 10px;
-    background: #e0dede;
-    justify-content: center;
-    display: flex;
-    margin: 20px auto;
-    padding: 12px;
-    border: none;
-    outline: none;
-    border-radius: 5px;
-  }
+	.signup {
+		position: relative;
+		width: 100%;
+		height: 100%;
+	}
 
-  button {
-    width: 60%;
-    height: 40px;
-    margin: 10px auto;
-    justify-content: center;
-    display: block;
-    color: #fff;
-    background: #DBA3B5;
-    font-size: 1em;
-    font-weight: bold;
-    margin-top: 30px;
-    outline: none;
-    border: none;
-    border-radius: 5px;
-    transition: .2s ease-in;
-    cursor: pointer;
-  }
+	label {
+		color: #fff;
+		font-size: 2.3em;
+		justify-content: center;
+		display: flex;
+		margin: 50px;
+		font-weight: bold;
+		cursor: pointer;
+		transition: .5s ease-in-out;
+	}
 
-  button:hover {
-    background: #DBA3B5;
-  }
+	input {
+		width: 60%;
+		height: 10px;
+		background: #e0dede;
+		justify-content: center;
+		display: flex;
+		margin: 20px auto;
+		padding: 12px;
+		border: none;
+		outline: none;
+		border-radius: 5px;
+	}
 
-  .login {
-    height: 460px;
-    background: #eee;
-    border-radius: 60% / 10%;
-    transform: translateY(-180px);
-    transition: .8s ease-in-out;
-  }
+	.btn {
+		width: 60%;
+		height: 40px;
+		margin: 10px auto;
+		justify-content: center;
+		display: block;
+		color: #fff;
+		background: #DBA3B5;
+		font-size: 1em;
+		font-weight: bold;
+		margin-top: 30px;
+		outline: none;
+		border: none;
+		border-radius: 5px;
+		transition: .2s ease-in;
+		cursor: pointer;
+	}
 
-  .login label {
-    color: #DBA3B5;
-    transform: scale(.6);
-  }
+	.btn:hover {
+		background: #DBA3B5;
+	}
 
-  #chk:checked~.login {
-    transform: translateY(-500px);
-  }
+	.login {
+		height: 460px;
+		background: #eee;
+		border-radius: 60% / 10%;
+		transform: translateY(-180px);
+		transition: .8s ease-in-out;
+	}
 
-  #chk:checked~.login label {
-    transform: scale(1);
-  }
+	.login label {
+		color: #DBA3B5;
+		transform: scale(.6);
+	}
 
-  #chk:checked~.signup label {
-    transform: scale(.6);
-  }
+	#chk:checked~.login {
+		transform: translateY(-500px);
+	}
+
+	#chk:checked~.login label {
+		transform: scale(1);
+	}
+
+	#chk:checked~.signup label {
+		transform: scale(.6);
+	}
 </style>
 <!-- <style lang="scss" scoped srcs="../styles/presentationPage.scss"></style> -->
