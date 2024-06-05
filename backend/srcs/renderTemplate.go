@@ -5,11 +5,8 @@ import (
 	"html/template"
 	"net/http"
 	"path/filepath"
+	"github.com/gorilla/mux"
 )
-
-type TemplateData struct {
-	Page string
-}
 
 func serveTemplate(templateName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -30,13 +27,16 @@ func serveTemplate(templateName string) http.HandlerFunc {
 	}
 }
 
-func renderTemplate(mux *http.ServeMux, app *App) {
-	// mux.HandleFunc("/", serveTemplate("firstPage.html"))
-	mux.HandleFunc("/", serveTemplate("presentationPage.html")) // La page de présentation sera servie sur la racine
-	mux.HandleFunc("/gallery", serveTemplate("gallery.html"))
-	mux.HandleFunc("/api/signup", app.createUser)
-
-	// Servir les fichiers statiques
+func renderTemplate(router *mux.Router, app *App) {
 	fs := http.FileServer(http.Dir("../../frontend/srcs"))
-	http.Handle("/scripts", http.StripPrefix("scripts", fs))
+    
+    http.Handle("/static/", http.StripPrefix("/static/", fs))
+	// router.HandleFunc("/", serveTemplate("firstPage.html"))
+	router.HandleFunc("/", serveTemplate("presentationPage.html")) // La page de présentation sera servie sur la racine
+	router.HandleFunc("/gallery", serveTemplate("gallery.html"))
+	router.HandleFunc("/signUp", app.signUp).Methods("POST")
+	// router.HandleFunc("/api/login", app.login)
+
+	// fs := http.FileServer(http.Dir("../../frontend/srcs"))
+	// http.Handle("/scripts", http.StripPrefix("scripts", fs))
 }

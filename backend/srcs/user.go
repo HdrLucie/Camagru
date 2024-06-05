@@ -2,45 +2,89 @@ package main
 
 import (
 	"encoding/json"
-    "net/http"
+	"net/http"
+	"golang.org/x/crypto/bcrypt"
+	"fmt"
 )
 
-var users []User
-
-type User struct {
-    ID       int    `json:"id"`
-    Email    string `json:"email"`
-    Username string `json:"username"`
-    Password string `json:"password"`
+func encryptPassword(password string) (string, error) {
+	crypted, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(crypted), err
 }
 
-func (app *App)	createUser(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-        http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-        return
-    }
+func CheckPasswordHash(password, hash string) bool {
+    err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+    return err == nil
+}
 
-    var user User
-    err := json.NewDecoder(r.Body).Decode(&user)
-    if err != nil {
-        http.Error(w, err.Error(), http.StatusBadRequest)
-        return
-    }
+func (app *App)	signUp(writer http.ResponseWriter, request *http.Request) {
+	writer.Header().Set("Content-Type", "application/json")
+	if request.Method != http.MethodPost {
+		http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	var user User
+	// NewDecoder.Decode and NewEncoder.Encode encode/décode un JSON -> golang/golang -> JSON. Retourne une structure.
+	// Nous permet de travailelr avec du JSON.
+	err := json.NewDecoder(request.Body).Decode(&user)
+	if err != nil {
+		http.Error(writer, err.Error(), http.StatusBadRequest)
+		return
+	}
+	encryptPassword, err := encryptPassword(user.Password)
+	if err != nil {
+		fmt.Println(err.Error())
+		return 
+	}
+	fmt.Println(encryptPassword)
+	result, err := app.dataBase.Exec("INSERT INTO users (email, username, password) VALUES ($1, $2, $3)", user.Email, user.Username, string(encryptPassword))
+	if err != nil {
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	userID, _ := result.LastInsertId()
+	user.Id = int(userID)
+	app.users = append(app.users, user)
+	writer.WriteHeader(http.StatusCreated)
+	json.NewEncoder(writer).Encode(map[string]string{"message": "User created successfully"})
+}
 
-    // Insérer l'utilisateur dans la base de données
-    result, err := app.dataBase.Exec("INSERT INTO users (email, username, password) VALUES (?, ?, ?)", user.Email, user.Username, user.Password)
-    if err != nil {
-        http.Error(w, err.Error(), http.StatusInternalServerError)
-        return
-    }
+func getUser(app *App, username string) (bool, error) {
+	var exists bool
 
-    // Récupérer l'ID de l'utilisateur inséré
-    userID, _ := result.LastInsertId()
-    user.ID = int(userID)
+	query := `SELECT EXISTS (SELECT 1 FROM users WHERE username = $1)`
 
-    // Ajouter l'utilisateur à la slice
-    users = append(users, user)
+	err := app.dataBase.QueryRow(query, username).Scan(&exists)
+	if err != nil {
+		return false, err
+	}
 
-    w.WriteHeader(http.StatusCreated)
-    json.NewEncoder(w).Encode(map[string]string{"message": "User created successfully"})
+	return exists, nil
+}
+
+func (app *App)	login(writer http.ResponseWriter, request *http.Request) {
+	var user User
+
+	err := json.NewDecoder(request.Body).Decode(&user)
+	if err != nil {
+		http.Error(writer, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	exist, err := getUser(app, user.Username)
+	if err != nil {
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	var redirectPath string
+	if exist {
+		redirectPath = "/gallery"
+		writer.WriteHeader(http.StatusOK)
+	} else {
+		redirectPath = "/"
+		writer.WriteHeader(http.StatusUnauthorized)
+	}
+
+	json.NewEncoder(writer).Encode(map[string]string{"redirectPath": redirectPath})
 }

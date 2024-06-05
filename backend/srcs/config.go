@@ -56,7 +56,7 @@ func getDBConfig() *DBConfig {
 	}
 }
 
-func DBConnection() *DBConfig {
+func DBConnection() *sql.DB {
 	dbConfig := getDBConfig()
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+ 
 	"password=%s dbname=%s sslmode=%s", 
@@ -65,11 +65,11 @@ func DBConnection() *DBConfig {
 	if err != nil {
 		panic(err)
 	}
-	defer db.Close()
+	// defer db.Close()
 	err = db.Ping()
 	if err != nil {
 		panic(err)
 	}
 	fmt.Println("Successfully connected!")
-	return dbConfig
+	return db
 }

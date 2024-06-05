@@ -6,10 +6,24 @@ import (
 	"os"
 	"github.com/joho/godotenv"
 	"log"
+	"database/sql"
+	"github.com/gorilla/mux"
 )
 
 type App struct {
-	dataBase *DBConfig
+	dataBase	*sql.DB
+	users		[]User
+}
+
+type User struct {
+	Id          int `json:id`
+	Email       string `json:"email"`
+	Username    string `json:"username"`
+	Password    string `json:"password"`
+}
+
+type TemplateData struct {
+	Page string
 }
 
 func main() {
@@ -24,9 +38,9 @@ func main() {
 	fmt.Println(port)
 	db := DBConnection()
 	app := &App{dataBase: db}
-	mux := http.NewServeMux()
-	renderTemplate(mux, app)
+	router := mux.NewRouter()
+	renderTemplate(router, app)
 
 	fmt.Println("Server started at http://localhost:" + port)
-	http.ListenAndServe(":"+port, mux)
+	http.ListenAndServe(":"+port, router)
 }

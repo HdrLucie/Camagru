@@ -7,25 +7,23 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-	<title>News App Demo</title>
-	<link rel="stylesheet" href="../styles/presentationPage.scss" type="css/text" />
+	<title>Camagru</title>
+	<!-- <link rel="stylesheet" href="/frontend/srcs/static/styles/presentationPage.scss"/> -->
 </head>
-
 <body>
 	<div class="main">
 		<input type="checkbox" id="chk" aria-hidden="true">
 		<div class="signup">
-			<!-- <form> -->
+			<form method="POST" action="createUser">
 			<label for="chk" aria-hidden="true">Sign up</label>
 			<input type="text" id="Username" name="txt" placeholder="Username">
 			<input type="email" id="Email" name="email" placeholder="Email" required="">
 			<input type="password" id="Password" name="pswd" placeholder="Password">
 			<button class="btn" id="signUp">Sign up</button>
-			<!-- </form> -->
+			</form>
 		</div>
-
 		<div class="login">
-			<!-- <form> -->
+			<!-- <form method="POST" action="login"> -->
 			<label for="chk" aria-hidden="true">Login</label>
 			<input type="text" placeholder="Username" id="UsernameLogin">
 			<input type="password" placeholder="Password" id="PasswordLogin">
@@ -46,7 +44,28 @@
 		if (login == "" || password == "") {
 			alert("Wrong username or password")
 		} else {
-			window.location.href = "/gallery"
+			fetch("/api/login", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				email: email, // Remplacez par l'e-mail saisi par l'utilisateur
+				username: login,
+				password: password
+			})
+		})
+			.then(response => response.json())
+			.then(data => {
+				console.log(data.message);
+				alert("Successfully connected");
+				const redirectPath = data.redirectPath;
+    			window.location.href = redirectPath;
+			})
+			.catch(error => {
+				console.error("Error:", error);
+				alert("Wrong username or password");
+			});
 		}
 	}
 	document.getElementById("signUp").onclick = function () {
@@ -62,13 +81,13 @@
 		if (login == "" || email == "" || password == "") {
 			alert("Wrong username, email or password")
 		}
-		fetch("/api/signup", {
+		fetch("/signUp", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json"
 			},
 			body: JSON.stringify({
-				email: "user@example.com", // Remplacez par l'e-mail saisi par l'utilisateur
+				email: email,
 				username: login,
 				password: password
 			})
@@ -77,6 +96,7 @@
 			.then(data => {
 				console.log(data.message);
 				alert("User created successfully");
+				window.location.href = "/gallery"
 			})
 			.catch(error => {
 				console.error("Error:", error);
@@ -221,4 +241,3 @@
 		transform: scale(.6);
 	}
 </style>
-<!-- <style lang="scss" scoped srcs="../styles/presentationPage.scss"></style> -->
