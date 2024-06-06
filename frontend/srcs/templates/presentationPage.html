@@ -10,16 +10,17 @@
 	<title>Camagru</title>
 	<!-- <link rel="stylesheet" href="/frontend/srcs/static/styles/presentationPage.scss"/> -->
 </head>
+
 <body>
 	<div class="main">
 		<input type="checkbox" id="chk" aria-hidden="true">
 		<div class="signup">
-			<form method="POST" action="createUser">
-			<label for="chk" aria-hidden="true">Sign up</label>
-			<input type="text" id="Username" name="txt" placeholder="Username">
-			<input type="email" id="Email" name="email" placeholder="Email" required="">
-			<input type="password" id="Password" name="pswd" placeholder="Password">
-			<button class="btn" id="signUp">Sign up</button>
+			<form method="POST">
+				<label for="chk" aria-hidden="true">Sign up</label>
+				<input type="text" id="Username" name="txt" placeholder="Username">
+				<input type="email" id="Email" name="email" placeholder="Email">
+				<input type="password" id="Password" name="pswd" placeholder="Password">
+				<button class="btn" id="signUp">Sign up</button>
 			</form>
 		</div>
 		<div class="login">
@@ -34,40 +35,6 @@
 </body>
 
 <script>
-	document.getElementById("login").onclick = function () {
-		var user = document.getElementById("UsernameLogin")
-		var mdp = document.getElementById("PasswordLogin")
-
-		var login = user.value
-		var password = mdp.value
-		console.log("Login : " + login + " Passowrd : " + password)
-		if (login == "" || password == "") {
-			alert("Wrong username or password")
-		} else {
-			fetch("/api/login", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify({
-				email: email, // Remplacez par l'e-mail saisi par l'utilisateur
-				username: login,
-				password: password
-			})
-		})
-			.then(response => response.json())
-			.then(data => {
-				console.log(data.message);
-				alert("Successfully connected");
-				const redirectPath = data.redirectPath;
-    			window.location.href = redirectPath;
-			})
-			.catch(error => {
-				console.error("Error:", error);
-				alert("Wrong username or password");
-			});
-		}
-	}
 	document.getElementById("signUp").onclick = function () {
 		var tmpUser = document.getElementById("Username")
 		var tmpEmail = document.getElementById("Email")
@@ -92,17 +59,58 @@
 				password: password
 			})
 		})
-			.then(response => response.json())
+			.then(response => {
+				if (!response.ok) {
+					return response.text().then(text => {
+						throw new Error(`Network response was not ok: ${text}`);
+					});
+				}
+				return response.json();
+			})
 			.then(data => {
 				console.log(data.message);
 				alert("User created successfully");
-				window.location.href = "/gallery"
+				// window.location.href = "/gallery"
 			})
 			.catch(error => {
-				console.error("Error:", error);
-				alert("Error creating user");
+				console.error("Error: ", error);
+				alert(`Error creating user: ${error.message}`);
 			});
 	}
+	// document.getElementById("login").onclick = function () {
+	// 	var user = document.getElementById("UsernameLogin")
+	// 	var mdp = document.getElementById("PasswordLogin")
+
+	// 	var login = user.value
+	// 	var password = mdp.value
+	// 	console.log("Login : " + login + " Passowrd : " + password)
+	// 	if (login == "" || password == "") {
+	// 		alert("Wrong username or password")
+	// 	} else {
+	// 		fetch("/api/login", {
+	// 		method: "POST",
+	// 		headers: {
+	// 			"Content-Type": "application/json"
+	// 		},
+	// 		body: JSON.stringify({
+	// 			Email: email,
+	// 			Username: login,
+	// 			Password: password
+	// 		})
+	// 	})
+	// 		.then(response => response.json())
+	// 		.then(data => {
+	// 			console.log(data.message);
+	// 			alert("Successfully connected");
+	// 			const redirectPath = data.redirectPath;
+	// 			window.location.href = redirectPath;
+	// 		})
+	// 		.catch(error => {
+	// 			console.error("Error:", error);
+	// 			alert("Wrong username or password");
+	// 		});
+	// 	}
+	// }
 </script>
 
 </html>
