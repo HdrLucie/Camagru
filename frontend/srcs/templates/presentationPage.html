@@ -35,7 +35,7 @@
 </body>
 
 <script>
-	document.getElementById("signUp").onclick = function () {
+	document.getElementById("signUp").onclick = async function () {
 		var tmpUser = document.getElementById("Username")
 		var tmpEmail = document.getElementById("Email")
 		var tmpPassword = document.getElementById("Password")
@@ -47,35 +47,29 @@
 		console.log("Login : " + login + " Email : " + email + " Mdp : " + password)
 		if (login == "" || email == "" || password == "") {
 			alert("Wrong username, email or password")
+			// return
 		}
-		fetch("/signUp", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify({
-				email: email,
-				username: login,
-				password: password
-			})
-		})
-			.then(response => {
-				if (!response.ok) {
-					return response.text().then(text => {
-						throw new Error(`Network response was not ok: ${text}`);
-					});
-				}
-				return response.json();
-			})
-			.then(data => {
-				console.log(data.message);
-				alert("User created successfully");
-				// window.location.href = "/gallery"
-			})
-			.catch(error => {
-				console.error("Error: ", error);
-				alert(`Error creating user: ${error.message}`);
+		try {
+			var response = await fetch("/signUp", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({
+					email: email,
+					username: login,
+					password: password
+				})
 			});
+			console.log(response);
+			// console.log(data.message);
+			alert("User created successfully");
+			// window.location.href = "/gallery"
+		}
+		catch (error) {
+			console.error("Error: ", error);
+			alert(`Error creating user: ${error.message}`);
+		}
 	}
 	// document.getElementById("login").onclick = function () {
 	// 	var user = document.getElementById("UsernameLogin")
@@ -134,7 +128,7 @@
 		width: 0;
 		height: 0;
 		background: transparent;
-	} */
+	}
 
 
 	/* body {
@@ -147,6 +141,11 @@
 		overflow: hidden;
 	} */
 
+	::-webkit-scrollbar {
+		width: 0;
+		height: 0;
+		background: transparent;
+	}
 
 	body {
 		margin: 0;

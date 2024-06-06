@@ -98,6 +98,13 @@ func (app *App)	signUp(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 	var user User
+
+	///////////////////////////////////////////
+	writer.WriteHeader(http.StatusCreated)
+	fmt.Println(user)
+	json.NewEncoder(writer).Encode(user)
+	///////////////////////////////////////////
+
 	// NewDecoder.Decode and NewEncoder.Encode encode/décode un JSON -> golang/golang -> JSON. Retourne une structure.
 	// Nous permet de travailelr avec du JSON.
 	err := json.NewDecoder(request.Body).Decode(&user)
