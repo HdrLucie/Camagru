@@ -94,16 +94,11 @@ func (app *App)	signUp(writer http.ResponseWriter, request *http.Request) {
 	fmt.Println(Yellow + "Sign Up function" + Reset)
 	writer.Header().Set("Content-Type", "application/json")
 	if request.Method != http.MethodPost {
+		fmt.Println(Red + "Error : Method" + Reset)
 		http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 	var user User
-
-	///////////////////////////////////////////
-	writer.WriteHeader(http.StatusCreated)
-	fmt.Println(user)
-	json.NewEncoder(writer).Encode(user)
-	///////////////////////////////////////////
 
 	// NewDecoder.Decode and NewEncoder.Encode encode/décode un JSON -> golang/golang -> JSON. Retourne une structure.
 	// Nous permet de travailelr avec du JSON.
@@ -137,7 +132,7 @@ func (app *App)	signUp(writer http.ResponseWriter, request *http.Request) {
 	writer.WriteHeader(http.StatusCreated)
 	response := map[string]string{
 		"message": "User created successfully",
-		"id":      strconv.Itoa(user.Id), // Vous pouvez inclure l'ID de l'utilisateur créé
+		"id":      strconv.Itoa(user.Id),
 	}
 	err = json.NewEncoder(writer).Encode(response)
 	if err != nil {
@@ -148,6 +143,8 @@ func (app *App)	signUp(writer http.ResponseWriter, request *http.Request) {
 }
 
 func (app *App)	login(writer http.ResponseWriter, request *http.Request) {
+	fmt.Println(Yellow + "login function" + Reset)
+	writer.Header().Set("Content-Type", "application/json")
 	var user User
 
 	err := json.NewDecoder(request.Body).Decode(&user)
@@ -156,8 +153,10 @@ func (app *App)	login(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
+	fmt.Println(Red + "Username : " + user.Username + "Password : " + user.Password + Reset)
 	err, exist := availableUsername(app, user.Username)
 	if err != nil {
+		fmt.Println(Red + "Error : wrong username" + Reset)
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 		return
 	}

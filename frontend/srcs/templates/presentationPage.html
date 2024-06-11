@@ -15,7 +15,7 @@
 	<div class="main">
 		<input type="checkbox" id="chk" aria-hidden="true">
 		<div class="signup">
-			<form method="POST">
+			<form method="POST" onsubmit="return false">
 				<label for="chk" aria-hidden="true">Sign up</label>
 				<input type="text" id="Username" name="txt" placeholder="Username">
 				<input type="email" id="Email" name="email" placeholder="Email">
@@ -24,12 +24,12 @@
 			</form>
 		</div>
 		<div class="login">
-			<!-- <form method="POST" action="login"> -->
-			<label for="chk" aria-hidden="true">Login</label>
-			<input type="text" placeholder="Username" id="UsernameLogin">
-			<input type="password" placeholder="Password" id="PasswordLogin">
-			<button class="btn" id="login">Sign in</button>
-			<!-- </form> -->
+			<form method="POST" action="login">
+				<label for="chk" aria-hidden="true">Login</label>
+				<input type="text" placeholder="Username" id="UsernameLogin">
+				<input type="password" placeholder="Password" id="PasswordLogin">
+				<button class="btn" id="login">Sign in</button>
+			</form>
 		</div>
 	</div>
 </body>
@@ -50,61 +50,63 @@
 			// return
 		}
 		try {
-			var response = await fetch("/signUp", {
+			const response = await fetch("/signUp", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json"
 				},
 				body: JSON.stringify({
-					email: email,
-					username: login,
-					password: password
+					"email": email,
+					"username": login,
+					"password": password
 				})
 			});
-			console.log(response);
-			// console.log(data.message);
-			alert("User created successfully");
-			// window.location.href = "/gallery"
-		}
-		catch (error) {
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+
+			const data = await response.json();
+			if (response.status === 201) {
+				alert("User created successfully");
+				window.location.href = "/gallery"
+			} else {
+				alert(`Error creating user: ${data.message}`);
+			}
+		} catch (error) {
 			console.error("Error: ", error);
 			alert(`Error creating user: ${error.message}`);
 		}
 	}
-	// document.getElementById("login").onclick = function () {
-	// 	var user = document.getElementById("UsernameLogin")
-	// 	var mdp = document.getElementById("PasswordLogin")
 
-	// 	var login = user.value
-	// 	var password = mdp.value
-	// 	console.log("Login : " + login + " Passowrd : " + password)
-	// 	if (login == "" || password == "") {
-	// 		alert("Wrong username or password")
-	// 	} else {
-	// 		fetch("/api/login", {
-	// 		method: "POST",
-	// 		headers: {
-	// 			"Content-Type": "application/json"
-	// 		},
-	// 		body: JSON.stringify({
-	// 			Email: email,
-	// 			Username: login,
-	// 			Password: password
-	// 		})
-	// 	})
-	// 		.then(response => response.json())
-	// 		.then(data => {
-	// 			console.log(data.message);
-	// 			alert("Successfully connected");
-	// 			const redirectPath = data.redirectPath;
-	// 			window.location.href = redirectPath;
-	// 		})
-	// 		.catch(error => {
-	// 			console.error("Error:", error);
-	// 			alert("Wrong username or password");
-	// 		});
-	// 	}
-	// }
+	document.getElementById("login").onclick = function () {
+		var user = document.getElementById("UsernameLogin")
+		var mdp = document.getElementById("PasswordLogin")
+
+		var login = user.value
+		var password = mdp.value
+		try {
+			fetch("/login", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({
+					Username: login,
+					Password: password
+				})
+			})
+				.then(response => response.json())
+				.then(data => {
+					console.log(data.message);
+					alert("Successfully connected");
+					const redirectPath = data.redirectPath;
+					window.location.href = redirectPath;
+				})
+		} catch (error) {
+			console.error("Error:", error);
+			alert("Wrong username or password");
+		}
+	}
 </script>
 
 </html>
