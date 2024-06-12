@@ -3,13 +3,29 @@
 <script>
 </script>
 
-<div class="message">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Camagru</title>
+  <script src="https://kit.fontawesome.com/76ec232e00.js" crossorigin="anonymous"></script>
+  <!-- <link rel="stylesheet" href="/frontend/srcs/static/styles/presentationPage.scss"/> -->
+</head>
+
+<!-- <div class="message">
   Sorry, your browser does not support CSS Grid. 😅
-</div>
-<div class="" title-section>
-  <div class="rainbow-text title">Camagru</div>
-  <div class="rainbow-text sub-title">Take your photos <i class="fa-light fa-camera-retro" style="color: #63E6BE;"></i></div>
-</div>
+</div> -->
+<header class="header">
+  <div class="menu">
+    <div class="title-section">
+      <div class="rainbow-text title">Camagru</div>
+    </div>
+    <div class="icon-menu">
+      <i class="fa-solid fa-users"></i>
+    </div>
+  </div>
+</header>
+
 <section class="section">
   <div class="grid">
     <div class="item">
@@ -89,255 +105,260 @@
     </div>
   </div>
   </div>
+</section>
 
-  </html>
+</html>
 
-  <style>
-    @import url('https://fonts.googleapis.com/css?family=Arvo');
-    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
+<style>
+  @import url('https://fonts.googleapis.com/css?family=Arvo');
+  @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
 
-    body,
-    html {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
+  body,
+  html {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    /* width: 100%;
+    height: 100%; */
+    margin: 0;
+    padding: 0;
+    background: #111;
+    font-size: 13px;
+    font-family: 'Arvo', monospace;
+
+    @supports(display: grid) {
+      display: block;
+    }
+  }
+
+  .header {
+    background-color: hsl(0, 0%, 0%);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 80px;
+    z-index: 2;
+  }
+
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    background: transparent;
+  }
+
+  .message {
+    border: 1px solid #d2d0d0;
+    /* padding: 2em; */
+    font-size: 1.7vw;
+    box-shadow: -2px 2px 10px 0px rgba(#444, 0.4);
+
+    @supports(display: grid) {
+      display: none;
+    }
+  }
+
+  .section {
+    display: none;
+    padding: 0.5rem;
+    margin-top: 2%;
+
+    @media screen and (min-width: 768px) {
+      padding: 4rem;
+    }
+
+    @supports(display: grid) {
+      display: block;
+    }
+  }
+
+  .menu {
+    margin-right: auto;
+    color: white;
+    align-content: center;
+    width: 100%;
+  }
+
+  .icon-menu {
+    position: relative;
+    margin-left: 20%;
+  }
+
+  .title {
+    font-family: 'Dancing script', cursive;
+    font-size: 5em;
+    width: 5em;
+    margin-left: 1%;
+    margin-right: auto;
+  }
+
+  /* Style the rainbow text element. */
+  .rainbow-text {
+    /* Create a conic gradient. */
+    /* Double percentages to avoid blur (#000 10%, #fff 10%, #fff 20%, ...). */
+    background: #cb9db2;
+    background-color: #cb9db2;
+    background: conic-gradient(#cb9db2 16.666%,
+        #d36e9c 16.666%,
+        #be3d77 33.333%,
+        #613348 33.333%,
+        #3D474D 50%,
+        #B39EA3 50%,
+        #B2BCC2 66.666%,
+        #476098 66.666%,
+        #476098 83.333%,
+        #867B69 83.333%);
+
+    /* Set thee background size and repeat properties. */
+    background-size: 57%;
+    background-repeat: repeat;
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    /* Animate the text when loading the element. */
+    /* This animates it on page load and when hovering out. */
+    animation: rainbow-text-animation-rev 0.5s ease forwards;
+  }
+
+  /* Add animation on hover. */
+  .rainbow-text:hover {
+    animation: rainbow-text-animation 0.5s ease forwards;
+  }
+
+  /* Move the background and make it larger. */
+  /* Animation shown when hovering over the text. */
+  @keyframes rainbow-text-animation {
+    0% {
+      background-size: 57%;
+      background-position: 0 0;
+    }
+
+    20% {
+      background-size: 57%;
+      background-position: 0 1em;
+    }
+
+    100% {
+      background-size: 300%;
+      background-position: -9em 1em;
+    }
+  }
+
+  /* Move the background and make it smaller. */
+  /* Animation shown when entering the page and after the hover animation. */
+  @keyframes rainbow-text-animation-rev {
+    0% {
+      background-size: 300%;
+      background-position: -9em 1em;
+    }
+
+    20% {
+      background-size: 57%;
+      background-position: 0 1em;
+    }
+
+    100% {
+      background-size: 57%;
+      background-position: 0 0;
+    }
+  }
+
+  .grid {
+    display: grid;
+    grid-gap: 40px;
+    grid-template-columns: repeat(auto-fit, minmax(520px, 1fr));
+    grid-auto-rows: 300px;
+    grid-auto-flow: row dense;
+  }
+
+  .item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    box-sizing: border-box;
+    background: #0c9a9a;
+    color: #fff;
+    grid-column-start: auto;
+    grid-row-start: auto;
+    color: #fff;
+    background: url('https://images.unsplash.com/photo-1470124182917-cc6e71b22ecc?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=');
+    background-size: cover;
+    background-position: center;
+    box-shadow: -2px 2px 10px 0px rgba(#444, 0.4);
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+    counter-increment: item-counter;
+
+    &:nth-of-type(3n) {
+      background-image: url('https://images.unsplash.com/photo-1422255198496-21531f12a6e8?dpr=2&auto=format&fit=crop&w=1500&h=996&q=80&cs=tinysrgb&crop=');
+    }
+
+    &:nth-of-type(4n) {
+      background-image: url('https://images.unsplash.com/photo-1490914327627-9fe8d52f4d90?dpr=2&auto=format&fit=crop&w=1500&h=2250&q=80&cs=tinysrgb&crop=');
+    }
+
+    &:nth-of-type(5n) {
+      background-image: url('https://images.unsplash.com/photo-1476097297040-79e9e1603142?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=');
+    }
+
+    &:nth-of-type(6n) {
+      background-image: url('https://images.unsplash.com/photo-1464652149449-f3b8538144aa?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=');
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
       width: 100%;
       height: 100%;
-      background: #111;
-      font-size: 13px;
-      font-family: 'Arvo', monospace;
-
-      @supports(display: grid) {
-        display: block;
-      }
+      background-color: black;
+      opacity: 0.3;
+      transition: opacity 0.3s ease-in-out;
     }
 
-    ::-webkit-scrollbar {
-      width: 0;
-      height: 0;
-      background: transparent;
-    }
-
-    .message {
-      border: 1px solid #d2d0d0;
-      padding: 2em;
-      font-size: 1.7vw;
-      box-shadow: -2px 2px 10px 0px rgba(#444, 0.4);
-
-      @supports(display: grid) {
-        display: none;
-      }
-    }
-
-    .section {
-      display: none;
-      padding: 0.5rem;
-
-      @media screen and (min-width: 768px) {
-        padding: 4rem;
-      }
-
-      @supports(display: grid) {
-        display: block;
-      }
-    }
-
-    .title-section {
-      width: 100%;
-      /* font-stretch: 70%; */
-    }
-
-    .title {
-      font-family: 'Dancing script', cursive;
-      font-weight: 100%;
-      font-size: 5em;
-      width: 5em;
-      font-stretch: 100%;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .sub-title {
-      font-family: 'Dancing script', cursive;
-      font-weight: 100px;
-      font-size: 3em;
-      width: 6em;
-      text-align: center;
-      /* padding: 0 1em 0 1em; */
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    /* Style the rainbow text element. */
-    .rainbow-text {
-      /* Create a conic gradient. */
-      /* Double percentages to avoid blur (#000 10%, #fff 10%, #fff 20%, ...). */
-      background: #CA4246;
-      background-color: #CA4246;
-      background: conic-gradient(#CA4246 16.666%,
-          #E16541 16.666%,
-          #E16541 33.333%,
-          #F18F43 33.333%,
-          #F18F43 50%,
-          #8B9862 50%,
-          #8B9862 66.666%,
-          #476098 66.666%,
-          #476098 83.333%,
-          #A7489B 83.333%);
-
-      /* Set thee background size and repeat properties. */
-      background-size: 57%;
-      background-repeat: repeat;
-
-      /* Use the text as a mask for the background. */
-      /* This will show the gradient as a text color rather than element bg. */
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-
-      /* Animate the text when loading the element. */
-      /* This animates it on page load and when hovering out. */
-      /* animation: rainbow-text-animation-rev 0.5s ease forwards; */
-    }
-
-    /* Add animation on hover. */
-    /* .rainbow-text:hover {
-      animation: rainbow-text-animation 0.5s ease forwards;
-    } */
-
-    /* Move the background and make it larger. */
-    /* Animation shown when hovering over the text. */
-    /* @keyframes rainbow-text-animation {
-      0% {
-        background-size: 57%;
-        background-position: 0 0;
-      }
-
-      20% {
-        background-size: 57%;
-        background-position: 0 1em;
-      }
-
-      100% {
-        background-size: 300%;
-        background-position: -9em 1em;
-      }
-    } */
-
-    /* Move the background and make it smaller. */
-    /* Animation shown when entering the page and after the hover animation. */
-    /* @keyframes rainbow-text-animation-rev {
-      0% {
-        background-size: 300%;
-        background-position: -9em 1em;
-      }
-
-      20% {
-        background-size: 57%;
-        background-position: 0 1em;
-      }
-
-      100% {
-        background-size: 57%;
-        background-position: 0 0;
-      }
-    } */
-
-    .grid {
-      display: grid;
-      grid-gap: 40px;
-      grid-template-columns: repeat(auto-fit, minmax(520px, 1fr));
-      grid-auto-rows: 300px;
-      grid-auto-flow: row dense;
-    }
-
-    .item {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      box-sizing: border-box;
-      background: #0c9a9a;
-      color: #fff;
-      grid-column-start: auto;
-      grid-row-start: auto;
-      color: #fff;
-      background: url('https://images.unsplash.com/photo-1470124182917-cc6e71b22ecc?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=');
-      background-size: cover;
-      background-position: center;
-      box-shadow: -2px 2px 10px 0px rgba(#444, 0.4);
-      transition: transform 0.3s ease-in-out;
-      cursor: pointer;
-      counter-increment: item-counter;
-
-      &:nth-of-type(3n) {
-        background-image: url('https://images.unsplash.com/photo-1422255198496-21531f12a6e8?dpr=2&auto=format&fit=crop&w=1500&h=996&q=80&cs=tinysrgb&crop=');
-      }
-
-      &:nth-of-type(4n) {
-        background-image: url('https://images.unsplash.com/photo-1490914327627-9fe8d52f4d90?dpr=2&auto=format&fit=crop&w=1500&h=2250&q=80&cs=tinysrgb&crop=');
-      }
-
-      &:nth-of-type(5n) {
-        background-image: url('https://images.unsplash.com/photo-1476097297040-79e9e1603142?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=');
-      }
-
-      &:nth-of-type(6n) {
-        background-image: url('https://images.unsplash.com/photo-1464652149449-f3b8538144aa?dpr=2&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=');
-      }
+    &:hover {
+      transform: scale(1.05);
 
       &:after {
-        content: '';
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background-color: black;
-        opacity: 0.3;
-        transition: opacity 0.3s ease-in-out;
-      }
-
-      &:hover {
-        transform: scale(1.05);
-
-        &:after {
-          opacity: 0;
-        }
-      }
-
-      &--medium {
-        grid-row-end: span 2;
-      }
-
-      &--large {
-        grid-row-end: span 3;
-      }
-
-      &--full {
-        grid-column-end: auto;
-
-        @media screen and (min-width: 768px) {
-          grid-column: 1/-1;
-          grid-row-end: span 2;
-        }
-      }
-
-      &__details {
-        position: relative;
-        z-index: 1;
-        padding: 15px;
-        color: #444;
-        background: #fff;
-        text-transform: lowercase;
-        letter-spacing: 1px;
-        color: #828282;
-
-        &:before {
-          content: counter(item-counter);
-          font-weight: bold;
-          font-size: 1.1rem;
-          padding-right: 0.5em;
-          color: #444;
-        }
+        opacity: 0;
       }
     }
-  </style>
+
+    &--medium {
+      grid-row-end: span 2;
+    }
+
+    &--large {
+      grid-row-end: span 3;
+    }
+
+    &--full {
+      grid-column-end: auto;
+
+      @media screen and (min-width: 768px) {
+        grid-column: 1/-1;
+        grid-row-end: span 2;
+      }
+    }
+
+    &__details {
+      position: relative;
+      z-index: 1;
+      padding: 15px;
+      color: #444;
+      background: #fff;
+      text-transform: lowercase;
+      letter-spacing: 1px;
+      color: #828282;
+
+      &:before {
+        content: counter(item-counter);
+        font-weight: bold;
+        font-size: 1.1rem;
+        padding-right: 0.5em;
+        color: #444;
+      }
+    }
+  }
+</style>

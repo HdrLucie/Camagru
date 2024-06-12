@@ -8,10 +8,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 	<title>Camagru</title>
+	<link href="path_to_css_files/fontawesome.css" rel="stylesheet">
+	<link href="path_to_css_files/brands.css" rel="stylesheet">
+	<link href="path_to_css_files/solid.css" rel="stylesheet">
 	<!-- <link rel="stylesheet" href="/frontend/srcs/static/styles/presentationPage.scss"/> -->
 </head>
 
-<body>
+<body style="margin:0;padding:0">
 	<div class="main">
 		<input type="checkbox" id="chk" aria-hidden="true">
 		<div class="signup">
@@ -24,7 +27,7 @@
 			</form>
 		</div>
 		<div class="login">
-			<form method="POST" action="login">
+			<form method="POST" onsubmit="return false">
 				<label for="chk" aria-hidden="true">Login</label>
 				<input type="text" placeholder="Username" id="UsernameLogin">
 				<input type="password" placeholder="Password" id="PasswordLogin">
@@ -78,14 +81,14 @@
 		}
 	}
 
-	document.getElementById("login").onclick = function () {
+	document.getElementById("login").onclick = async function () {
 		var user = document.getElementById("UsernameLogin")
 		var mdp = document.getElementById("PasswordLogin")
 
 		var login = user.value
 		var password = mdp.value
 		try {
-			fetch("/login", {
+			const response = await fetch("/login", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json"
@@ -94,14 +97,14 @@
 					Username: login,
 					Password: password
 				})
-			})
-				.then(response => response.json())
-				.then(data => {
-					console.log(data.message);
-					alert("Successfully connected");
-					const redirectPath = data.redirectPath;
-					window.location.href = redirectPath;
-				})
+			});
+			const data = await response.json();
+			if (response.status === 200) {
+				alert("Successfully connected");
+				window.location.href = data.redirectPath
+			} else {
+				alert(`Error connection: ${data.message}`);
+			}
 		} catch (error) {
 			console.error("Error:", error);
 			alert("Wrong username or password");
@@ -150,8 +153,8 @@
 	}
 
 	body {
-		margin: 0;
-		padding: 0;
+		margin: 0px;
+		padding: 0px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
