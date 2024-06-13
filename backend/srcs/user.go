@@ -9,6 +9,8 @@ import (
 	"regexp"
 )
 
+var secretKey = []byte("secret-key")
+
 func encryptPassword(password string) (string) {
 	crypted, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	if err != nil {
@@ -16,15 +18,6 @@ func encryptPassword(password string) (string) {
 		return ""
 	}
 	return string(crypted)
-}
-
-func CheckPasswordHash(password, hash string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-	if err != nil {
-		fmt.Println(Green + "Error : Wrong password" + Reset)
-		return false
-	}
-	return true
 }
 
 func isValidEmail(email string) bool {
@@ -69,20 +62,6 @@ func	availableId(app *App, id int) (error, bool) {
 	}
 	fmt.Println(exists)
 	return nil, exists
-}
-
-func	getUser(username string, app *App) (*User, error) {
-	var user User
-
-	query := "SELECT id, username, email, password FROM Users WHERE username = $1"
-
-	row := app.dataBase.QueryRow(query, username)
-	err := row.Scan(&user.Id, &user.Username, &user.Email, &user.Password)
-	if err != nil {
-		fmt.Println(Red + "User doesn't exist" + Reset)
-		return nil, err
-	}
-	return &user, nil
 }
 
 func isIdentifierAvailable(app *App, user User) bool {
@@ -158,37 +137,4 @@ func (app *App)	signUp(writer http.ResponseWriter, request *http.Request) {
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 		return
 	}
-}
-
-func (app *App)	login(writer http.ResponseWriter, request *http.Request) {
-	fmt.Println(Yellow + "login function" + Reset)
-	writer.Header().Set("Content-Type", "application/json")
-	var user User
-
-	err := json.NewDecoder(request.Body).Decode(&user)
-	if err != nil {
-		http.Error(writer, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	fmt.Println(Red + "Username : " + user.Username + "Password : " + user.Password + Reset)
-	err, _ = availableUsername(app, user.Username)
-	if err != nil {
-		fmt.Println(Red + "Error : wrong username" + Reset)
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	var redirectPath string
-	try, _ := getUser(user.Username, app)
-	if CheckPasswordHash(user.Password, try.Password) == true {
-		fmt.Println(Green + "Right password" + Reset)
-		redirectPath = "/gallery"
-		writer.WriteHeader(http.StatusOK)
-	} else {
-		fmt.Println(Green + "Wrong password" + Reset)
-		redirectPath = "/"
-		writer.WriteHeader(http.StatusUnauthorized)
-	}
-
-	json.NewEncoder(writer).Encode(map[string]string{"redirectPath": redirectPath})
 }
