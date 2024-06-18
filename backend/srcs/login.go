@@ -39,6 +39,7 @@ func CheckPasswordHash(password, hash string) bool {
 }
 
 func	createToken(user User) (string, error) {
+	fmt.Println(Blue + "Create Token function" + Reset)
 	expirationTime := time.Now().Add(24 * time.Hour)
 	claims := &Claims{
 		Username: user.Username,
