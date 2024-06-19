@@ -5,7 +5,6 @@ import (
 	"html/template"
 	"net/http"
 	"path/filepath"
-	"github.com/gorilla/mux"
 )
 
 func serveTemplate(templateName string) http.HandlerFunc {
@@ -27,27 +26,41 @@ func serveTemplate(templateName string) http.HandlerFunc {
 	}
 }
 
-func	serveStyleFiles() {
+func	serveStyleFiles(router *http.ServeMux) {
     styles := http.FileServer(http.Dir("../../frontend/srcs/stylesheets/"))
-	http.Handle("/styles/", http.StripPrefix("/styles/", styles))
+	router.Handle("/styles/", http.StripPrefix("/styles", mdw(styles)))
 }
 
-func serveScriptsFiles() {
+func serveScriptsFiles(router *http.ServeMux) {
     scripts := http.FileServer(http.Dir("../../frontend/srcs/scripts/"))
-	http.Handle("/scripts/", http.StripPrefix("/scripts/", scripts))
+	router.Handle("/scripts/", http.StripPrefix("/scripts", mdw(scripts)))
 }
 
-func serveImgFiles() {
+func serveImgFiles(router *http.ServeMux) {
+	fmt.Println(Red + "SERVE IMAGE" + Reset)
     assets := http.FileServer(http.Dir("../../frontend/srcs/assets/"))
-	http.Handle("/assets/", http.StripPrefix("/assets/", assets))
+	router.Handle("/assets/", http.StripPrefix("/assets", mdw(assets)))
 }
 
-func renderTemplate(router *mux.Router, app *App) {
-	serveStyleFiles()
-	serveScriptsFiles()
-	serveImgFiles()
-    router.HandleFunc("/", serveTemplate("login.html"))
+func mdw(next http.Handler) http.Handler {
+    f := func(w http.ResponseWriter, r *http.Request) {
+        // Executes middleware logic here...
+        fmt.Println()
+        fmt.Println(r)
+        fmt.Println()
+        next.ServeHTTP(w, r) // Pass request to next handler
+    }
+
+    return http.HandlerFunc(f)
+}
+
+func renderTemplate(router *http.ServeMux, app *App) {
+	serveStyleFiles(router)
+	serveScriptsFiles(router)
+	serveImgFiles(router)
+    
+	router.HandleFunc("/", serveTemplate("login.html"))
     router.HandleFunc("/gallery", serveTemplate("gallery.html"))
-    router.HandleFunc("/signUp", app.signUp).Methods("POST")
-    router.HandleFunc("/login", app.login).Methods("POST")
+    router.HandleFunc("/signUp", app.signUp)
+    router.HandleFunc("/login", app.login)
 }
