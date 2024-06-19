@@ -27,11 +27,27 @@ func serveTemplate(templateName string) http.HandlerFunc {
 	}
 }
 
+func	serveStyleFiles() {
+    styles := http.FileServer(http.Dir("../../frontend/srcs/stylesheets/"))
+	http.Handle("/styles/", http.StripPrefix("/styles/", styles))
+}
+
+func serveScriptsFiles() {
+    scripts := http.FileServer(http.Dir("../../frontend/srcs/scripts/"))
+	http.Handle("/scripts/", http.StripPrefix("/scripts/", scripts))
+}
+
+func serveImgFiles() {
+    assets := http.FileServer(http.Dir("../../frontend/srcs/assets/"))
+	http.Handle("/assets/", http.StripPrefix("/assets/", assets))
+}
+
 func renderTemplate(router *mux.Router, app *App) {
-	fs := http.FileServer(http.Dir("../../frontend/srcs"))
-	http.Handle("/scripts", http.StripPrefix("scripts", fs))
-	router.HandleFunc("/", serveTemplate("presentationPage.html")) // La page de présentation sera servie sur la racine
-	router.HandleFunc("/gallery", serveTemplate("gallery.html"))
-	router.HandleFunc("/signUp", app.signUp).Methods("POST")
-	router.HandleFunc("/login", app.login).Methods("POST")
+	serveStyleFiles()
+	serveScriptsFiles()
+	serveImgFiles()
+    router.HandleFunc("/", serveTemplate("login.html"))
+    router.HandleFunc("/gallery", serveTemplate("gallery.html"))
+    router.HandleFunc("/signUp", app.signUp).Methods("POST")
+    router.HandleFunc("/login", app.login).Methods("POST")
 }

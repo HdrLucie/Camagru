@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<link rel="stylesheet" type="text/css" href="/styles/login.css" />
+	<script src="/scripts/login.js"></script>
+	<title>Camagru</title>
+</head>
+
+<body style="margin:0;padding:0">
+	<div class="main">
+		<input type="checkbox" id="chk" aria-hidden="true">
+		<div class="signup">
+			<form method="POST" onsubmit="return false">
+				<label for="chk" aria-hidden="true">Sign up</label>
+				<input type="text" id="Username" name="txt" placeholder="Username">
+				<input type="email" id="Email" name="email" placeholder="Email">
+				<input type="password" id="Password" name="pswd" placeholder="Password">
+				<button class="btn" id="signUp">Sign up</button>
+			</form>
+		</div>
+		<div class="login">
+			<form method="POST" onsubmit="return false">
+				<label for="chk" aria-hidden="true">Login</label>
+				<input type="text" placeholder="Username" id="UsernameLogin">
+				<input type="password" placeholder="Password" id="PasswordLogin">
+				<button class="btn" id="login">Sign in</button>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
