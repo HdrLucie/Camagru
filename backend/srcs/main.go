@@ -29,6 +29,7 @@ type User struct {
 	Email       string `json:"email"`
 	Username    string `json:"username"`
 	Password    string `json:"password"`
+	Token		string `json:"token"`
 }
 
 type TemplateData struct {
@@ -53,32 +54,3 @@ func main() {
 	fmt.Println("Server started at http://localhost:" + port)
 	http.ListenAndServe(":"+port, router)
 }
-
-// package main
-
-// import (
-// 	"log"
-// 	"net/http"
-// 	"time"
-// )
-
-// func timeHandler(format string) http.Handler {
-// 	fn := func(w http.ResponseWriter, r *http.Request) {
-// 		tm := time.Now().Format(format)
-// 		w.Write([]byte("The time is: " + tm))
-// 	}
-// 	return http.HandlerFunc(fn)
-// }
-
-// func main() {
-// 	mux := http.NewServeMux()
-
-// 	th := timeHandler(time.RFC1123)
-// 	mux.Handle("/time", th)
-
-// 	fileServerTmp := http.FileServer(http.Dir("/mnt/nfs/homes/hlucie/goinfre/Camagru/frontend/srcs/assets/"))
-//     mux.Handle("/assets/", http.StripPrefix("/assets", fileServerTmp))
-    
-// 	log.Print("Listening...")
-// 	http.ListenAndServe(":3000", mux)
-// }

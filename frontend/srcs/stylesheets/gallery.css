@@ -100,6 +100,7 @@ header {
 }
 
 .burger {
+    z-index:10;
     width: 52px;
     height: 52px;
     padding: 8px;
@@ -113,6 +114,7 @@ header {
     position: relative;
     z-index: 11;
     cursor: pointer;
+    position: fixed;
 }
 
 .burger._active {
@@ -125,13 +127,11 @@ header {
     }
 }
 
-/*/
-///////////////////////////////////////
-/*/
-/* Grid section */
-/*/
-///////////////////////////////////////
-/*/
+/*/////////////////////////////////////////*/
+/*               Grid section              */
+/*/////////////////////////////////////////*/
+
+
 .gallery-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -139,6 +139,7 @@ header {
     padding: 20px;
     position: relative;
     top: 150px;
+    z-index: 1;
 }
 
 .gallery-container img {

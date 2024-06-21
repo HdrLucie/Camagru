@@ -75,6 +75,49 @@ func	checkPassword(u User, app *App, writer http.ResponseWriter) (string, int) {
 	}
 }
 
+func addTokenToDb(app *App, user *User, token string) error {
+    fmt.Println(Green + "Add token to database" + Reset)
+    fmt.Println("Token : " + token)
+    fmt.Println("User ID : ", user.Id)
+
+	var exists bool
+	err := app.dataBase.QueryRow("SELECT EXISTS(SELECT 1 FROM users WHERE username = $1)", user.Username).Scan(&exists)
+	if err != nil {
+		fmt.Println("Erreur lors de la vérification de l'existence de l'utilisateur:", err)
+		return err
+	}
+	if !exists {
+		fmt.Printf("Aucun utilisateur trouvé avec l'Username : %d\n", user.Username)
+		return fmt.Errorf("utilisateur non trouvé")
+	}
+
+    result, err := app.dataBase.Exec("UPDATE users SET token = $1 WHERE username = $2", token, user.Username)
+    if err != nil {
+        fmt.Println(Red + "Error : add token to database" + Reset)
+        fmt.Println("Error details:", err)
+        return err
+    }
+
+    rowsAffected, err := result.RowsAffected()
+    if err != nil {
+        fmt.Println(Red + "Error getting rows affected" + Reset)
+        return err
+    }
+    fmt.Println("Rows affected:", rowsAffected)
+
+    if rowsAffected == 0 {
+        fmt.Println(Yellow + "Warning: No rows were updated" + Reset)
+    }
+    for i, u := range app.users {
+        if u.Id == user.Id {
+            app.users[i].Token = token
+        }
+    }
+	fmt.Println(user)
+	fmt.Println(Green + "Add token to database" + Reset)
+	return nil
+}
+
 func (app *App)	login(writer http.ResponseWriter, request *http.Request) {
 	fmt.Println(Yellow + "login function" + Reset)
 	writer.Header().Set("Content-Type", "application/json")
@@ -100,6 +143,12 @@ func (app *App)	login(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 	token, err := createToken(user)
+	if err != nil {
+		fmt.Println(Red + "Error : creating token" + Reset)
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	addTokenToDb(app, &user, token)
 	writer.WriteHeader(statusCode)
     json.NewEncoder(writer).Encode(map[string]string{
         "token": token,

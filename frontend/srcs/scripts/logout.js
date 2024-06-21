@@ -1,4 +1,6 @@
 // Fonction pour vérifier si le token est présent
+window.onload = checkToken;
+
 function checkToken() {
     console.log("Function check token")
     const token = localStorage.getItem('token');
@@ -8,7 +10,6 @@ function checkToken() {
         window.location.href = '/';
     }
 }
-window.onload = checkToken;
 
 document.getElementById("burger").onclick = function () {
     let burger = document.querySelector(".js-burger");
@@ -18,6 +19,9 @@ document.getElementById("burger").onclick = function () {
     burger.classList.toggle("_active");
 }
 
-document.getElementById("logout").onclick = function () {
+document.getElementById("logout").onclick = async function () {
     console.log("Logout")
+    const token = localStorage.getItem('token')
+    localStorage.clear()
+    window.location.href = '/'
 }

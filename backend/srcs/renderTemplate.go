@@ -27,19 +27,21 @@ func serveTemplate(templateName string) http.HandlerFunc {
 }
 
 func	serveStyleFiles(router *http.ServeMux) {
+	fmt.Println(Red + "SERVE STYLES" + Reset)
     styles := http.FileServer(http.Dir("../../frontend/srcs/stylesheets/"))
-	router.Handle("/styles/", http.StripPrefix("/styles", mdw(styles)))
+	router.Handle("/styles/", http.StripPrefix("/styles", styles))
 }
 
 func serveScriptsFiles(router *http.ServeMux) {
-    scripts := http.FileServer(http.Dir("../../frontend/srcs/scripts/"))
-	router.Handle("/scripts/", http.StripPrefix("/scripts", mdw(scripts)))
+	fmt.Println(Red + "SERVE SCRIPTS" + Reset)
+	scripts := http.FileServer(http.Dir("../../frontend/srcs/scripts/"))
+	router.Handle("/scripts/", http.StripPrefix("/scripts", scripts))
 }
 
 func serveImgFiles(router *http.ServeMux) {
 	fmt.Println(Red + "SERVE IMAGE" + Reset)
     assets := http.FileServer(http.Dir("../../frontend/srcs/assets/"))
-	router.Handle("/assets/", http.StripPrefix("/assets", mdw(assets)))
+	router.Handle("/assets/", http.StripPrefix("/assets", assets))
 }
 
 func mdw(next http.Handler) http.Handler {
