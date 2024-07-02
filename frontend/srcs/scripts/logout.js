@@ -20,7 +20,7 @@ document.getElementById("burger").onclick = function () {
 }
 
 document.getElementById("logout").onclick = async function () {
-    console.log("Logout")
+   alert('Logout')
     const token = localStorage.getItem('token')
     localStorage.clear()
     window.location.href = '/'

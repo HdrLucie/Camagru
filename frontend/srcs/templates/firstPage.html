@@ -2,11 +2,9 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    console.log("Je passe bien par cette fonction.\n")
-    button = document.getElementById("navigateButton");
-    button.addEventListener("click", function () {
-      window.location.href = "/presentationPage";
-    });
+    document.getElementById("welcome").onclick = async function () {
+      window.location.href = '/connection'
+    }
   });
 </script>
 
@@ -22,24 +20,20 @@
   <link rel="stylesheet" href="../styles/presentationPage.scss" type="css/text" />
 </head>
 
-<button id="navigateButton">Camagru</button>
+<div class="container">
+  <h1>
+    <button id="welcome" class="animation">
+      <div class="animation-left"><span>Camagru</span></div>
+      <div class="animation-right"><span>Camagru</span></div>
+    </button>
+  </h1>
+</div>
+
 
 </html>
 
 <style>
   @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap");
-
-  * {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    -ms-overflow-style: none;
-    /* box-sizing: border-box; */
-    /* margin: 0;
-    padding: 0; */
-    font-family: 'Righteous', cursive;
-    text-rendering: optimizeLegibility;
-    font-size: 20px;
-  }
 
   ::-webkit-scrollbar {
     width: 0;
@@ -52,7 +46,7 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: #111;
+    background: #000000;
     background-image: url("../assets/cameras.jpg");
     width: 100%;
     height: 100%;
@@ -61,133 +55,149 @@
     background-size: 100%;
   }
 
-    /* .header {
-    background-color: hsl(0, 0%, 0%);
-    position: fixed;
-    top: 0;
-    width: 100%;
-    height: 80px;
-    z-index: 2;
-  }
-
-  ::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-    background: transparent;
-  }
-
-  .message {
-    border: 1px solid #d2d0d0;
-    /* padding: 2em; */
-  /* font-size: 1.7vw;
-    box-shadow: -2px 2px 10px 0px rgba(#444, 0.4);
-
-    @supports(display: grid) {
-      display: none;
-    }
-  }
-
-  .section {
-    display: none;
-    padding: 0.5rem;
-    margin-top: 2%;
-
-    @media screen and (min-width: 768px) {
-      padding: 4rem;
-    }
-
-    @supports(display: grid) {
-      display: block;
-    }
-  }
-
-  .menu {
-    margin-right: auto;
-    color: white;
+  .container {
+    display: flex;
+    justify-content: center;
     align-content: center;
-    width: 100%;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
   }
 
-  .icon-menu {
+  h1 {
+    text-align: center;
+    text-transform: uppercase;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 50px;
+    color: rgba(190, 61, 119);
+    margin: 0 auto;
+
+    @media screen and (max-width: 800px) {
+      font-size: 30px;
+    }
+  }
+
+  button,
+  input[type="submit"],
+  input[type="reset"] {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+  }
+
+  .animation {
     position: relative;
-    margin-left: 20%;
-  }
+    width: 100%;
 
-  .title {
-    font-family: 'Dancing script', cursive;
-    font-size: 5em;
-    width: 5em;
-    margin-left: 1%;
-    margin-right: auto;
-  } */
+    div {
+      overflow: hidden;
+      width: 50%;
+      height: 100%;
+      transform: skewX(-20deg);
 
-  /* Style the rainbow text element. */
-  /* .rainbow-text { */
-  /* Create a conic gradient. */
-  /* Double percentages to avoid blur (#000 10%, #fff 10%, #fff 20%, ...). */
-  /* background: #cb9db2;
-    background-color: #cb9db2;
-    background: conic-gradient(#cb9db2 16.666%,
-        #d36e9c 16.666%,
-        #be3d77 33.333%,
-        #613348 33.333%,
-        #3D474D 50%,
-        #B39EA3 50%,
-        #B2BCC2 66.666%,
-        #476098 66.666%,
-        #476098 83.333%,
-        #867B69 83.333%); */
-
-  /* Set thee background size and repeat properties. */
-  /* background-size: 57%;
-    background-repeat: repeat;
-
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent; */
-
-  /* Animate the text when loading the element. */
-  /* This animates it on page load and when hovering out. */
-  /* animation: rainbow-text-animation-rev 0.5s ease forwards;
-  } */
-
-  /* Add animation on hover. */
-  /* .rainbow-text:hover {
-    animation: rainbow-text-animation 0.5s ease forwards;
-  } */
-
-  /* Move the background and make it larger. */
-  /* Animation shown when hovering over the text. */
-  /* @keyframes rainbow-text-animation {
-    0% {
-      background-size: 57%;
-      background-position: 0 0;
+      &::before {
+        content: "";
+        position: absolute;
+        width: 0%;
+        height: 4px;
+        background: #fff;
+      }
     }
 
-    20% {
-      background-size: 57%;
-      background-position: 0 1em;
-    }
-
-    100% {
-      background-size: 300%;
-      background-position: -9em 1em;
+    span {
+      padding: 0 10px;
     }
   }
 
-  @keyframes rainbow-text-animation-rev {
-    0% {
-      background-size: 300%;
-      background-position: -9em 1em;
+  .animation-left {
+
+    &::before {
+      left: 0;
+      animation: widthLineLeft 1.2s 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.10) forwards;
     }
 
-    20% {
-      background-size: 57%;
-      background-position: 0 1em;
+    span {
+      display: block;
+      animation: slideLeft 1.2s 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.10) forwards;
+      transform: translateX(200px) skewX(20deg);
+    }
+  }
+
+  .animation-right {
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    &:before {
+      bottom: 0;
+      right: 0;
+      animation: widthLineRight 1.2s 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.10) forwards;
+    }
+
+    span {
+      position: absolute;
+      width: 100%;
+      left: -100%;
+      transform: translateX(-200px) skewX(20deg);
+      animation: slideRight 1.2s 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.10) forwards;
+    }
+  }
+
+  @keyframes slideLeft {
+    from {
+      transform: translateX(200px) skewX(20deg);
+    }
+
+    to {
+      transform: translateX(0%) skewX(20deg);
+    }
+  }
+
+  @keyframes slideRight {
+    from {
+      transform: translateX(-200px) skewX(20deg);
+    }
+
+    to {
+      transform: translateX(0%) skewX(20deg);
+    }
+  }
+
+  @keyframes widthLineLeft {
+    0% {
+      width: 0%;
+      left: 0%;
+    }
+
+    50% {
+      width: 100%;
+      left: 0%;
     }
 
     100% {
-      background-size: 57%;
-      background-position: 0 0;
+      width: 0%;
+      left: 100%;
     }
-  } */
+  }
+
+  @keyframes widthLineRight {
+    0% {
+      width: 0%;
+      right: 0%;
+    }
+
+    50% {
+      width: 100%;
+      right: 0%;
+    }
+
+    100% {
+      width: 0%;
+      right: 100%;
+    }
+  }
 </style>
