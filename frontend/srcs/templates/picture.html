@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Camagru</title>
+  <script src="https://kit.fontawesome.com/76ec232e00.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" type="text/css" href="/styles/picture.css" />
+</head>
+
+<body>
+  <header style="position:fixed; z-index: 5;">
+    <ul class="nav js-nav">
+      <li class="nav__item">
+        <button href="#" class="nav__link">Gallery</button>
+      </li>
+      <li class="nav__item">
+        <button id="takePicture" class="nav__link">Take a picture</button>
+      </li>
+      <li class="nav__item">
+        <button href="#" class="nav__link">Profile</button>
+      </li>
+      <li class="nav__item">
+        <button href="#" class="nav__link">Stickers</button>
+      </li>
+      <li class="nav__item">
+        <button id="logout" class="nav__link">Logout</button>
+      </li>
+    </ul>
+    <button id="burger" class="burger js-burger">
+      <svg viewBox="0 0 24 24">
+        <path fill="currentColor" d="M3 18H21V16H3V18ZM3 13H21V11H3V13ZM3 6V8H21V6H3Z" />
+      </svg>
+    </button>
+  </header>
+  <div class="contentarea">
+    <div class="camera">
+      <video id="video">Video stream not available.</video>
+      <button id="startbutton">Take photo</button>
+    </div>
+    <canvas id="canvas"> </canvas>
+    <div class="output">
+      <img id="photo" alt="The screen capture will appear in this box." />
+    </div>
+  </div>
+</body>
+<script src="/scripts/picture.js"></script>
+
+</html>

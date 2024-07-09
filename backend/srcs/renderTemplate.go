@@ -64,6 +64,7 @@ func renderTemplate(router *http.ServeMux, app *App) {
 	router.HandleFunc("/", serveTemplate("firstPage.html"))
 	router.HandleFunc("/connection", serveTemplate("login.html"))
     router.HandleFunc("/gallery", serveTemplate("gallery.html"))
+	router.HandleFunc("/takePicture", serveTemplate("picture.html"))
     router.HandleFunc("/signUp", app.signUp)
     router.HandleFunc("/login", app.login)
 }

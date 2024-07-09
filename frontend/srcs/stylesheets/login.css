@@ -79,7 +79,7 @@ input {
 }
 
 .btn:hover {
-	background: #d36e9c;
+	background: #B61A53;
 }
 
 .login {
@@ -91,7 +91,7 @@ input {
 }
 
 .login label {
-	color: #d36e9c;
+	color: #DF3073;
 	transform: scale(0.6);
 }
 
@@ -105,4 +105,15 @@ input {
 
 #chk:checked~.signup label {
 	transform: scale(0.6);
+}
+
+.resetPassword {
+	font-size: 10px;
+	border: none;
+	text-decoration: underline;
+	justify-content: center;
+	display: flex;
+	justify-content: center;
+	display: flex;
+	margin: 10px 15%;
 }
