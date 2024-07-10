@@ -14,10 +14,10 @@
   <header style="position:fixed; z-index: 5;">
     <ul class="nav js-nav">
       <li class="nav__item">
-        <button href="#" class="nav__link">Gallery</button>
+        <button href="#" class="nav__link" onclick="redirectionPage('/gallery')">Gallery</button>
       </li>
       <li class="nav__item">
-        <button id="takePicture" class="nav__link">Take a picture</button>
+        <button class="nav__link" onclick="redirectionPage('/takePicture')">Take a picture</button>
       </li>
       <li class="nav__item">
         <button href="#" class="nav__link">Profile</button>
@@ -62,7 +62,6 @@
     <img style="z-index:0" src="/assets/camera.jpg">
   </div>
 </body>
-<script src="/scripts/logout.js"></script>
 <script src="/scripts/menu.js"></script>
 <script src="/scripts/picture.js"></script>
 

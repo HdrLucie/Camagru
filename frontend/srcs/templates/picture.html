@@ -14,7 +14,7 @@
   <header style="position:fixed; z-index: 5;">
     <ul class="nav js-nav">
       <li class="nav__item">
-        <button href="#" class="nav__link">Gallery</button>
+        <button href="#" class="nav__link" onclick="redirectionPage('/gallery')">Gallery</button>
       </li>
       <li class="nav__item">
         <button id="takePicture" class="nav__link">Take a picture</button>
@@ -40,12 +40,13 @@
       <video id="video">Video stream not available.</video>
       <button id="startbutton">Take photo</button>
     </div>
-    <canvas id="canvas"> </canvas>
-    <div class="output">
+    <canvas id="canvas"></canvas>
+    <!-- <div class="output">
       <img id="photo" alt="The screen capture will appear in this box." />
-    </div>
+    </div> -->
   </div>
 </body>
 <script src="/scripts/picture.js"></script>
+<script src="/scripts/menu.js"></script>
 
 </html>
