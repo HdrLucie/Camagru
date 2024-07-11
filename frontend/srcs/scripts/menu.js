@@ -9,7 +9,8 @@ function checkToken() {
         window.location.href = '/';
     }
 }
-
+// Ton code JavaScript ici
+console.log('La page entière est complètement chargée');
 document.getElementById("burger").onclick = function () {
     let burger = document.querySelector(".js-burger");
     let nav = document.querySelector(".js-nav");

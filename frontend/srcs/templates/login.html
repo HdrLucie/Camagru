@@ -6,6 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 	<link rel="stylesheet" type="text/css" href="/styles/login.css"/>
+	<script src="https://kit.fontawesome.com/76ec232e00.js" crossorigin="anonymous"></script>
 	<title>Camagru</title>
 </head>
 
@@ -17,7 +18,14 @@
 				<label for="chk" aria-hidden="true">Sign up</label>
 				<input type="text" id="Username" name="txt" placeholder="Username">
 				<input type="email" id="Email" name="email" placeholder="Email">
-				<input type="password" id="Password" name="pswd" placeholder="Password">
+				<input type="password" id="Password" name="pswd" placeholder="Password" required
+				pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*?[0-9])(?=.*?[!@#$%^&*+`~'=?\|\]\[\(\)\-<>/]).{8,}">
+				<div class="info">
+					<i style="color:white" class="fa-solid fa-circle-info"></i>
+				</div>
+				<div class="passwordRequierments">
+					Password must contain between 8 and 25 characters, an uppercase letter, a lowercase letter, a number and a non-alphanumeric character (!@#$%&*...).
+				</div>
 				<button class="btn" id="signUp">Sign up</button>
 			</form>
 		</div>
