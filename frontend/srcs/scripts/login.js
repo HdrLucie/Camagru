@@ -45,7 +45,8 @@ window.addEventListener('load', function () {
 
 			const data = await response.json();
 			if (response.status === 201) {
-				alert("User created successfully");
+				console.log("\nAccount created successfully! Please check your email to verify your account.")
+				alert(`Account created successfully! Please check your email to verify your account.`);
 			} else {
 				alert(`Error creating user: ${data.message}`);
 			}

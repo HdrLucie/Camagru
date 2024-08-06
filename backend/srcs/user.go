@@ -128,7 +128,7 @@ func (app *App)	signUp(writer http.ResponseWriter, request *http.Request) {
 	app.users = append(app.users, user)
 	writer.WriteHeader(http.StatusCreated)
 	response := map[string]string{
-		"message": "User created successfully",
+		"message": "Account created successfully! Please check your email to verify your account.",
 		"id":      strconv.Itoa(user.Id),
 	}
 	err = json.NewEncoder(writer).Encode(response)
@@ -137,4 +137,5 @@ func (app *App)	signUp(writer http.ResponseWriter, request *http.Request) {
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// sendMail(user)
 }
