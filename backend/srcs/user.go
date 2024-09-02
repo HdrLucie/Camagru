@@ -88,6 +88,9 @@ func isIdentifierAvailable(app *App, user User) bool {
 }
 
 func (app *App)	signUp(writer http.ResponseWriter, request *http.Request) {
+	var userID int
+	var user User
+	var token string
 	fmt.Println(Yellow + "Sign Up function" + Reset)
 	writer.Header().Set("Content-Type", "application/json")
 	if request.Method != http.MethodPost {
@@ -95,7 +98,6 @@ func (app *App)	signUp(writer http.ResponseWriter, request *http.Request) {
 		http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	var user User
 
 	// NewDecoder.Decode and NewEncoder.Encode encode/décode un JSON -> golang/golang -> JSON. Retourne une structure.
 	// Nous permet de travailelr avec du JSON.
@@ -117,8 +119,10 @@ func (app *App)	signUp(writer http.ResponseWriter, request *http.Request) {
 		http.Error(writer, "Invalid email format", http.StatusBadRequest)
 		return
 	}
-	var userID int
-	err = app.dataBase.QueryRow("INSERT INTO users (email, username, password) VALUES ($1, $2, $3) RETURNING id", user.Email, user.Username, string(encryptPassword)).Scan(&userID)
+	token = generateAuthToken()
+	user.AuthToken = token
+	fmt.Println(token)
+	err = app.dataBase.QueryRow("INSERT INTO users (email, username, password, authToken, confirmed) VALUES ($1, $2, $3, $4, $5) RETURNING id", user.Email, user.Username, string(encryptPassword), string(user.AuthToken), 0).Scan(&userID)
 	if err != nil {
 		fmt.Println(Red + "Error : insert users to the database" + Reset)
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
@@ -137,5 +141,5 @@ func (app *App)	signUp(writer http.ResponseWriter, request *http.Request) {
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	// sendMail(user)
+	sendMail(user)
 }

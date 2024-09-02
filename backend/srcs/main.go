@@ -30,6 +30,8 @@ type User struct {
 	Username    string `json:"username"`
 	Password    string `json:"password"`
 	Token		string `json:"token"`
+	AuthToken	string`json:"authToken"`
+	confirmed	bool`json:"confirmed"`
 }
 
 type TemplateData struct {
