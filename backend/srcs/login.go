@@ -18,10 +18,9 @@ type Claims struct {
 func	getUser(username string, app *App) (*User, error) {
 	var user User
 
-	query := "SELECT id, username, email, password FROM Users WHERE username = $1"
-
+	query := "SELECT id, username, email, password, authToken FROM Users WHERE username = $1"
 	row := app.dataBase.QueryRow(query, username)
-	err := row.Scan(&user.Id, &user.Username, &user.Email, &user.Password)
+	err := row.Scan(&user.Id, &user.Username, &user.Email, &user.Password, &user.AuthToken)
 	if err != nil {
 		fmt.Println(Red + "User doesn't exist" + Reset)
 		return nil, err

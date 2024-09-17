@@ -134,6 +134,7 @@ func (app *App)	signUp(writer http.ResponseWriter, request *http.Request) {
 	response := map[string]string{
 		"message": "Account created successfully! Please check your email to verify your account.",
 		"id":      strconv.Itoa(user.Id),
+		"redirectPath": "/authentification",
 	}
 	err = json.NewEncoder(writer).Encode(response)
 	if err != nil {

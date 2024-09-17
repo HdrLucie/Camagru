@@ -1,5 +1,4 @@
 window.addEventListener('load', function () {
-	// Ton code JavaScript ici
 	console.log('La page entière est complètement chargée');
 
 	function checkPassword(password) {
@@ -47,6 +46,7 @@ window.addEventListener('load', function () {
 			if (response.status === 201) {
 				console.log("\nAccount created successfully! Please check your email to verify your account.")
 				alert(`Account created successfully! Please check your email to verify your account.`);
+				window.location.href = data.redirectPath
 			} else {
 				alert(`Error creating user: ${data.message}`);
 			}
