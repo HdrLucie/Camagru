@@ -11,15 +11,18 @@ import (
 
 func	generateAuthToken() string {
 	token := make([]byte, 32)
-    _, err := rand.Read(token)
-    if err != nil {
-        panic(err)
-    }
+	_, err := rand.Read(token)
+	if err != nil {
+		panic(err)
+	}
 	return hex.EncodeToString(token)
 }
 
 func sendMail(user User) {
 	// NewMessage creates a new message.
+	if (funcMsg == 1) {
+		fmt.Println(Yellow + "Send mail function" + Reset)
+	}
 	m := mail.NewMessage()
 	m.SetHeader("From", "camagru@mail.fr")
 	m.SetHeader("To", user.Email)
@@ -34,53 +37,45 @@ func sendMail(user User) {
 	}
 }
 
-func verifyToken(app *App, token string) (int, string) {
-	fmt.Println(Yellow + "GET TOKEN" + Reset)
+func verifyToken(app *App, token string) int {
 	var user User
-	query := "SELECT id, username FROM Users WHERE authToken = $1"
-	err := app.dataBase.QueryRow(query, token).Scan(&user.Id, &user.Username)
-	fmt.Println(user.Id, user.Username)
+	query := "SELECT id FROM Users WHERE authToken = $1"
+	err := app.dataBase.QueryRow(query, token).Scan(&user.Id)
 	if err != nil {
-		return -1, ""
+		fmt.Println(Magenta + "Verify token error" + Reset)
+		fmt.Println("Erreur:", err)
+		return -1
 	}
-	fmt.Println(user.Id, user.Username)
-	return user.Id, user.Username
-}
-
-func setConfirmed(app *App, id int) {
-	result, err := app.dataBase.Exec("UPDATE users SET confirmed = $1 WHERE id = $2", 1, id)
-    if err != nil {
-        fmt.Println(Red + "Error : set confirmed status" + Reset)
-        fmt.Println("Error details:", err)
-    }
-	rowsAffected, err := result.RowsAffected()
-    if err != nil {
-        fmt.Println(Red + "Error getting rows affected" + Reset)
-    }
-    fmt.Println("Rows affected:", rowsAffected)
+	return user.Id
 }
 
 func (app *App) verifyAuth(writer http.ResponseWriter, request *http.Request) {
 	var token string 
-	fmt.Println(Red + "VERIFICATION FUNCTION" + Reset)
+	if (funcMsg == 1) {
+		fmt.Println(Yellow + "Verify auth func" + Reset)
+	}
 	var tokenRequest struct {
-        Token string `json:"token"`
-    }
-    err := json.NewDecoder(request.Body).Decode(&tokenRequest)
-    if err != nil {
-        http.Error(writer, "Invalid request body", http.StatusBadRequest)
-        return
-    }
+		Token string `json:"token"`
+	}
+	err := json.NewDecoder(request.Body).Decode(&tokenRequest)
+	if err != nil {
+		http.Error(writer, "Invalid request body", http.StatusBadRequest)
+		return
+	}
 	token = tokenRequest.Token
-	id, username := verifyToken(app, token)
+	fmt.Printf("Verify token : %s\n", token)
+	id := verifyToken(app, token)
 	fmt.Printf("Id : %d\n", id)
 	if id == -1 {
 		http.Error(writer, "Invalid request body", http.StatusBadRequest)
-        return
+		return
 	} else {
-		setConfirmed(app, id)
-		user, _ := getUser(username, app)
-		fmt.Println(Red + "SET CONFIRMED" + Reset)
-		fmt.Println(user)
+		err := setterStatus(app, id)
+		if err != nil {
+			fmt.Println("Error details:", err)
+		}
+	}
+	if (usersList == 1) {
+		printUsers(app)
 	}
 }

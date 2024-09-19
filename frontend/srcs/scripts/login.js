@@ -74,10 +74,8 @@ window.addEventListener('load', function () {
 				})
 			});
 			const data = await response.json();
-
 			const token = data.token;
 			localStorage.setItem('token', token);
-
 			console.log('Token:', token);
 			if (response.status === 200) {
 				alert("Successfully connected");

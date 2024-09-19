@@ -19,12 +19,12 @@ document.getElementById("burger").onclick = function () {
     burger.classList.toggle("_active");
 }
 
-document.getElementById("logout").onclick = async function () {
-    alert('Logout')
-    const token = localStorage.getItem('token')
-    localStorage.clear()
-    window.location.href = '/'
-}
+// document.getElementById("logout").onclick = async function () {
+//     alert('Logout')
+//     const token = localStorage.getItem('token')
+//     localStorage.clear()
+//     window.location.href = '/'
+// }
 
 function redirectionPage(path) {
     alert('Redirection page')
