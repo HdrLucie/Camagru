@@ -27,7 +27,7 @@ func sendMail(user User) {
 	m.SetHeader("From", "camagru@mail.fr")
 	m.SetHeader("To", user.Email)
 	m.SetHeader("Subject", "Authentification")
-	content := fmt.Sprintf("Welcome to Canagru, click here : <a href=\"http://localhost:8080/authentification?token=%s\"> to verify your account\n", user.AuthToken)
+	content := fmt.Sprintf("Welcome to Canagru, click here : <a href=\"http://localhost:8080/verify?token=%s\"> to verify your account\n", user.AuthToken)
 	m.SetBody("text/html", content)
 
 	dialer := mail.NewDialer("smtp.mail.fr", 587, "camagru@mail.fr", "12hdkHUDH![d")
