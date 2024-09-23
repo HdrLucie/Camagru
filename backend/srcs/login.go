@@ -109,9 +109,30 @@ func addTokenToDb(app *App, user *User, token string) error {
 	return nil
 }
 
+func manageLoginError(app *App, user User, writer http.ResponseWriter) (string, string, int) {
+	err, _ := availableUsername(app, user.Username)
+	if err != nil {
+		fmt.Println(Red + "Error : wrong username" + Reset)
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		return "", "", 0
+	}
+	redirectPath, statusCode := checkPassword(user, app, writer)
+	if err != nil {
+		writer.WriteHeader(http.StatusUnauthorized)
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		return "", "", 0
+	}
+	token, err := createToken(user)
+	if err != nil {
+		fmt.Println(Red + "Error : creating token" + Reset)
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		return "", "", 0
+	}
+	return token, redirectPath, statusCode
+}
+
 func (app *App)	login(writer http.ResponseWriter, request *http.Request) {
 	var user User
-	var redirectPath string
 	if (funcMsg == 1) {
 		fmt.Println(Yellow + "login function" + Reset)
 	}
@@ -124,24 +145,7 @@ func (app *App)	login(writer http.ResponseWriter, request *http.Request) {
 		http.Error(writer, err.Error(), http.StatusBadRequest)
 		return
 	}
-	err, _ = availableUsername(app, user.Username)
-	if err != nil {
-		fmt.Println(Red + "Error : wrong username" + Reset)
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	redirectPath, statusCode := checkPassword(user, app, writer)
-	if err != nil {
-		writer.WriteHeader(http.StatusUnauthorized)
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	token, err := createToken(user)
-	if err != nil {
-		fmt.Println(Red + "Error : creating token" + Reset)
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	token, redirectPath, statusCode := manageLoginError(app, user, writer)
 	addTokenToDb(app, &user, token)
 	writer.WriteHeader(statusCode)
     json.NewEncoder(writer).Encode(map[string]string{

@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"net/http"
+	"strconv"
 )
 
 func	generateAuthToken() string {
@@ -27,7 +28,7 @@ func sendMail(user User) {
 	m.SetHeader("From", "camagru@mail.fr")
 	m.SetHeader("To", user.Email)
 	m.SetHeader("Subject", "Authentification")
-	content := fmt.Sprintf("Welcome to Canagru, click here : <a href=\"http://localhost:8080/verify?token=%s\"> to verify your account\n", user.AuthToken)
+	content := fmt.Sprintf("Welcome to Camagru %s, click here : <a href=\"http://localhost:8080/verify?token=%s\"> to verify your account\n", user.Username, user.AuthToken)
 	m.SetBody("text/html", content)
 
 	dialer := mail.NewDialer("smtp.mail.fr", 587, "camagru@mail.fr", "12hdkHUDH![d")
@@ -57,7 +58,14 @@ func (app *App) verifyAuth(writer http.ResponseWriter, request *http.Request) {
 	var tokenRequest struct {
 		Token string `json:"token"`
 	}
+	writer.Header().Set("Content-Type", "application/json")
+	if request.Method != http.MethodPost {
+		fmt.Println(Red + "Error : Method" + Reset)
+		http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
 	err := json.NewDecoder(request.Body).Decode(&tokenRequest)
+	fmt.Println("Token : " + tokenRequest.Token)
 	if err != nil {
 		http.Error(writer, "Invalid request body", http.StatusBadRequest)
 		return
@@ -77,5 +85,17 @@ func (app *App) verifyAuth(writer http.ResponseWriter, request *http.Request) {
 	}
 	if (usersList == 1) {
 		printUsers(app)
+	}
+	writer.WriteHeader(http.StatusCreated)
+	response := map[string]string{
+		"message": "Authentification successfully confirmed!",
+		"id":      strconv.Itoa(id),
+		"redirectPath": "/connection",
+	}
+	err = json.NewEncoder(writer).Encode(response)
+	if err != nil {
+		fmt.Println(Red + "Error : Encode Json object" + Reset)
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		return
 	}
 }
