@@ -41,8 +41,8 @@ func setterStatus(app *App, id int) error {
     if rowsAffected == 0 {
         fmt.Println(Yellow + "Warning: No rows were updated" + Reset)
     }
-	for i, u := range app.users {
-		if u.Id == id {
+	for i, _ := range app.users {
+		if app.users[i].Id == id {
 			app.users[i].confirmed = true
 		}
 	}

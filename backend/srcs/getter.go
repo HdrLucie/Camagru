@@ -30,7 +30,33 @@ func (app *App) getUserByJWT(JWT string) (*User, error) {
 	query := "SELECT id, username, email, password, authToken FROM Users WHERE JWT = $1"
 	row := app.dataBase.QueryRow(query, JWT)
 	err := row.Scan(&user.Id, &user.Username, &user.Email, &user.Password, &user.AuthToken)
-	fmt.Println(user.Id, user.Username)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	return &user, nil
+}
+
+func (app *App) getStatus(id int) (bool) {
+	if (getterMsg == 1) {
+		fmt.Println(Yellow + "Get Status" + Reset)
+	}	
+	for i, _ := range app.users {
+		if app.users[i].Id == id {
+			return app.users[i].confirmed
+		}
+	}
+	return false
+}
+
+func (app *App) getUserByUsername(username string) (*User, error) {
+	var user User
+	if (getterMsg == 1) {
+		fmt.Println(Yellow + "Get user by JWT" + Reset)
+	}
+	query := "SELECT id, email, username, password, authToken, confirmed FROM Users WHERE username = $1"
+	row := app.dataBase.QueryRow(query, username)
+	err := row.Scan(&user.Id, &user.Email, &user.Username, &user.Password, &user.AuthToken, &user.confirmed)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err

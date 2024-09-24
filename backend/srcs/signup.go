@@ -34,7 +34,6 @@ func availableUsername(app *App, username string) (error, bool) {
 	if err != nil {
 		return err, false
 	}
-	fmt.Println(exists)
 	return nil, exists
 }
 
@@ -47,7 +46,6 @@ func	availableEmail(app *App, email string) (error, bool) {
 	if err != nil {
 		return err, false
 	}
-	fmt.Println(exists)
 	return nil, exists
 }
 
@@ -60,7 +58,6 @@ func	availableId(app *App, id int) (error, bool) {
 	if err != nil {
 		return err, false
 	}
-	fmt.Println(exists)
 	return nil, exists
 }
 
@@ -80,7 +77,6 @@ func isIdentifierAvailable(app *App, user User) bool {
 		fmt.Println("Error checking username availability:", err)
 		return false
 	}
-
 	if (id == true || email == true || username == true) {
 		return true
 	}
@@ -91,7 +87,7 @@ func (app *App)	signUp(writer http.ResponseWriter, request *http.Request) {
 	var userID int
 	var user User
 	var token string
-	if (funcMsg == 1){
+	if (funcMsg == 1) {
 		fmt.Println(Yellow + "Sign Up function" + Reset)
 	}
 	writer.Header().Set("Content-Type", "application/json")
@@ -112,9 +108,8 @@ func (app *App)	signUp(writer http.ResponseWriter, request *http.Request) {
 	encryptPassword := encryptPassword(user.Password)
 	user.Password = encryptPassword
 	if (isIdentifierAvailable(app, user) == true ) {
-		fmt.Println(Red + "Error : Username or email already in use" + Reset)
-		http.Error(writer, "Error : Username or email already in use", http.StatusInternalServerError)
-		return		
+		http.Error(writer, "Error : Username or email already in use", http.StatusConflict)
+		return	
 	}
 	if !isValidEmail(user.Email) {
 		http.Error(writer, "Invalid email format", http.StatusBadRequest)

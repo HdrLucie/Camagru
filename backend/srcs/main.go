@@ -19,10 +19,10 @@ var Cyan = "\033[36m"
 var Gray = "\033[37m" 
 var White = "\033[97m"
 
-var funcMsg = 1
-var usersList = 1
-var setterMsg = 1
-var getterMsg = 1
+var funcMsg = 0
+var usersList = 0
+var setterMsg = 0
+var getterMsg = 0
 
 type App struct {
 	dataBase	*sql.DB

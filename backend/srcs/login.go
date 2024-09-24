@@ -7,6 +7,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"fmt"
 	"time"
+	// "strconv"
 )
 
 type Claims struct {
@@ -18,9 +19,9 @@ type Claims struct {
 func	getUser(username string, app *App) (*User, error) {
 	var user User
 
-	query := "SELECT id, username, email, password, authToken FROM Users WHERE username = $1"
+	query := "SELECT id, email, password, authToken FROM Users WHERE username = $1"
 	row := app.dataBase.QueryRow(query, username)
-	err := row.Scan(&user.Id, &user.Username, &user.Email, &user.Password, &user.AuthToken)
+	err := row.Scan(&user.Id, &user.Email, &user.Password, &user.AuthToken)
 	if err != nil {
 		fmt.Println(Red + "User doesn't exist" + Reset)
 		return nil, err
@@ -37,7 +38,7 @@ func CheckPasswordHash(password, hash string) bool {
 	return true
 }
 
-func	createToken(user User) (string, error) {
+func	createToken(user *User) (string, error) {
 	expirationTime := time.Now().Add(24 * time.Hour)
 	claims := &Claims{
 		Username: user.Username,
@@ -55,17 +56,11 @@ func	createToken(user User) (string, error) {
 	return tokenString, nil
 }
 
-func	checkPassword(u User, app *App, writer http.ResponseWriter) (string, int) {
-	user, err := getUser(u.Username, app)
-	if err != nil {
-		redirectPath := "/"
-		return redirectPath, http.StatusUnauthorized
-	}
-	if CheckPasswordHash(u.Password, user.Password) == true {
+func (app *App)	checkPassword(user *User, pass string, writer http.ResponseWriter) (string, int) {
+	if CheckPasswordHash(pass, user.Password) == true {
 		redirectPath := "/gallery"
 		return redirectPath, http.StatusOK
 	} else {
-		fmt.Println(Green + "Wrong password" + Reset)
 		redirectPath := "/"
 		return redirectPath, http.StatusUnauthorized
 	}
@@ -102,51 +97,66 @@ func addTokenToDb(app *App, user *User, token string) error {
     }
     for i, u := range app.users {
         if u.Id == user.Id {
-			fmt.Printf("Ajout token user")
             app.users[i].JWT = token
         }
     }
 	return nil
 }
 
-func manageLoginError(app *App, user User, writer http.ResponseWriter) (string, string, int) {
+func (app *App) manageLoginError(pass string, user *User, writer http.ResponseWriter) (string, string, int) {
 	err, _ := availableUsername(app, user.Username)
 	if err != nil {
 		fmt.Println(Red + "Error : wrong username" + Reset)
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
-		return "", "", 0
+		http.Error(writer, err.Error(), http.StatusUnauthorized)
+		return "", "/connection", 401
 	}
-	redirectPath, statusCode := checkPassword(user, app, writer)
+	redirectPath, statusCode := app.checkPassword(user, pass, writer)
 	if err != nil {
 		writer.WriteHeader(http.StatusUnauthorized)
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
-		return "", "", 0
+		http.Error(writer, err.Error(), http.StatusUnauthorized)
+		return "", "/connection", 401
 	}
-	token, err := createToken(user)
-	if err != nil {
-		fmt.Println(Red + "Error : creating token" + Reset)
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
-		return "", "", 0
+	if user.confirmed == true {
+		token, err := createToken(user)
+		if err != nil {
+			fmt.Println(Red + "Error : creating token" + Reset)
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+			return "", "", 500
+		}
+		return token, redirectPath, statusCode
+	} else {
+		return "", "/connection", 403
 	}
-	return token, redirectPath, statusCode
 }
 
 func (app *App)	login(writer http.ResponseWriter, request *http.Request) {
-	var user User
+	var user *User
+	var data User
 	if (funcMsg == 1) {
 		fmt.Println(Yellow + "login function" + Reset)
 	}
-		if (usersList == 1) {
+	if (usersList == 1) {
 		printUsers(app)
 	}
 	writer.Header().Set("Content-Type", "application/json")
-	err := json.NewDecoder(request.Body).Decode(&user)
+	if request.Method != http.MethodPost {
+		fmt.Println(Red + "Error : Method" + Reset)
+		http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	err := json.NewDecoder(request.Body).Decode(&data)
 	if err != nil {
 		http.Error(writer, err.Error(), http.StatusBadRequest)
 		return
 	}
-	token, redirectPath, statusCode := manageLoginError(app, user, writer)
-	addTokenToDb(app, &user, token)
+	user, err = app.getUserByUsername(data.Username)
+	if err != nil {
+		http.Error(writer, err.Error(), http.StatusUnauthorized)
+		writer.WriteHeader(401)
+		return
+	}
+	token, redirectPath, statusCode := app.manageLoginError(data.Password, user, writer)
+	addTokenToDb(app, user, token)
 	writer.WriteHeader(statusCode)
     json.NewEncoder(writer).Encode(map[string]string{
         "token": token,
