@@ -22,19 +22,6 @@ func (app *App) UserExists(username string) (error) {
 	return nil
 }
 
-// func	getUser(username string, app *App) (*User, error) {
-// 	var user User
-
-// 	query := "SELECT id, email, password, authToken FROM Users WHERE username = $1"
-// 	row := app.dataBase.QueryRow(query, username)
-// 	err := row.Scan(&user.Id, &user.Email, &user.Password, &user.AuthToken)
-// 	if err != nil {
-// 		fmt.Println(Red + "User doesn't exist" + Reset)
-// 		return nil, err
-// 	}
-// 	return &user, nil
-// }
-
 func (app *App) getUserByJWT(JWT string) (*User, error) {
 	var user User
 	if (getterMsg == 1) {
@@ -65,10 +52,25 @@ func (app *App) getStatus(id int) (bool) {
 func (app *App) getUserByUsername(username string) (*User, error) {
 	var user User
 	if (getterMsg == 1) {
-		fmt.Println(Yellow + "Get user by JWT" + Reset)
+		fmt.Println(Yellow + "Get user by username" + Reset)
 	}
 	query := "SELECT id, email, username, password, authToken, authStatus FROM Users WHERE username = $1"
 	row := app.dataBase.QueryRow(query, username)
+	err := row.Scan(&user.Id, &user.Email, &user.Username, &user.Password, &user.AuthToken, &user.authStatus)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	return &user, nil
+}
+
+func (app *App) getUserByEmail(email string) (*User, error) {
+	var user User
+	if (getterMsg == 1) {
+		fmt.Println(Yellow + "Get user by email" + Reset)
+	}
+	query := "SELECT id, email, username, password, authToken, authStatus FROM Users WHERE email = $1"
+	row := app.dataBase.QueryRow(query, email)
 	err := row.Scan(&user.Id, &user.Email, &user.Username, &user.Password, &user.AuthToken, &user.authStatus)
 	if err != nil {
 		fmt.Println(err)

@@ -43,11 +43,10 @@ func serveImgFiles(router *http.ServeMux) {
 
 func mdw(next http.Handler) http.Handler {
     f := func(w http.ResponseWriter, r *http.Request) {
-        // Executes middleware logic here...
         fmt.Println()
         fmt.Println(r)
         fmt.Println()
-        next.ServeHTTP(w, r) // Pass request to next handler
+        next.ServeHTTP(w, r)
     }
 
     return http.HandlerFunc(f)
@@ -63,9 +62,13 @@ func renderTemplate(router *http.ServeMux, app *App) {
     router.HandleFunc("/gallery", serveTemplate("gallery.html"))
 	router.HandleFunc("/takePicture", serveTemplate("picture.html"))
 	router.HandleFunc("/authentification", serveTemplate("authentification.html"))
+	router.HandleFunc("/forgetPassword", serveTemplate("forgetPassword.html"))
+	router.HandleFunc("/verify", serveTemplate("verify.html"))
+	router.HandleFunc("/resetPassword", serveTemplate("resetPassword.html"))
     router.HandleFunc("/signUp", app.signUp)
     router.HandleFunc("/login", app.login)
-	router.HandleFunc("/verify", serveTemplate("verify.html"))
 	router.HandleFunc("/logout", app.logout)
 	router.HandleFunc("/verifyAccount", app.verifyAccount)
+	router.HandleFunc("/sendResetLink", app.sendResetLink)
+	router.HandleFunc("/newPassword", app.resetPassword)
 }

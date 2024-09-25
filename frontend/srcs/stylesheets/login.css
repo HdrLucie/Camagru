@@ -1,7 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap");
 
-$hover-text: "Microdosing yr dreamcatcher retro, next level vegan meh pickled shoreditch fap craft beer.";
-
 ::-webkit-scrollbar {
 	width: 0;
 	height: 0;
@@ -145,4 +143,4 @@ input {
 .info:hover + .passwordRequierments {
 	transform: translateY(18px);
 	opacity:1;
-  }
+}

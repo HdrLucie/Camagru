@@ -71,9 +71,7 @@ func (app *App) verifyAccount(writer http.ResponseWriter, request *http.Request)
 		return
 	}
 	token = tokenRequest.Token
-	fmt.Printf("Verify token : %s\n", token)
 	id := verifyToken(app, token)
-	fmt.Println(Red + "Before change status\n- - - - - - - - - - - - - -\n" + Reset)
 	if id == -1 {
 		http.Error(writer, "Invalid request body", http.StatusBadRequest)
 		return
