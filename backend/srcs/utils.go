@@ -15,7 +15,7 @@ func	printUsers(app *App) {
 		fmt.Println("Password : " + app.users[i].Password)
 		fmt.Println("JWT : " + app.users[i].JWT)
 		fmt.Println("authToken : " + app.users[i].AuthToken)
-		fmt.Printf("Status : %d\n", app.users[i].confirmed)
+		fmt.Printf("Status : %d\n", app.users[i].authStatus)
 		fmt.Println(Gray + "- - - - - - - - - - - - - - - - -" + Reset)
 	}
 }

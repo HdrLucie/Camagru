@@ -36,7 +36,7 @@ type User struct {
 	Password    string `json:"password"`
 	JWT			string `json:"token"`
 	AuthToken	string`json:"authToken"`
-	confirmed	bool`json:"confirmed"`
+	authStatus	bool`json:"authStatus"`
 }
 
 type TemplateData struct {

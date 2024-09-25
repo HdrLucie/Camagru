@@ -7,26 +7,12 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"fmt"
 	"time"
-	// "strconv"
 )
 
 type Claims struct {
 	Username string		`json:"username"`
 	UserId   int		`json:"userid"`
 	jwt.RegisteredClaims
-}
-
-func	getUser(username string, app *App) (*User, error) {
-	var user User
-
-	query := "SELECT id, email, password, authToken FROM Users WHERE username = $1"
-	row := app.dataBase.QueryRow(query, username)
-	err := row.Scan(&user.Id, &user.Email, &user.Password, &user.AuthToken)
-	if err != nil {
-		fmt.Println(Red + "User doesn't exist" + Reset)
-		return nil, err
-	}
-	return &user, nil
 }
 
 func CheckPasswordHash(password, hash string) bool {
@@ -116,7 +102,7 @@ func (app *App) manageLoginError(pass string, user *User, writer http.ResponseWr
 		http.Error(writer, err.Error(), http.StatusUnauthorized)
 		return "", "/connection", 401
 	}
-	if user.confirmed == true {
+	if user.authStatus == true {
 		token, err := createToken(user)
 		if err != nil {
 			fmt.Println(Red + "Error : creating token" + Reset)
@@ -152,7 +138,6 @@ func (app *App)	login(writer http.ResponseWriter, request *http.Request) {
 	user, err = app.getUserByUsername(data.Username)
 	if err != nil {
 		http.Error(writer, err.Error(), http.StatusUnauthorized)
-		writer.WriteHeader(401)
 		return
 	}
 	token, redirectPath, statusCode := app.manageLoginError(data.Password, user, writer)

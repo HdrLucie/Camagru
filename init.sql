@@ -5,5 +5,5 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     JWT VARCHAR(255) NULL,
     authToken VARCHAR(255) NULL,
-    confirmed BOOLEAN
+    authStatus BOOLEAN
 );

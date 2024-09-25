@@ -50,7 +50,7 @@ func verifyToken(app *App, token string) int {
 	return user.Id
 }
 
-func (app *App) verifyAuth(writer http.ResponseWriter, request *http.Request) {
+func (app *App) verifyAccount(writer http.ResponseWriter, request *http.Request) {
 	var token string 
 	if (funcMsg == 1) {
 		fmt.Println(Yellow + "Verify auth func" + Reset)

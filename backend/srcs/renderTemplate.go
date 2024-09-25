@@ -67,5 +67,5 @@ func renderTemplate(router *http.ServeMux, app *App) {
     router.HandleFunc("/login", app.login)
 	router.HandleFunc("/verify", serveTemplate("verify.html"))
 	router.HandleFunc("/logout", app.logout)
-	router.HandleFunc("/verifyAuth", app.verifyAuth)
+	router.HandleFunc("/verifyAccount", app.verifyAccount)
 }

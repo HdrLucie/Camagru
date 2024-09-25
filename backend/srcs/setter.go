@@ -27,7 +27,7 @@ func (app *App) removeJWT(username string) error {
 }
 
 func setterStatus(app *App, id int) error {
-	result, err := app.dataBase.Exec("UPDATE users SET confirmed = $1 WHERE id = $2", 1, id)
+	result, err := app.dataBase.Exec("UPDATE users SET authStatus = $1 WHERE id = $2", 1, id)
 	if err != nil {
 		fmt.Println(Red + "Error : set confirmed status" + Reset)
 		fmt.Println("Error details:", err)
@@ -43,7 +43,7 @@ func setterStatus(app *App, id int) error {
     }
 	for i, _ := range app.users {
 		if app.users[i].Id == id {
-			app.users[i].confirmed = true
+			app.users[i].authStatus = true
 		}
 	}
 	return nil

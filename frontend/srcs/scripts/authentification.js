@@ -16,7 +16,7 @@ async function verifyAccount() {
     console.log(token)
     console.log("Verify Account")
     try {
-        const response = await fetch("/verifyAuth", {
+        const response = await fetch("/verifyAccount", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
