@@ -15,20 +15,6 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
-func	getUser(username string, app *App) (*User, error) {
-	var user User
-
-	query := "SELECT id, username, email, password FROM Users WHERE username = $1"
-
-	row := app.dataBase.QueryRow(query, username)
-	err := row.Scan(&user.Id, &user.Username, &user.Email, &user.Password)
-	if err != nil {
-		fmt.Println(Red + "User doesn't exist" + Reset)
-		return nil, err
-	}
-	return &user, nil
-}
-
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	if err != nil {
@@ -38,8 +24,7 @@ func CheckPasswordHash(password, hash string) bool {
 	return true
 }
 
-func	createToken(user User) (string, error) {
-	fmt.Println(Blue + "Create Token function" + Reset)
+func	createToken(user *User) (string, error) {
 	expirationTime := time.Now().Add(24 * time.Hour)
 	claims := &Claims{
 		Username: user.Username,
@@ -57,30 +42,22 @@ func	createToken(user User) (string, error) {
 	return tokenString, nil
 }
 
-func	checkPassword(u User, app *App, writer http.ResponseWriter) (string, int) {
-
-	user, err := getUser(u.Username, app)
-	if err != nil {
-		redirectPath := "/"
-		return redirectPath, http.StatusUnauthorized
-	}
-	if CheckPasswordHash(u.Password, user.Password) == true {
-		fmt.Println(Green + "Right password" + Reset)
+func (app *App)	checkPassword(user *User, pass string, writer http.ResponseWriter) (string, int) {
+	if CheckPasswordHash(pass, user.Password) == true {
 		redirectPath := "/gallery"
 		return redirectPath, http.StatusOK
 	} else {
-		fmt.Println(Green + "Wrong password" + Reset)
 		redirectPath := "/"
 		return redirectPath, http.StatusUnauthorized
 	}
 }
 
 func addTokenToDb(app *App, user *User, token string) error {
-    fmt.Println(Green + "Add token to database" + Reset)
-    fmt.Println("Token : " + token)
-    fmt.Println("User ID : ", user.Id)
-
 	var exists bool
+	
+	if (funcMsg == 1) {
+		fmt.Println(Yellow + "Add token to database" + Reset)
+	}
 	err := app.dataBase.QueryRow("SELECT EXISTS(SELECT 1 FROM users WHERE username = $1)", user.Username).Scan(&exists)
 	if err != nil {
 		fmt.Println("Erreur lors de la vérification de l'existence de l'utilisateur:", err)
@@ -90,65 +67,81 @@ func addTokenToDb(app *App, user *User, token string) error {
 		fmt.Printf("Aucun utilisateur trouvé avec l'Username : %d\n", user.Username)
 		return fmt.Errorf("utilisateur non trouvé")
 	}
-
-    result, err := app.dataBase.Exec("UPDATE users SET token = $1 WHERE username = $2", token, user.Username)
+    result, err := app.dataBase.Exec("UPDATE users SET JWT = $1 WHERE username = $2", token, user.Username)
     if err != nil {
         fmt.Println(Red + "Error : add token to database" + Reset)
         fmt.Println("Error details:", err)
         return err
     }
-
     rowsAffected, err := result.RowsAffected()
     if err != nil {
         fmt.Println(Red + "Error getting rows affected" + Reset)
         return err
     }
-    fmt.Println("Rows affected:", rowsAffected)
-
     if rowsAffected == 0 {
         fmt.Println(Yellow + "Warning: No rows were updated" + Reset)
     }
     for i, u := range app.users {
         if u.Id == user.Id {
-            app.users[i].Token = token
+            app.users[i].JWT = token
         }
     }
-	fmt.Println(user)
-	fmt.Println(Green + "Add token to database" + Reset)
 	return nil
 }
 
-func (app *App)	login(writer http.ResponseWriter, request *http.Request) {
-	fmt.Println(Yellow + "login function" + Reset)
-	writer.Header().Set("Content-Type", "application/json")
-	var user User
+func (app *App) manageLoginError(pass string, user *User, writer http.ResponseWriter) (string, string, int) {
+	err, _ := availableUsername(app, user.Username)
+	if err != nil {
+		fmt.Println(Red + "Error : wrong username" + Reset)
+		http.Error(writer, err.Error(), http.StatusUnauthorized)
+		return "", "/connection", 401
+	}
+	redirectPath, statusCode := app.checkPassword(user, pass, writer)
+	if err != nil {
+		writer.WriteHeader(http.StatusUnauthorized)
+		http.Error(writer, err.Error(), http.StatusUnauthorized)
+		return "", "/connection", 401
+	}
+	if user.authStatus == true {
+		token, err := createToken(user)
+		if err != nil {
+			fmt.Println(Red + "Error : creating token" + Reset)
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+			return "", "", 500
+		}
+		return token, redirectPath, statusCode
+	} else {
+		return "", "/connection", 403
+	}
+}
 
-	err := json.NewDecoder(request.Body).Decode(&user)
+func (app *App)	login(writer http.ResponseWriter, request *http.Request) {
+	var user *User
+	var data User
+	if (funcMsg == 1) {
+		fmt.Println(Yellow + "login function" + Reset)
+	}
+	if (usersList == 1) {
+		printUsers(app)
+	}
+	writer.Header().Set("Content-Type", "application/json")
+	if request.Method != http.MethodPost {
+		fmt.Println(Red + "Error : Method" + Reset)
+		http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	err := json.NewDecoder(request.Body).Decode(&data)
 	if err != nil {
 		http.Error(writer, err.Error(), http.StatusBadRequest)
 		return
 	}
-	fmt.Println(Red + "Username : " + user.Username + "Password : " + user.Password + Reset)
-	err, _ = availableUsername(app, user.Username)
+	user, err = app.getUserByUsername(data.Username)
 	if err != nil {
-		fmt.Println(Red + "Error : wrong username" + Reset)
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		http.Error(writer, err.Error(), http.StatusUnauthorized)
 		return
 	}
-	var redirectPath string
-	redirectPath, statusCode := checkPassword(user, app, writer)
-	if err != nil {
-		writer.WriteHeader(http.StatusUnauthorized)
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	token, err := createToken(user)
-	if err != nil {
-		fmt.Println(Red + "Error : creating token" + Reset)
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	addTokenToDb(app, &user, token)
+	token, redirectPath, statusCode := app.manageLoginError(data.Password, user, writer)
+	addTokenToDb(app, user, token)
 	writer.WriteHeader(statusCode)
     json.NewEncoder(writer).Encode(map[string]string{
         "token": token,

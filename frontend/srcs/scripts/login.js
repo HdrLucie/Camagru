@@ -1,5 +1,4 @@
 window.addEventListener('load', function () {
-	// Ton code JavaScript ici
 	console.log('La page entière est complètement chargée');
 
 	function checkPassword(password) {
@@ -47,12 +46,15 @@ window.addEventListener('load', function () {
 			if (response.status === 201) {
 				console.log("\nAccount created successfully! Please check your email to verify your account.")
 				alert(`Account created successfully! Please check your email to verify your account.`);
+				window.location.href = data.redirectPath
+			} else if (response.status === 409) {
+				alert("Username or email already in use.")
 			} else {
 				alert(`Error creating user: ${data.message}`);
 			}
 		} catch (error) {
 			console.error("Error: ", error);
-			alert(`Error creating user: ${error.message}`);
+			alert(`HEEEREEEE Error creating user: ${error.message}`);
 		}
 	}
 
@@ -69,19 +71,21 @@ window.addEventListener('load', function () {
 					"Content-Type": "application/json"
 				},
 				body: JSON.stringify({
-					Username: login,
-					Password: password
+					"Username": login,
+					"Password": password
 				})
 			});
 			const data = await response.json();
-
 			const token = data.token;
 			localStorage.setItem('token', token);
-
 			console.log('Token:', token);
 			if (response.status === 200) {
 				alert("Successfully connected");
 				window.location.href = data.redirectPath
+			} else if (response.status === 401) {
+				alert("Unable to log in. Please verify your credentials and try again.")
+			} else if (response.status === 403) {
+				alert("Account verification required. Please check your email to complete the verification process.")
 			} else {
 				alert(`Error connection: ${data.message}`);
 			}

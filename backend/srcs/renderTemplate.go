@@ -27,19 +27,16 @@ func serveTemplate(templateName string) http.HandlerFunc {
 }
 
 func	serveStyleFiles(router *http.ServeMux) {
-	fmt.Println(Red + "SERVE STYLES" + Reset)
     styles := http.FileServer(http.Dir("../../frontend/srcs/stylesheets/"))
 	router.Handle("/styles/", http.StripPrefix("/styles", styles))
 }
 
 func serveScriptsFiles(router *http.ServeMux) {
-	fmt.Println(Red + "SERVE SCRIPTS" + Reset)
 	scripts := http.FileServer(http.Dir("../../frontend/srcs/scripts/"))
 	router.Handle("/scripts/", http.StripPrefix("/scripts", scripts))
 }
 
 func serveImgFiles(router *http.ServeMux) {
-	fmt.Println(Red + "SERVE IMAGE" + Reset)
     assets := http.FileServer(http.Dir("../../frontend/srcs/assets/"))
 	router.Handle("/assets/", http.StripPrefix("/assets", assets))
 }
@@ -65,6 +62,10 @@ func renderTemplate(router *http.ServeMux, app *App) {
 	router.HandleFunc("/connection", serveTemplate("login.html"))
     router.HandleFunc("/gallery", serveTemplate("gallery.html"))
 	router.HandleFunc("/takePicture", serveTemplate("picture.html"))
+	router.HandleFunc("/authentification", serveTemplate("authentification.html"))
     router.HandleFunc("/signUp", app.signUp)
     router.HandleFunc("/login", app.login)
+	router.HandleFunc("/verify", serveTemplate("verify.html"))
+	router.HandleFunc("/logout", app.logout)
+	router.HandleFunc("/verifyAccount", app.verifyAccount)
 }

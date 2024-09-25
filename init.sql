@@ -3,5 +3,7 @@ CREATE TABLE users (
     email VARCHAR(255) NOT NULL,
     username VARCHAR(100),
     password VARCHAR(255) NOT NULL,
-    token VARCHAR(255) NULL
+    JWT VARCHAR(255) NULL,
+    authToken VARCHAR(255) NULL,
+    authStatus BOOLEAN
 );

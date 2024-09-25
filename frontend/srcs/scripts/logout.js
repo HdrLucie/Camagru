@@ -2,26 +2,50 @@
 window.onload = checkToken;
 
 function checkToken() {
-    console.log("Function check token")
-    const token = localStorage.getItem('token');
-    console.log(token)
-    if (!token) {
-        // alert('No token found. Please login.');
-        window.location.href = '/';
-    }
+	console.log("Function check token")
+	const token = localStorage.getItem('token');
+	if (!token) {
+		window.location.href = '/';
+	}
 }
 
 document.getElementById("burger").onclick = function () {
-    let burger = document.querySelector(".js-burger");
-    let nav = document.querySelector(".js-nav");
+	let burger = document.querySelector(".js-burger");
+	let nav = document.querySelector(".js-nav");
 
-    nav.classList.toggle("_active");
-    burger.classList.toggle("_active");
+	nav.classList.toggle("_active");
+	burger.classList.toggle("_active");
 }
 
 document.getElementById("logout").onclick = async function () {
-    alert('Logout')
-    const token = localStorage.getItem('token')
-    localStorage.clear()
-    window.location.href = '/'
+	const token = localStorage.getItem('token')
+	console.log("Logout function\n" + token)
+	try {
+		const response = await fetch("/logout", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				"token": token,
+			})
+		});
+        const responseText = await response.text();
+        let data;
+        if (responseText) {
+            data = JSON.parse(responseText);
+        }
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		if (response.status === 200) {
+			localStorage.clear()
+			window.location.href = '/'
+		} else {
+			alert(`Error logout message: ${data.message}`);
+		}
+	} catch (error) {
+		console.error("Error: ", error);
+		alert(`Error logout: ${error.message}`);
+	}
 }

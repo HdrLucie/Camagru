@@ -19,6 +19,11 @@ var Cyan = "\033[36m"
 var Gray = "\033[37m" 
 var White = "\033[97m"
 
+var funcMsg = 0
+var usersList = 0
+var setterMsg = 0
+var getterMsg = 0
+
 type App struct {
 	dataBase	*sql.DB
 	users		[]User
@@ -29,7 +34,9 @@ type User struct {
 	Email       string `json:"email"`
 	Username    string `json:"username"`
 	Password    string `json:"password"`
-	Token		string `json:"token"`
+	JWT			string `json:"token"`
+	AuthToken	string`json:"authToken"`
+	authStatus	bool`json:"authStatus"`
 }
 
 type TemplateData struct {
