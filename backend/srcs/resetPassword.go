@@ -65,6 +65,7 @@ func (app *App) resetPassword(writer http.ResponseWriter, request *http.Request)
 		writer.WriteHeader(http.StatusNotFound)
         response := map[string]string{"error": "User not found"}
         json.NewEncoder(writer).Encode(response)
+		return 
 	}
 	printUsers(app)
 	err = app.newPassword(user.Id, u.Password)
