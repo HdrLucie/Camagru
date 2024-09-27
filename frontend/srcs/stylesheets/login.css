@@ -1,7 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap");
 
-$hover-text: "Microdosing yr dreamcatcher retro, next level vegan meh pickled shoreditch fap craft beer.";
-
 ::-webkit-scrollbar {
 	width: 0;
 	height: 0;
@@ -130,7 +128,7 @@ input {
 .passwordRequierments {
 	position: fixed;
     margin-left: 20%;
-    top: 48%;
+    top: 40%;
     opacity: 0;
     width: 300px;
     border-radius: 5px;
@@ -138,11 +136,11 @@ input {
     color: #fff;
     font-size: 12px;
     padding: 10px;
-    text-align: left;
+    text-align: justify;
     transition: all 300ms ease;
 }
 
 .info:hover + .passwordRequierments {
 	transform: translateY(18px);
 	opacity:1;
-  }
+}

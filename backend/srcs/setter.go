@@ -48,3 +48,28 @@ func setterStatus(app *App, id int) error {
 	}
 	return nil
 }
+
+func (app *App) newPassword(id int, newPassword string) error {
+
+	encryptPassword := encryptPassword(newPassword)
+	result, err := app.dataBase.Exec("UPDATE users SET password = $1 WHERE id = $2", encryptPassword, id)
+	if err != nil {
+		fmt.Println(Red + "Error : set confirmed status" + Reset)
+		fmt.Println("Error details:", err)
+		return err
+	}
+	rowsAffected, err := result.RowsAffected()
+    if err != nil {
+        fmt.Println(Red + "Error getting rows affected" + Reset)
+        return err
+    }
+    if rowsAffected == 0 {
+        fmt.Println(Yellow + "Warning: No rows were updated" + Reset)
+    }
+	for i, _ := range app.users {
+		if app.users[i].Id == id {
+			app.users[i].Password = encryptPassword
+		}
+	}
+	return nil
+}
