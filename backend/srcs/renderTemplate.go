@@ -65,10 +65,12 @@ func renderTemplate(router *http.ServeMux, app *App) {
 	router.HandleFunc("/forgetPassword", serveTemplate("forgetPassword.html"))
 	router.HandleFunc("/verify", serveTemplate("verify.html"))
 	router.HandleFunc("/resetPassword", serveTemplate("resetPassword.html"))
-    router.HandleFunc("/signUp", app.signUp)
+	router.HandleFunc("/settings", serveTemplate("settings.html"))
+	router.HandleFunc("/signUp", app.signUp)
     router.HandleFunc("/login", app.login)
 	router.HandleFunc("/logout", app.logout)
 	router.HandleFunc("/verifyAccount", app.verifyAccount)
 	router.HandleFunc("/sendResetLink", app.sendResetLink)
 	router.HandleFunc("/newPassword", app.resetPassword)
+	router.HandleFunc("/editUsername", app.updateUsername)
 }

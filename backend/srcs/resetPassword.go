@@ -7,24 +7,6 @@ import (
 	"github.com/go-mail/mail"
 )
 
-func (app *App) deserializeUserData(writer http.ResponseWriter, request *http.Request) User {
-	var u User
-
-	fmt.Println(Yellow + "Send Reset Link function" + Reset)
-	writer.Header().Set("Content-Type", "application/json")
-	if request.Method != http.MethodPost {
-		fmt.Println(Red + "Error : Method" + Reset)
-		http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
-	}
-	err := json.NewDecoder(request.Body).Decode(&u)
-	if err != nil {
-		fmt.Println(Red + "Error : Decode Json object" + Reset)
-		http.Error(writer, err.Error(), http.StatusBadRequest)
-	}
-
-	return u
-}
-
 func (app *App) sendResetLink(writer http.ResponseWriter, request *http.Request) {
 	var user User
 
