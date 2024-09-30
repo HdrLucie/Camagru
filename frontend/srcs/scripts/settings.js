@@ -10,21 +10,62 @@ function checkToken() {
     }
 }
 
-document.getElementById("signUp").onclick = async function () {
+document.getElementById("setUsername").onclick = async function () {
 	console.log("\n\nupdate name\n\n")
-	var tmpUser = document.getElementById("Username")
+	var tmpUser = document.getElementById("username")
+    // console.log(tmpUser)
 	const token = localStorage.getItem('token')
 
 	var login = tmpUser.value
-
-    const response = await fetch("/editUsername", {
+    console.log("login :" + login)
+    const response = fetch("/editUsername", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            "username": login,
-            "JWT": token
+            "login": login,
+        })
+    });
+}
+
+document.getElementById("setPassword").onclick = async function () {
+	console.log("\n\nupdate name\n\n")
+	var tmpUser = document.getElementById("password")
+    // console.log(tmpUser)
+	const token = localStorage.getItem('token')
+
+	var password = tmpUser.value
+    console.log("password :" + password)
+    const response = fetch("/editPassword", {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            "password": password,
+        })
+    });
+}
+
+document.getElementById("setEmail").onclick = async function () {
+	console.log("\n\nupdate mail\n\n")
+	var tmpUser = document.getElementById("email")
+    // console.log(tmpUser)
+	const token = localStorage.getItem('token')
+
+	var email = tmpUser.value
+    console.log("Email :" + email)
+    const response = fetch("/editEmail", {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            "email": email,
         })
     });
 }

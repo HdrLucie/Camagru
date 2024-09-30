@@ -122,7 +122,7 @@ func (app *App)	login(writer http.ResponseWriter, request *http.Request) {
 		fmt.Println(Yellow + "login function" + Reset)
 	}
 	if (usersList == 1) {
-		printUsers(app)
+		app.printUsers()
 	}
 	writer.Header().Set("Content-Type", "application/json")
 	if request.Method != http.MethodPost {

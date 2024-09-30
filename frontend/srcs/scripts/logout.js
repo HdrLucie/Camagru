@@ -24,11 +24,9 @@ document.getElementById("logout").onclick = async function () {
 		const response = await fetch("/logout", {
 			method: "POST",
 			headers: {
-				"Content-Type": "application/json"
+				"Content-Type": "application/json",
+				"Authorization": `Bearer ${token}`,
 			},
-			body: JSON.stringify({
-				"token": token,
-			})
 		});
         const responseText = await response.text();
         let data;

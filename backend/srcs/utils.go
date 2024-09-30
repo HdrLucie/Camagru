@@ -5,8 +5,8 @@ import (
 	"strconv"
 )
 
-func	printUsers(app *App) {
-	fmt.Println(Cyan + "List of user" + Reset)
+func (app *App) printUsers() {
+	fmt.Println(Cyan + "List of user : " + Reset)
 	fmt.Println(Gray + "- - - - - - - - - - - - - - - - -" + Reset)
 	for i, _ := range app.users {
 		fmt.Println("Id : " + strconv.Itoa(app.users[i].Id))

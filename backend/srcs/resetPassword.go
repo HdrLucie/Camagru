@@ -49,8 +49,8 @@ func (app *App) resetPassword(writer http.ResponseWriter, request *http.Request)
         json.NewEncoder(writer).Encode(response)
 		return 
 	}
-	printUsers(app)
-	err = app.newPassword(user.Id, u.Password)
+	app.printUsers()
+	err = app.setPassword(user.Id, u.Password)
 	if err != nil {
 		writer.WriteHeader(http.StatusBadRequest)
         response := map[string]string{"error": "Impossible to change password"}
@@ -62,5 +62,5 @@ func (app *App) resetPassword(writer http.ResponseWriter, request *http.Request)
 			"redirectPath": "/connection",
 		})
 	}
-	printUsers(app)	
+	app.printUsers()	
 }

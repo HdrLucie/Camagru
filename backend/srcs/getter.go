@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"encoding/json"
+	"strings"
 )
 
 // ! ||--------------------------------------------------------------------------------||
@@ -29,11 +30,10 @@ func (app *App) getUserByJWT(JWT string) (*User, error) {
 	if (getterMsg == 1) {
 		fmt.Println(Yellow + "Get user by JWT" + Reset)
 	}
-	query := "SELECT id, username, email, password, authToken FROM Users WHERE JWT = $1"
+	query := "SELECT id, email, username, password, JWT, authToken, authStatus FROM Users WHERE JWT = $1"
 	row := app.dataBase.QueryRow(query, JWT)
-	err := row.Scan(&user.Id, &user.Username, &user.Email, &user.Password, &user.AuthToken)
+	err := row.Scan(&user.Id, &user.Email, &user.Username, &user.Password, &user.JWT, &user.AuthToken, &user.authStatus)
 	if err != nil {
-		fmt.Println(err)
 		return nil, err
 	}
 	return &user, nil
@@ -101,4 +101,9 @@ func (app *App) deserializeUserData(writer http.ResponseWriter, request *http.Re
 	}
 
 	return u
+}
+
+func extractJWTFromRequest(request *http.Request) string {
+	JWT := request.Header.Get("Authorization")
+	return strings.TrimPrefix(JWT, "Bearer ")
 }
