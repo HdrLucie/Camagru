@@ -60,4 +60,6 @@ func main() {
 
 	fmt.Println("Server started at http://localhost:" + port)
 	http.ListenAndServe(":"+port, router)
+	// fmt.Println("Server started at http://localhost:" + port)
+	// http.ListenAndServe("paul-f4Ar8s2.clusters.42paris.fr:"+port, router)
 }

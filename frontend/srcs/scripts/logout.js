@@ -9,14 +9,6 @@ function checkToken() {
 	}
 }
 
-document.getElementById("burger").onclick = function () {
-	let burger = document.querySelector(".js-burger");
-	let nav = document.querySelector(".js-nav");
-
-	nav.classList.toggle("_active");
-	burger.classList.toggle("_active");
-}
-
 document.getElementById("logout").onclick = async function () {
 	const token = localStorage.getItem('token')
 	console.log("Logout function\n" + token)
