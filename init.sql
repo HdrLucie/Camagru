@@ -7,3 +7,9 @@ CREATE TABLE users (
     authToken VARCHAR(255) NULL,
     authStatus BOOLEAN
 );
+
+CREATE TABLE stickers (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    image_path TEXT
+);

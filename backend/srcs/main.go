@@ -30,13 +30,13 @@ type App struct {
 }
 
 type User struct {
-	Id          int `json:id`
+	Id          int `json:"id"`
 	Email       string `json:"email"`
 	Username    string `json:"username"`
 	Password    string `json:"password"`
 	JWT			string `json:"token"`
 	AuthToken	string`json:"authToken"`
-	authStatus	bool`json:"authStatus"`
+	AuthStatus	bool`json:"authStatus"`
 }
 
 type TemplateData struct {

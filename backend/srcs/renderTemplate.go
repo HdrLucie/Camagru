@@ -90,4 +90,5 @@ func renderTemplate(router *http.ServeMux, app *App) {
 	router.HandleFunc("/editUsername", app.authMiddleware(app.modifyUsername))
 	router.HandleFunc("/editPassword", app.authMiddleware(app.modifyPassword))
 	router.HandleFunc("/editEmail", app.authMiddleware(app.modifyEmail))
+	router.HandleFunc("/getUser", app.authMiddleware(app.getUser))
 }

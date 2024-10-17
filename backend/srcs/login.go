@@ -102,7 +102,7 @@ func (app *App) manageLoginError(pass string, user *User, writer http.ResponseWr
 		http.Error(writer, err.Error(), http.StatusUnauthorized)
 		return "", "/connection", 401
 	}
-	if user.authStatus == true {
+	if user.AuthStatus == true {
 		token, err := createToken(user)
 		if err != nil {
 			fmt.Println(Red + "Error : creating token" + Reset)

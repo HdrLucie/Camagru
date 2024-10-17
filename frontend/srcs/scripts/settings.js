@@ -1,12 +1,34 @@
-window.onload = checkToken;
+document.addEventListener('DOMContentLoaded', () => {
+    checkToken();
+    loadUserData();
+});
 
-function checkToken() {
-    console.log("Function check token")
+async function checkToken() {
     const token = localStorage.getItem('token');
+    console.log("Function check token")    
     console.log(token)
     if (!token) {
         // alert('No token found. Please login.');
         window.location.href = '/';
+    }
+}
+
+async function getUser() {
+    const token = localStorage.getItem('token');
+    console.log("getUser function")    
+    try {
+        const response = await fetch("/getUser", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+        const userData = await response.json();
+        return userData;
+    } catch (error) {
+        console.error("Erreur:", error);
+        return null;
     }
 }
 
@@ -15,6 +37,16 @@ function redirectionPage(path) {
     window.location.href = path;
 }
 
+async function loadUserData() {
+    const userData = await getUser();
+    console.log("User :" + userData)
+    if (!userData) return;
+
+    document.querySelectorAll('[user-data]').forEach(element => {
+        const field = element.getAttribute('user-data');
+        element.textContent = userData[field];
+    });
+}
 // document.getElementById("setUsername").onclick = async function () {
 // 	console.log("\n\nupdate name\n\n")
 // 	var tmpUser = document.getElementById("username")

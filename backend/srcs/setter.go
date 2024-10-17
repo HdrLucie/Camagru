@@ -43,7 +43,7 @@ func setterStatus(app *App, id int) error {
 	}
 	for i, _ := range app.users {
 		if app.users[i].Id == id {
-			app.users[i].authStatus = true
+			app.users[i].AuthStatus = true
 		}
 	}
 	return nil
