@@ -110,11 +110,13 @@ async function loadUserData() {
 document.addEventListener('DOMContentLoaded', function() {
     const showPhotos = document.getElementById('show-photos');
     const showSettings = document.getElementById('show-settings');
+    const showStickers = document.getElementById('show-stickers');
     const photosList = document.getElementById('photos-list');
     const settings = document.getElementById('settings');
+    const stickers = document.getElementById('stickers');
 
     function showContent(contentToShow) {
-        [photosList, settings].forEach(content => {
+        [photosList, settings, stickers].forEach(content => {
             content.classList.remove('active');
         });
         contentToShow.classList.add('active');
@@ -130,6 +132,10 @@ document.addEventListener('DOMContentLoaded', function() {
         showContent(settings);
     });
 
+    showStickers.addEventListener('click', function(e) {
+        e.preventDefault();
+        showContent(stickers);
+    });
     // La liste des photos est affichée par défaut
     showContent(photosList);
 });

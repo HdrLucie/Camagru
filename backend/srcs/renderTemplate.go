@@ -38,8 +38,13 @@ func serveScriptsFiles(router *http.ServeMux) {
 }
 
 func serveImgFiles(router *http.ServeMux) {
-	assets := http.FileServer(http.Dir("../../frontend/srcs/assets/"))
+	assets := http.FileServer(http.Dir("../../frontend/srcs/assets/img"))
 	router.Handle("/assets/", http.StripPrefix("/assets", assets))
+}
+
+func serveStickersFiles(router *http.ServeMux) {
+	stickers := http.FileServer(http.Dir("../../frontend/srcs/assets/stickers/"))
+	router.Handle("/stickers/", http.StripPrefix("/stickers", stickers))
 }
 
 func (app *App) verifyJWT(JWT string) (*User, error) {
@@ -67,11 +72,7 @@ func (app *App) authMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-func renderTemplate(router *http.ServeMux, app *App) {
-	serveStyleFiles(router)
-	serveScriptsFiles(router)
-	serveImgFiles(router)
-	
+func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/", serveTemplate("firstPage.html"))
 	router.HandleFunc("/connection", serveTemplate("login.html"))
 	router.HandleFunc("/gallery", serveTemplate("gallery.html"))
@@ -91,4 +92,14 @@ func renderTemplate(router *http.ServeMux, app *App) {
 	router.HandleFunc("/editPassword", app.authMiddleware(app.modifyPassword))
 	router.HandleFunc("/editEmail", app.authMiddleware(app.modifyEmail))
 	router.HandleFunc("/getUser", app.authMiddleware(app.getUser))
+	router.HandleFunc("/getStickers", app.authMiddleware(app.getStickers))
+}
+
+func renderTemplate(router *http.ServeMux, app *App) {
+	serveStyleFiles(router)
+	serveScriptsFiles(router)
+	serveImgFiles(router)
+	serveStickersFiles(router)
+
+	app.router(router)
 }
