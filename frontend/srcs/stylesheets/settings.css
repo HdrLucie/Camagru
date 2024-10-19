@@ -678,3 +678,22 @@ h3 {
 .stickers {
 	width: 950px;
 }
+
+/* DATA USER */
+
+.data-user {
+	width: 500px;
+	height: 300px;
+	background-color: #B61A53;
+	margin: 1em;
+	padding: 1em;
+}
+
+.data-user-title{
+	font-size: large;
+	font-variant-caps: petite-caps;
+}
+
+.data-user-text {
+	margin-left:100px;
+}

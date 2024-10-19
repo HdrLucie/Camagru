@@ -63,7 +63,7 @@
 	</div>
 	<div id="stickers" class="content-div stickers">
 		<div class="content-div-title">
-			Liste stickers
+			Stickers
 		</div class="content-div-title">
 		<div>
 			<div class="stickers-grid" id="stickersContainer">
@@ -72,8 +72,12 @@
 	</div>
 	<div id="settings" class="content-div">
 		<div class="content-div-title">Settings</div>
+		<div class="data-user">
+			<div class="data-user-title">Username</div>
+			<div class="data-user-text" user-data="username"></div>
+		</div>
 		<form method="POST" onsubmit="return false">
-			<input type="text" id="username" name="txt" placeholder="username">
+			<input  type="text" id="username" name="txt" user-data="username" placeholder="${username}">
 			<button class="btn" id="setUsername">Set username</button>
 		</form>
 		<form method="POST" onsubmit="return false">
