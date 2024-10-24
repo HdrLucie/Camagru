@@ -74,20 +74,22 @@
 		<div class="content-div-title">Settings</div>
 		<div class="data-user">
 			<div class="data-user-title">Username</div>
-			<div class="data-user-text" user-data="username"></div>
+			<div class="data-user-text" user-data="username">
+				<i class="fa-solid fa-pen"></i>
+			</div>
 		</div>
 		<form method="POST" onsubmit="return false">
 			<input  type="text" id="username" name="txt" user-data="username" placeholder="${username}">
 			<button class="btn" id="setUsername">Set username</button>
 		</form>
-		<form method="POST" onsubmit="return false">
-			<input type="password" id="password" name="txt" placeholder="password">
-			<button class="btn" id="setPassword">Set password</button>
-		</form>
-		<form method="POST" onsubmit="return false">
-			<input type="email" id="email" name="txt" placeholder="email">
-			<button class="btn" id="setEmail">Set email</button>
-		</form>
+		<!--<form method="POST" onsubmit="return false">-->
+		<!--	<input type="password" id="password" name="txt" placeholder="password">-->
+		<!--	<button class="btn" id="setPassword">Set password</button>-->
+		<!--</form>-->
+		<!--<form method="POST" onsubmit="return false">-->
+		<!--	<input type="email" id="email" name="txt" placeholder="email">-->
+		<!--	<button class="btn" id="setEmail">Set email</button>-->
+		<!--</form>-->
 	</div>
 </body>
 <script src="/scripts/settings.js"></script>
