@@ -24,16 +24,17 @@ async function getStickers() {
 async function displayStickers() {
     const stickers = await getStickers();
     const container = document.getElementById('stickersContainer');
-    
     // Nettoyer le conteneur
     container.innerHTML = '';
-    
     if (stickers && stickers.length > 0) {
         stickers.forEach(sticker => {
+			const stickerContainer = document.createElement('div');
+            stickerContainer.className = 'sticker-item';
             const img = document.createElement('img');
             img.src = "/stickers/" + sticker.name;
-            img.alt = sticker.name;
-            container.appendChild(img);
+			img.alt = sticker.name;
+			stickerContainer.appendChild(img);
+            container.appendChild(stickerContainer);
         });
     } else {
         const message = document.createElement('p');

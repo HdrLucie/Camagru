@@ -68,7 +68,7 @@ input {
 	cursor: pointer;
 }
 
-.btn:hover {
+btn:hover {
 	background: #B61A53;
 }
 
@@ -192,7 +192,6 @@ img {
 	display: block;
 	width: 100%;
 	aspect-ratio: 1 / 1;
-	object-fit: cover;
 	object-position: bottom;
 	border-radius: 3px;
 	transition: transform 500ms linear;
@@ -667,16 +666,53 @@ h3 {
 /* STICKERS GRID */
 
 .stickers-grid {
-	/* width: 950px; */
+	 /*width: 128px; */
 	height: 128px;
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
 	gap: 2em;
 	padding: 1em;
+	object-fit:contain;	
+	background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
-.stickers {
-	width: 950px;
+/*.stickers {*/
+/*	width: 950px;*/
+/*}*/
+/*.stickers-section {*/
+/*    width: 100%;*/
+/*    padding: 20px;*/
+/*}*/
+/**/
+/*.stickers {*/
+/*    max-width: 1200px; /* ou la largeur que vous souhaitez */*/
+/*    margin: 0 auto; /* Centre le contenu */*/
+/*}*/
+/**/
+/*.stickers-grid {*/
+/*    display: grid;*/
+/*    grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));*/
+/*    gap: 2em;*/
+/*    padding: 1em;*/
+/*}*/
+/**/
+/*/* Style pour le conteneur de chaque sticker */*/
+/*.sticker-item {*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    width: 128px;*/
+/*    height: 128px;*/
+/*}*/
+
+/* Style pour les images */
+.sticker-item {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
 }
 
 /* DATA USER */
