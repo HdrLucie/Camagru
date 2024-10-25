@@ -183,7 +183,7 @@ header::after {
 	height: 100px;
 	border-radius: 50%;
 	overflow: hidden;
-	background: #ccc;
+	background: transparent;
 	border: 3px solid #000;
 
 }
@@ -719,18 +719,55 @@ h3 {
 
 .data-user {
 	width: 500px;
-	height: 300px;
-	background-color: #B61A53;
+	height: 450px;
+	background-color: transparent;
 	margin: 1em;
 	padding: 1em;
 }
 
+.sub-data-user{
+	width: 200px;
+	display: ruby;
+}
 .data-user-title{
 	font-size: large;
+	margin:20px;	
+	letter-spacing: 2px;
 	font-variant-caps: petite-caps;
+	animation: rainbow-colors 50s linear infinite;
+	background: linear-gradient(to right,#FE4365,#C49CDE, #FC913A, #d36e9c, #d36e9c, #FE4265);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+	background-size: 500% 100%;
 }
+
+@keyframes rainbow-colors {
+	0% { background-position: 0% 50%; }
+	100% { background-position: 100% 50%; }
+}	
 
 .data-user-text {
 	margin:20px;
-	width:100px;
+	width:auto;
+}
+
+.modify-button {
+	padding:5px;
+	font-size:9px;
+	letter-spacing:0.5px;
+	border:none;
+	color:white;
+	background-color:transparent;
+	text-decoration:underline;
+	font-family:Arial;
+}
+
+.change-avatar {
+	width: 300px;
+	height: 450px;
+	background-color: transparent;
+	right:-650px;
+	top:-550px;
+	position: relative;
 }
