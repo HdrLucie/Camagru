@@ -114,8 +114,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const photosList = document.getElementById('photos-list');
     const settings = document.getElementById('settings');
     const stickers = document.getElementById('stickers');
+	const image_input = document.getElementById( 'image_input' );
 
-    function showContent(contentToShow) {
+	function showContent(contentToShow) {
         [photosList, settings, stickers].forEach(content => {
             content.classList.remove('active');
         });
@@ -138,4 +139,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     // La liste des photos est affichée par défaut
     showContent(photosList);
+
+	image_input.addEventListener('click', function() {
+	  const file_reader = new FileReader();
+	  file_reader.addEventListener("load", () => {
+	    const uploaded_image = file_reader.result;
+	    document.querySelector("#display_image").style.backgroundImage = `url(${uploaded_image})`;
+	  });
+	  file_reader.readAsDataURL(this.files[0]);
+	});
 });
+
+
+
