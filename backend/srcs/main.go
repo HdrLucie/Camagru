@@ -38,6 +38,7 @@ type User struct {
 	JWT			string `json:"token"`
 	AuthToken	string`json:"authToken"`
 	AuthStatus	bool`json:"authStatus"`
+	Avatar		string `json:"avatar"`
 }
 
 type Stickers struct {

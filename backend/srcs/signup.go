@@ -117,7 +117,8 @@ func (app *App)	signUp(writer http.ResponseWriter, request *http.Request) {
 	}
 	token = generateAuthToken()
 	user.AuthToken = token
-	err = app.dataBase.QueryRow("INSERT INTO users (email, username, password, authToken, authStatus) VALUES ($1, $2, $3, $4, $5) RETURNING id", user.Email, user.Username, string(encryptPassword), string(user.AuthToken), 0).Scan(&userID)
+	fmt.Println(app.stickers[0].Path);
+	err = app.dataBase.QueryRow("INSERT INTO users (email, username, password, authToken, authStatus, avatar) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id", user.Email, user.Username, string(encryptPassword), string(user.AuthToken), 0, app.stickers[0].Name).Scan(&userID)
 	if err != nil {
 		fmt.Println(Red + "Error : insert users to the database" + Reset)
 		http.Error(writer, err.Error(), http.StatusInternalServerError)

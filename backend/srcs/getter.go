@@ -30,9 +30,9 @@ func (app *App) getUserByJWT(JWT string) (*User, error) {
 	if (getterMsg == 1) {
 		fmt.Println(Yellow + "Get user by JWT" + Reset)
 	}
-	query := "SELECT id, email, username, password, JWT, authToken, authStatus FROM Users WHERE JWT = $1"
+	query := "SELECT id, email, username, password, JWT, authToken, authStatus, avatar FROM Users WHERE JWT = $1"
 	row := app.dataBase.QueryRow(query, JWT)
-	err := row.Scan(&user.Id, &user.Email, &user.Username, &user.Password, &user.JWT, &user.AuthToken, &user.AuthStatus)
+	err := row.Scan(&user.Id, &user.Email, &user.Username, &user.Password, &user.JWT, &user.AuthToken, &user.AuthStatus, &user.Avatar)
 	if err != nil {
 		return nil, err
 	}

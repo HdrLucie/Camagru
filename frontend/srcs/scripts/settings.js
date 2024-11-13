@@ -25,6 +25,7 @@ async function getUser() {
             },
         });
         const userData = await response.json();
+		console.log("Avatar" + userData.avatar);
         return userData;
     } catch (error) {
         console.error("Erreur:", error);
@@ -39,73 +40,15 @@ function redirectionPage(path) {
 
 async function loadUserData() {
     const userData = await getUser();
-    console.log("User :" + userData)
     if (!userData) return;
 
     document.querySelectorAll('[user-data]').forEach(element => {
         const field = element.getAttribute('user-data');
+		console.log(field);
         element.textContent = userData[field];
+		console.log(element.textContent);
     });
 }
-// document.getElementById("setUsername").onclick = async function () {
-// 	console.log("\n\nupdate name\n\n")
-// 	var tmpUser = document.getElementById("username")
-//     // console.log(tmpUser)
-// 	const token = localStorage.getItem('token')
-
-// 	var login = tmpUser.value
-//     console.log("login :" + login)
-//     const response = fetch("/editUsername", {
-//         method: "POST",
-//         headers: {
-//             "Authorization": `Bearer ${token}`,
-//             "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({
-//             "login": login,
-//         })
-//     });
-// }
-
-// document.getElementById("setPassword").onclick = async function () {
-// 	console.log("\n\nupdate name\n\n")
-// 	var tmpUser = document.getElementById("password")
-//     // console.log(tmpUser)
-// 	const token = localStorage.getItem('token')
-
-// 	var password = tmpUser.value
-//     console.log("password :" + password)
-//     const response = fetch("/editPassword", {
-//         method: "POST",
-//         headers: {
-//             "Authorization": `Bearer ${token}`,
-//             "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({
-//             "password": password,
-//         })
-//     });
-// }
-
-// document.getElementById("setEmail").onclick = async function () {
-// 	console.log("\n\nupdate mail\n\n")
-// 	var tmpUser = document.getElementById("email")
-//     // console.log(tmpUser)
-// 	const token = localStorage.getItem('token')
-
-// 	var email = tmpUser.value
-//     console.log("Email :" + email)
-//     const response = fetch("/editEmail", {
-//         method: "POST",
-//         headers: {
-//             "Authorization": `Bearer ${token}`,
-//             "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({
-//             "email": email,
-//         })
-//     });
-// }
 
 document.addEventListener('DOMContentLoaded', function() {
     const showPhotos = document.getElementById('show-photos');
@@ -149,6 +92,3 @@ document.addEventListener('DOMContentLoaded', function() {
 	  file_reader.readAsDataURL(this.files[0]);
 	});
 });
-
-
-
