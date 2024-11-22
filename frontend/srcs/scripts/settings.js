@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    checkToken();
+	checkToken();
     loadUserData();
 });
 
@@ -15,7 +15,6 @@ async function checkToken() {
 
 async function getUser() {
     const token = localStorage.getItem('token');
-    console.log("getUser function")    
     try {
         const response = await fetch("/getUser", {
             method: "GET",
@@ -25,8 +24,8 @@ async function getUser() {
             },
         });
         const userData = await response.json();
-		console.log("Avatar" + userData.avatar);
-        return userData;
+		console.log(userData);
+		return userData;
     } catch (error) {
         console.error("Erreur:", error);
         return null;
@@ -41,12 +40,16 @@ function redirectionPage(path) {
 async function loadUserData() {
     const userData = await getUser();
     if (!userData) return;
-
-    document.querySelectorAll('[user-data]').forEach(element => {
+	const avatarDiv = document.getElementById('avatarId');
+	if (avatarDiv) {
+        const img = document.createElement('img');
+        img.src = "/stickers/" + userData.avatar;
+		img.alt = userData.avatar;
+        avatarDiv.appendChild(img);
+	}
+	document.querySelectorAll('[user-data]:not(img)').forEach(element => {
         const field = element.getAttribute('user-data');
-		console.log(field);
         element.textContent = userData[field];
-		console.log(element.textContent);
     });
 }
 
