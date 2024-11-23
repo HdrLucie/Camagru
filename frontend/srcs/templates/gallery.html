@@ -8,12 +8,15 @@
   <title>Camagru</title>
   <script src="https://kit.fontawesome.com/76ec232e00.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" type="text/css" href="/styles/gallery.css" />
+  <link rel="icon" href="/assets/favicon.svg" />
 </head>
 
 <body>
   <header style="position:fixed; z-index: 5;">
     <ul class="nav js-nav">
-      <li class="nav__item">
+	<img style="float: left; width:350px;" src="/assets/logo2.png">
+		<div class="menu">
+		<li class="nav__item">
         <button href="#" class="nav__link" onclick="redirectionPage('/gallery')">Gallery</button>
       </li>
       <li class="nav__item">
@@ -28,6 +31,7 @@
       <li class="nav__item">
         <button id="logout" class="nav__link">Logout</button>
       </li>
+		</div>
     </ul>
     <button id="burger" class="burger js-burger">
       <svg viewBox="0 0 24 24">

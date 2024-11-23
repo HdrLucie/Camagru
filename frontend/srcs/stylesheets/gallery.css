@@ -15,7 +15,7 @@ html {
     background: #111;
     font-size: 13px;
     font-family: 'Arvo', monospace;
-}
+}http://localhost:8080/assets/camera.jpg
 
 * {
     margin: 0;
@@ -37,7 +37,7 @@ header {
 }
 
 .nav {
-    border-right: 1px solid rgba(255, 255, 255, 0.2);
+	border-right: 1px solid rgba(255, 255, 255, 0.2);
     background-color: #000;
     list-style-type: none;
     font: 500 20px/24px "Montserrat", Arial, sans-serif;
@@ -70,19 +70,29 @@ header {
     text-decoration: none;
     display: block;
     padding: 24px 100px;
-    /* transition: background-color 0.2s ease;
-    */
+	cursor: pointer;
+    transition: background-color 0.2s ease-out;
+}
+
+.menu {
+	clear: none;
+	width: max-content;
+    float: right;
+	height: 100%;
+	align-content: center;
 }
 
 .nav__link:hover {
     color: #be3d77;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1140px) {
+
     .nav {
         padding: 0;
+		height:90px;
         position: fixed;
-        display: flex;
+        display: block;
         border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         border-right: none;
         transform: translateX(0);
@@ -92,13 +102,19 @@ header {
 
     .nav__item {
         flex: 1;
+		float:left;
         text-align: center;
-    }
+		max-width: max-content;
+	}
 
     .nav__link {
         z-index: 15;
         position: relative;
-        padding: 32px 8px;
+		max-width: max-content;
+		padding:20px;
+		padding-right: 4rem;
+		padding-left: 4rem;
+		border-right: 1px solid #f4f4f4
     }
 }
 
@@ -112,19 +128,18 @@ header {
     background-color: #000;
     border: 1px solid rgba(255, 255, 255, 0.2);
     transition: background-color 0.2s ease;
-    float: right;
-    margin: 44px;
+    margin: 18px;
     position: relative;
     z-index: 11;
     cursor: pointer;
-    position: fixed;
+	float:right;
 }
 
 .burger._active {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1140px) {
     .burger {
         display: none;
     }
