@@ -139,6 +139,6 @@ func (app *App)	signUp(writer http.ResponseWriter, request *http.Request) {
 	}
 	sendMail(user)
 	if (usersList == 1) {
-		printUsers(app)
+		app.printUsers()
 	}
 }

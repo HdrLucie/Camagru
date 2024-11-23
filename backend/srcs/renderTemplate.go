@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"net/http"
 	"path/filepath"
+	"context"
 )
 
 func serveTemplate(templateName string) http.HandlerFunc {
@@ -27,7 +28,7 @@ func serveTemplate(templateName string) http.HandlerFunc {
 }
 
 func	serveStyleFiles(router *http.ServeMux) {
-    styles := http.FileServer(http.Dir("../../frontend/srcs/stylesheets/"))
+	styles := http.FileServer(http.Dir("../../frontend/srcs/stylesheets/"))
 	router.Handle("/styles/", http.StripPrefix("/styles", styles))
 }
 
@@ -37,38 +38,68 @@ func serveScriptsFiles(router *http.ServeMux) {
 }
 
 func serveImgFiles(router *http.ServeMux) {
-    assets := http.FileServer(http.Dir("../../frontend/srcs/assets/"))
+	assets := http.FileServer(http.Dir("../../frontend/srcs/assets/img"))
 	router.Handle("/assets/", http.StripPrefix("/assets", assets))
 }
 
-func mdw(next http.Handler) http.Handler {
-    f := func(w http.ResponseWriter, r *http.Request) {
-        fmt.Println()
-        fmt.Println(r)
-        fmt.Println()
-        next.ServeHTTP(w, r)
-    }
+func serveStickersFiles(router *http.ServeMux) {
+	stickers := http.FileServer(http.Dir("../../frontend/srcs/assets/stickers/"))
+	router.Handle("/stickers/", http.StripPrefix("/stickers", stickers))
+}
 
-    return http.HandlerFunc(f)
+func (app *App) verifyJWT(JWT string) (*User, error) {
+	user, error := app.getUserByJWT(JWT)
+	if error != nil {
+		return nil, error
+	}
+	return user, error
+}
+
+func (app *App) authMiddleware(next http.HandlerFunc) http.HandlerFunc {
+	return func(writer http.ResponseWriter, request *http.Request) {
+		JWT := extractJWTFromRequest(request)
+		if JWT == "" {
+			http.Error(writer, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+		user, err := app.verifyJWT(JWT)
+		if err != nil {
+			http.Error(writer, "Invalid token", http.StatusUnauthorized)
+			return
+		}
+		ctx := context.WithValue(request.Context(), "user", user)
+		next.ServeHTTP(writer, request.WithContext(ctx))
+	}
+}
+
+func (app *App) router(router *http.ServeMux) {
+	router.HandleFunc("/", serveTemplate("firstPage.html"))
+	router.HandleFunc("/connection", serveTemplate("login.html"))
+	router.HandleFunc("/gallery", serveTemplate("gallery.html"))
+	router.HandleFunc("/takePicture", serveTemplate("picture.html"))
+	router.HandleFunc("/authentification", serveTemplate("authentification.html"))
+	router.HandleFunc("/forgetPassword", serveTemplate("forgetPassword.html"))
+	router.HandleFunc("/verify", serveTemplate("verify.html"))
+	router.HandleFunc("/resetPassword", serveTemplate("resetPassword.html"))
+	router.HandleFunc("/settings", serveTemplate("settings.html"))
+	router.HandleFunc("/signUp", app.signUp)
+	router.HandleFunc("/login", app.login)
+	router.HandleFunc("/logout", app.authMiddleware(app.logout))
+	router.HandleFunc("/verifyAccount", app.verifyAccount)
+	router.HandleFunc("/sendResetLink", app.sendResetLink)
+	router.HandleFunc("/newPassword", app.resetPassword)
+	router.HandleFunc("/editUsername", app.authMiddleware(app.modifyUsername))
+	router.HandleFunc("/editPassword", app.authMiddleware(app.modifyPassword))
+	router.HandleFunc("/editEmail", app.authMiddleware(app.modifyEmail))
+	router.HandleFunc("/getUser", app.authMiddleware(app.getUser))
+	router.HandleFunc("/getStickers", app.authMiddleware(app.getStickers))
 }
 
 func renderTemplate(router *http.ServeMux, app *App) {
 	serveStyleFiles(router)
 	serveScriptsFiles(router)
 	serveImgFiles(router)
-    
-	router.HandleFunc("/", serveTemplate("firstPage.html"))
-	router.HandleFunc("/connection", serveTemplate("login.html"))
-    router.HandleFunc("/gallery", serveTemplate("gallery.html"))
-	router.HandleFunc("/takePicture", serveTemplate("picture.html"))
-	router.HandleFunc("/authentification", serveTemplate("authentification.html"))
-	router.HandleFunc("/forgetPassword", serveTemplate("forgetPassword.html"))
-	router.HandleFunc("/verify", serveTemplate("verify.html"))
-	router.HandleFunc("/resetPassword", serveTemplate("resetPassword.html"))
-    router.HandleFunc("/signUp", app.signUp)
-    router.HandleFunc("/login", app.login)
-	router.HandleFunc("/logout", app.logout)
-	router.HandleFunc("/verifyAccount", app.verifyAccount)
-	router.HandleFunc("/sendResetLink", app.sendResetLink)
-	router.HandleFunc("/newPassword", app.resetPassword)
+	serveStickersFiles(router)
+
+	app.router(router)
 }

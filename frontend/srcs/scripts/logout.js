@@ -1,21 +1,13 @@
 // Fonction pour vérifier si le token est présent
-window.onload = checkToken;
+// window.onload = checkToken;
 
-function checkToken() {
-	console.log("Function check token")
-	const token = localStorage.getItem('token');
-	if (!token) {
-		window.location.href = '/';
-	}
-}
-
-document.getElementById("burger").onclick = function () {
-	let burger = document.querySelector(".js-burger");
-	let nav = document.querySelector(".js-nav");
-
-	nav.classList.toggle("_active");
-	burger.classList.toggle("_active");
-}
+// function checkToken() {
+// 	console.log("Function check token")
+// 	const token = localStorage.getItem('token');
+// 	if (!token) {
+// 		window.location.href = '/';
+// 	}
+// }
 
 document.getElementById("logout").onclick = async function () {
 	const token = localStorage.getItem('token')
@@ -24,11 +16,9 @@ document.getElementById("logout").onclick = async function () {
 		const response = await fetch("/logout", {
 			method: "POST",
 			headers: {
-				"Content-Type": "application/json"
+				"Content-Type": "application/json",
+				"Authorization": `Bearer ${token}`,
 			},
-			body: JSON.stringify({
-				"token": token,
-			})
 		});
         const responseText = await response.text();
         let data;

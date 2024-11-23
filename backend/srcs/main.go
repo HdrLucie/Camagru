@@ -27,16 +27,23 @@ var getterMsg = 0
 type App struct {
 	dataBase	*sql.DB
 	users		[]User
+	stickers	[]Stickers
 }
 
 type User struct {
-	Id          int `json:id`
+	Id          int `json:"id"`
 	Email       string `json:"email"`
 	Username    string `json:"username"`
 	Password    string `json:"password"`
 	JWT			string `json:"token"`
 	AuthToken	string`json:"authToken"`
-	authStatus	bool`json:"authStatus"`
+	AuthStatus	bool`json:"authStatus"`
+}
+
+type Stickers struct {
+	Id		int `json:"id"`
+	Name	string `json:"name"`
+	Path	string `json:"path"`
 }
 
 type TemplateData struct {
@@ -56,8 +63,14 @@ func main() {
 	db := DBConnection()
 	app := &App{dataBase: db}
 	router := http.NewServeMux()
+	err = app.InsertSticker()
+	if err != nil {
+		log.Fatal("Error loading stickers directory")
+	}
 	renderTemplate(router, app)
 
 	fmt.Println("Server started at http://localhost:" + port)
 	http.ListenAndServe(":"+port, router)
+	// fmt.Println("Server started at http://localhost:" + port)
+	// http.ListenAndServe("paul-f4Ar8s2.clusters.42paris.fr:"+port, router)
 }

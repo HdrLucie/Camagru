@@ -82,7 +82,7 @@ func (app *App) verifyAccount(writer http.ResponseWriter, request *http.Request)
 		}
 	}
 	if (usersList == 1) {
-		printUsers(app)
+		app.printUsers()
 	}
 	writer.WriteHeader(http.StatusCreated)
 	response := map[string]string{
