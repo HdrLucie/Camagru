@@ -72,6 +72,29 @@ btn:hover {
 	background: #B61A53;
 }
 
+.custom-file-input::-webkit-file-upload-button {
+  visibility: hidden;
+}
+
+.custom-file-input {
+	background-color: transparent;
+	position:relative;
+	right:-30px;
+}
+
+.custom-file-input::before {
+	content: 'Change your avatar';
+	/*display: inline-block;*/
+	/*outline: none;*/
+	/*white-space: nowrap;*/
+	cursor: pointer;
+	font-size: 18px;
+	text-decoration:underline;
+	background-color:black;
+	border:none;
+	color:white;
+}
+
 .login {
 	height: 760px;
 	background: #eee;
@@ -183,7 +206,7 @@ header::after {
 	height: 100px;
 	border-radius: 50%;
 	overflow: hidden;
-	background: #ccc;
+	background: transparent;
 	border: 3px solid #000;
 
 }
@@ -191,7 +214,6 @@ header::after {
 img {
 	display: block;
 	width: 100%;
-	aspect-ratio: 1 / 1;
 	object-position: bottom;
 	border-radius: 3px;
 	transition: transform 500ms linear;
@@ -661,12 +683,17 @@ h3 {
 	font-size: xx-large;
 	font-stretch: expanded;
 	font-variant-caps: petite-caps;
+	/*animation: rainbow-colors 50s linear infinite;*/
+	background: linear-gradient(to right,#FE4365,#C49CDE, #FC913A, #d36e9c, #d36e9c, #FE4265);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+	background-size: 500% 100%;
 }
 
 /* STICKERS GRID */
 
 .stickers-grid {
-	 /*width: 128px; */
 	height: 128px;
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
@@ -678,58 +705,63 @@ h3 {
     background-repeat: no-repeat;
 }
 
-/*.stickers {*/
-/*	width: 950px;*/
-/*}*/
-/*.stickers-section {*/
-/*    width: 100%;*/
-/*    padding: 20px;*/
-/*}*/
-/**/
-/*.stickers {*/
-/*    max-width: 1200px; /* ou la largeur que vous souhaitez */*/
-/*    margin: 0 auto; /* Centre le contenu */*/
-/*}*/
-/**/
-/*.stickers-grid {*/
-/*    display: grid;*/
-/*    grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));*/
-/*    gap: 2em;*/
-/*    padding: 1em;*/
-/*}*/
-/**/
-/*/* Style pour le conteneur de chaque sticker */*/
-/*.sticker-item {*/
-/*    display: flex;*/
-/*    justify-content: center;*/
-/*    align-items: center;*/
-/*    width: 128px;*/
-/*    height: 128px;*/
-/*}*/
-
-/* Style pour les images */
-.sticker-item {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;
-}
 
 /* DATA USER */
 
 .data-user {
 	width: 500px;
-	height: 300px;
-	background-color: #B61A53;
+	height: 450px;
+	background-color: transparent;
 	margin: 1em;
 	padding: 1em;
 }
 
+.sub-data-user{
+	width: 200px;
+	display: ruby;
+}
 .data-user-title{
-	font-size: large;
+	font-size: x-large;
+	margin:20px;	
+	letter-spacing: 2px;
 	font-variant-caps: petite-caps;
+	/*animation: rainbow-colors 50s linear infinite;*/
+	background: linear-gradient(to right,#FE4365,#C49CDE, #FC913A, #d36e9c, #d36e9c, #FE4265);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+	background-size: 500% 100%;
 }
 
+@keyframes rainbow-colors {
+	0% { background-position: 0% 50%; }
+	100% { background-position: 100% 50%; }
+}	
+
 .data-user-text {
-	margin-left:100px;
+	margin:20px;
+	width:auto;
+}
+
+.modify-button {
+	padding:5px;
+	font-size:9px;
+	letter-spacing:0.5px;
+	border:none;
+	color:white;
+	background-color:transparent;
+	text-decoration:underline;
+	font-family:Arial;
+}
+
+.change-avatar {
+	display: flex;
+	align-items: center;
+	align-content: center;
+	width: 300px;
+	height: 450px;
+	background-color: transparent;
+	right:-600px;
+	top:-530px;
+	position: relative;
 }

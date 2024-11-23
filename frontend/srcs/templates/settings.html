@@ -34,8 +34,7 @@
 						<i class="fa-solid fa-icons"></i>
 					</a>
 				</nav>
-				<div class="avatar">
-					<img src="/stickers/angry.png"/>
+				<div class="avatar" id="avatarId">
 				</div>
 			</header>
 			<h3 user-data="username"></h3>
@@ -43,14 +42,7 @@
 				Lorem ipsum dolor sit amet, consectetur adipisicing elit et cupiditate deleniti. Lorem ipsum dolor sit
 				amet, consectetur adipisicing elit et cupiditate deleniti.
 			</div>
-			<!-- <div class="contacts">
-				<a href=""><i class="fa fa-picture-o"></i></a>
-				<a href=""><i class="fa fa-camera-retro"></i></a>
-				<a href=""><i class="fa fa-cogs"></i></a>
-				<a href="/logout"><i class="fa fa-sign-out"></i></a>
-				<div class="clear"></div>
-			</div> -->
-			<footer>
+				<footer>
 				<p>
 				</p>
 			</footer>
@@ -64,30 +56,43 @@
 	<div id="stickers" class="content-div stickers">
 		<div class="content-div-title">
 			Stickers
-		</div class="content-div-title">
-		<div>
-			<div class="stickers-grid sticker-item" id="stickersContainer">
 		</div>
+			<div class="stickers-grid" id="stickersContainer">
 		</div>
 	</div>
-	<div id="settings" class="content-div">
-		<div class="content-div-title">Settings</div>
-		<div class="data-user">
-			<div class="data-user-title">Username</div>
-			<div class="data-user-text" user-data="username"></div>
+	<div id="settings" class="content-div" style="overflow-y: hidden;">
+		<div class="content-div-title">
+			Settings
 		</div>
-		<form method="POST" onsubmit="return false">
-			<input  type="text" id="username" name="txt" user-data="username" placeholder="${username}">
-			<button class="btn" id="setUsername">Set username</button>
-		</form>
-		<form method="POST" onsubmit="return false">
-			<input type="password" id="password" name="txt" placeholder="password">
-			<button class="btn" id="setPassword">Set password</button>
-		</form>
-		<form method="POST" onsubmit="return false">
-			<input type="email" id="email" name="txt" placeholder="email">
-			<button class="btn" id="setEmail">Set email</button>
-		</form>
+		<div class="data-user">
+			<div class="sub-data-user">
+				<div class="data-user-title">Username</div>
+				<button class="modify-button" on-click="show-form">modify your username</button>	
+			</div>
+			<div class="data-user-text" user-data="username"></div>
+			<div class="sub-data-user">
+				<div class="data-user-title">Email</div>
+				<button class="modify-button" on-click="show-form">modify your email</button>	
+			</div>
+			<div class="data-user-text" user-data="email"></div>
+			<div class="sub-data-user">
+				<div class="data-user-title">Password</div>
+				<button class="modify-button" on-click="show-form">modify your password</button>	
+			</div>
+			<div class="sub-data-user">
+				<div class="data-user-title">Tell us about yourself</div>
+				<button class="modify-button" on-click="show-form">modify your email</button>	
+			</div>
+			<div class="data-user-text">
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit et cupiditate deleniti. Lorem ipsum dolor sit
+				amet, consectetur adipisicing elit et cupiditate deleniti.
+			</div>
+		</div>
+		<div class="change-avatar">
+			<div class="avatar" id="avatarId" style="display:flex; width: 128px; height: 128px;border: 2px solid #fff">
+			</div>
+			<input class="custom-file-input" type="file" accept="image/jpeg, image/png, image/jpg"id="image_input"></input>
+		</div>
 	</div>
 </body>
 <script src="/scripts/settings.js"></script>

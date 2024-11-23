@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    checkToken();
+	checkToken();
     loadUserData();
 });
 
@@ -15,7 +15,6 @@ async function checkToken() {
 
 async function getUser() {
     const token = localStorage.getItem('token');
-    console.log("getUser function")    
     try {
         const response = await fetch("/getUser", {
             method: "GET",
@@ -25,7 +24,8 @@ async function getUser() {
             },
         });
         const userData = await response.json();
-        return userData;
+		console.log(userData);
+		return userData;
     } catch (error) {
         console.error("Erreur:", error);
         return null;
@@ -39,73 +39,19 @@ function redirectionPage(path) {
 
 async function loadUserData() {
     const userData = await getUser();
-    console.log("User :" + userData)
     if (!userData) return;
-
-    document.querySelectorAll('[user-data]').forEach(element => {
+	const avatarDiv = document.getElementById('avatarId');
+	if (avatarDiv) {
+        const img = document.createElement('img');
+        img.src = "/stickers/" + userData.avatar;
+		img.alt = userData.avatar;
+        avatarDiv.appendChild(img);
+	}
+	document.querySelectorAll('[user-data]:not(img)').forEach(element => {
         const field = element.getAttribute('user-data');
         element.textContent = userData[field];
     });
 }
-// document.getElementById("setUsername").onclick = async function () {
-// 	console.log("\n\nupdate name\n\n")
-// 	var tmpUser = document.getElementById("username")
-//     // console.log(tmpUser)
-// 	const token = localStorage.getItem('token')
-
-// 	var login = tmpUser.value
-//     console.log("login :" + login)
-//     const response = fetch("/editUsername", {
-//         method: "POST",
-//         headers: {
-//             "Authorization": `Bearer ${token}`,
-//             "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({
-//             "login": login,
-//         })
-//     });
-// }
-
-// document.getElementById("setPassword").onclick = async function () {
-// 	console.log("\n\nupdate name\n\n")
-// 	var tmpUser = document.getElementById("password")
-//     // console.log(tmpUser)
-// 	const token = localStorage.getItem('token')
-
-// 	var password = tmpUser.value
-//     console.log("password :" + password)
-//     const response = fetch("/editPassword", {
-//         method: "POST",
-//         headers: {
-//             "Authorization": `Bearer ${token}`,
-//             "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({
-//             "password": password,
-//         })
-//     });
-// }
-
-// document.getElementById("setEmail").onclick = async function () {
-// 	console.log("\n\nupdate mail\n\n")
-// 	var tmpUser = document.getElementById("email")
-//     // console.log(tmpUser)
-// 	const token = localStorage.getItem('token')
-
-// 	var email = tmpUser.value
-//     console.log("Email :" + email)
-//     const response = fetch("/editEmail", {
-//         method: "POST",
-//         headers: {
-//             "Authorization": `Bearer ${token}`,
-//             "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({
-//             "email": email,
-//         })
-//     });
-// }
 
 document.addEventListener('DOMContentLoaded', function() {
     const showPhotos = document.getElementById('show-photos');
@@ -114,8 +60,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const photosList = document.getElementById('photos-list');
     const settings = document.getElementById('settings');
     const stickers = document.getElementById('stickers');
+	const image_input = document.getElementById( 'image_input' );
 
-    function showContent(contentToShow) {
+	function showContent(contentToShow) {
         [photosList, settings, stickers].forEach(content => {
             content.classList.remove('active');
         });
@@ -138,4 +85,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     // La liste des photos est affichée par défaut
     showContent(photosList);
+
+	image_input.addEventListener('click', function() {
+	  const file_reader = new FileReader();
+	  file_reader.addEventListener("load", () => {
+	    const uploaded_image = file_reader.result;
+	    document.querySelector("#display_image").style.backgroundImage = `url(${uploaded_image})`;
+	  });
+	  file_reader.readAsDataURL(this.files[0]);
+	});
 });

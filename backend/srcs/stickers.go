@@ -10,13 +10,11 @@ func (app *App) extractPathFiles() error {
 	path := "../../frontend/srcs/assets/stickers/"
 	directory, err := os.Open(path)
 	if err != nil {
-		fmt.Println(Red + "HERE 1" + Reset)
 		return err
 	}
 	defer directory.Close()
 	list, err := directory.Readdir(-1)
 	if err != nil {
-		fmt.Println(Red + "HERE 2" + Reset)
 		return err
 	}
 	app.stickers = make([]Stickers, 0, len(list))
@@ -55,7 +53,6 @@ func (app *App) InsertSticker() error {
 	for i, sticker := range app.stickers {
 		exists, err = app.manageStickersInsertError(sticker.Path)
 		if (!exists) {
-			fmt.Println("Insertion")
 			query := `
 				INSERT INTO stickers (id, name, image_path)
 				VALUES ($1, $2, $3)`
@@ -67,8 +64,6 @@ func (app *App) InsertSticker() error {
 			fmt.Errorf("Stickers déjà existant %s: %v", sticker.Name, err)
 		}
     }
-
-
 
 	return nil
 }

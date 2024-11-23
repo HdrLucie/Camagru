@@ -28,13 +28,10 @@ async function displayStickers() {
     container.innerHTML = '';
     if (stickers && stickers.length > 0) {
         stickers.forEach(sticker => {
-			const stickerContainer = document.createElement('div');
-            stickerContainer.className = 'sticker-item';
             const img = document.createElement('img');
             img.src = "/stickers/" + sticker.name;
 			img.alt = sticker.name;
-			stickerContainer.appendChild(img);
-            container.appendChild(stickerContainer);
+            container.appendChild(img);
         });
     } else {
         const message = document.createElement('p');
