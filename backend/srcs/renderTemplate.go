@@ -9,24 +9,23 @@ import (
 )
 
 func serveTemplate(templateName string) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		tmplPath := filepath.Join("../../frontend/srcs/templates", templateName)
-		tmpl, err := template.ParseFiles(tmplPath)
-		if err != nil {
-			http.Error(w, "Could not parse template", http.StatusInternalServerError)
-			fmt.Println("Error parsing template:", err)
-			return
-		}
+    return func(w http.ResponseWriter, r *http.Request) {
+		templateDir := "../../frontend/srcs/templates"
+        tmpl, err := template.ParseGlob(filepath.Join(templateDir, "*.html"))
+        if err != nil {
+            http.Error(w, "Could not parse templates", http.StatusInternalServerError)
+            fmt.Println("Error parsing templates:", err)
+            return
+        }
 
-		data := TemplateData{Page: templateName}
-		err = tmpl.Execute(w, data)
-		if err != nil {
-			http.Error(w, "Could not execute template", http.StatusInternalServerError)
-			fmt.Println("Error executing template:", err)
-		}
-	}
+        data := TemplateData{Page: templateName}
+        err = tmpl.ExecuteTemplate(w, templateName, data)
+        if err != nil {
+            http.Error(w, "Could not execute template", http.StatusInternalServerError)
+            fmt.Println("Error executing template:", err)
+        }
+    }
 }
-
 func	serveStyleFiles(router *http.ServeMux) {
 	styles := http.FileServer(http.Dir("../../frontend/srcs/stylesheets/"))
 	router.Handle("/styles/", http.StripPrefix("/styles", styles))
