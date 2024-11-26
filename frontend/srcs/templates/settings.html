@@ -7,34 +7,36 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 	<title>Camagru</title>
 	<link rel="stylesheet" href="/styles/settings.css" />
+	<link rel="stylesheet" href="/styles/sticky-bar.css" />
 	<link rel="icon" href="/assets/favicon.svg" />
 	<script src="https://kit.fontawesome.com/76ec232e00.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
+	{{ template "navbar" . }}
 	<div class="main">
 		<div class="card">
 			<header>
-				<nav class="menu">
-					<input type="checkbox" href="#" class="menu-open" name="menu-open" id="menu-open" />
-					<label class="menu-open-button" for="menu-open">
-						<span class="lines line-1"></span>
-						<span class="lines line-2"></span>
-						<span class="lines line-3"></span>
-					</label>
-					<a class="menu-item green" onclick="redirectionPage('/takePicture')">
-						<i class="fa fa-camera-retro"></i>
-					</a>
-					<a class="menu-item red" id="show-photos">
-						<i class="fa fa-images"></i>
-					</a>
-					<a class="menu-item purple" id="show-settings">
-						<i class="fa fa-cogs"></i>
-					</a>
-					<a class="menu-item orange" id="show-stickers">
-						<i class="fa-solid fa-icons"></i>
-					</a>
-				</nav>
+				<!--<nav class="menu">-->
+				<!--	<input type="checkbox" href="#" class="menu-open" name="menu-open" id="menu-open" />-->
+				<!--	<label class="menu-open-button" for="menu-open">-->
+				<!--		<span class="lines line-1"></span>-->
+				<!--		<span class="lines line-2"></span>-->
+				<!--		<span class="lines line-3"></span>-->
+				<!--	</label>-->
+				<!--	<a class="menu-item green" onclick="redirectionPage('/takePicture')">-->
+				<!--		<i class="fa fa-camera-retro"></i>-->
+				<!--	</a>-->
+				<!--	<a class="menu-item red" id="show-photos">-->
+				<!--		<i class="fa fa-images"></i>-->
+				<!--	</a>-->
+				<!--	<a class="menu-item purple" id="show-settings">-->
+				<!--		<i class="fa fa-cogs"></i>-->
+				<!--	</a>-->
+				<!--	<a class="menu-item orange" id="show-stickers">-->
+				<!--		<i class="fa-solid fa-icons"></i>-->
+				<!--	</a>-->
+				<!--</nav>-->
 				<div class="avatar" id="avatarId">
 				</div>
 			</header>
