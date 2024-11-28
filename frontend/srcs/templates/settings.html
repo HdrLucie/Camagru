@@ -1,0 +1,41 @@
+{{ define "settings-container" }}
+
+<div id="settings" class="content-div">
+	<div class="settings-container">
+		<div class="content-title">
+			<div class="content-div-title">Settings</div>
+		</div>
+		<div class="left-column">
+			<div class="data-user">
+				<div class="sub-data-user">
+					<div class="data-user-title">Username</div>
+				</div>
+				<div class="data-user-text" user-data="username"></div>
+				<div class="sub-data-user">
+					<div class="data-user-title">Email</div>
+				</div>
+				<div class="data-user-text" user-data="email"></div>
+				<div class="sub-data-user">
+					<div class="data-user-title">Tell us about yourself</div>
+				</div>
+				<div class="data-user-text">
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit et cupiditate deleniti. Lorem ipsum dolor sit
+					amet, consectetur adipisicing elit et cupiditate deleniti.
+				</div>
+
+				<div class="sub-data-user">
+					<div class="data-user-title">Reset your password</div>
+				</div>
+			</div>
+		</div>
+		<div class="right-column">
+			<div class="change-avatar">
+				<div class="avatar" id="avatarId" style="display:flex; width: 128px; height: 128px;border: 2px solid #fff">
+				</div>
+				<input class="custom-file-input" type="file" accept="image/jpeg, image/png, image/jpg"id="image_input"></input>
+			</div>
+		</div>
+	</div>
+</div>
+
+{{ end }}

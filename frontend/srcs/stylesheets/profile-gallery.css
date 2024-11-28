@@ -1,0 +1,22 @@
+.content-div {
+	width: 1000px;
+	height: 650px;
+	max-height: 100%;
+	background-color: #000000;
+	color: white;
+	display: none;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 1s, visibility 1s;
+	overflow: scroll;
+	max-width: 100%;
+}
+
+.content-div.active { 
+	display: grid;
+	grid-template-rows: auto 1fr;
+	width: 100%;
+	max-width: 1000px;
+	opacity: 1;
+	visibility: visible;
+}
