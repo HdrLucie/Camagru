@@ -80,7 +80,7 @@ func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/forgetPassword", serveTemplate("forgetPassword.html"))
 	router.HandleFunc("/verify", serveTemplate("verify.html"))
 	router.HandleFunc("/resetPassword", serveTemplate("resetPassword.html"))
-	router.HandleFunc("/settings", serveTemplate("settings.html"))
+	router.HandleFunc("/profile", serveTemplate("profile.html"))
 	router.HandleFunc("/signUp", app.signUp)
 	router.HandleFunc("/login", app.login)
 	router.HandleFunc("/logout", app.authMiddleware(app.logout))

@@ -1,10 +1,6 @@
-header {
-    width: 100%;
-    position: fixed;
-    top: 0;
-}
-
 .nav {
+	top:0;
+	width:100%;
 	border-right: 1px solid rgba(255, 255, 255, 0.2);
     background-color: #000;
     list-style-type: none;
@@ -43,7 +39,7 @@ header {
     transition: background-color 0.2s ease-out;
 }
 
-.menu {
+.menu-navbar {
 	clear: none;
 	width: max-content;
     float: right;

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Camagru</title>
+		<link rel="stylesheet" href="/styles/profile-gallery.css" />
+		<link rel="stylesheet" href="/styles/settings.css" />
+		<link rel="stylesheet" href="/styles/profile.css" />
+		<link rel="stylesheet" href="/styles/profile-menu.css" />
+		<link rel="stylesheet" href="/styles/sticky-bar.css" />
+		<link rel="icon" href="/assets/favicon.svg" />
+		<script src="https://kit.fontawesome.com/76ec232e00.js" crossorigin="anonymous"></script>
+	</head>
+
+	<body>
+		{{ template "navbar" . }}
+		<!--<div class="main">-->
+			<div class="card">
+				<header>
+					<div class="avatar" id="avatarId"></div>
+				</header>
+				<h3 user-data="username"></h3>
+				<div class="desc">
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit et cupiditate deleniti. Lorem ipsum dolor sit
+					amet, consectetur adipisicing elit et cupiditate deleniti.
+				</div>
+				<div class="contacts">
+					<a id="show-photos"><i class="fa fa-images"></i></a>
+					<a id="show-settings"><i class="fa fa-cogs"></i></a>
+					<a id="show-stickers"><i class="fa fa-icons"></i></a>
+					<div class="clear"></div>
+				</div>
+				<footer>
+					<p>
+					</p>
+				</footer>
+			</div>
+		<!--</div>-->
+		<div id="photos-list" class="content-div active">
+			<div class="content-title">
+				Your pictures
+			</div>
+		</div>
+		<div id="stickers" class="content-div stickers">
+			<div class="content-title">
+				Stickers
+			</div>
+			<div class="stickers-grid" id="stickersContainer"></div>
+		</div>
+		{{ template "settings-container" . }}
+
+	</body>
+	<script src="/scripts/settings.js"></script>
+	<script src="/scripts/logout.js"></script>
+	<script src="/scripts/stickers.js"></script>
+
+</html>
