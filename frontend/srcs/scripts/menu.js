@@ -27,6 +27,5 @@ document.getElementById("burger").onclick = function () {
 // }
 
 function redirectionPage(path) {
-    alert('Redirection page')
     window.location.href = path;
 }

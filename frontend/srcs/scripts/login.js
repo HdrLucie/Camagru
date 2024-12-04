@@ -32,7 +32,7 @@ document.getElementById("signUp").onclick = async function () {
 	if (login == "" || email == "" || password == "") {
 		alert("Wrong username, email or password")
 	}
-	result = checkPassword(password)
+	var result = checkPassword(password);
 	if (result == false) {
 		alert("Password must contain between 8 and 25 characters, an uppercase letter, a lowercase letter, a number and a non-alphanumeric character (!@#$%&*...).")
 		return
@@ -56,7 +56,6 @@ document.getElementById("signUp").onclick = async function () {
 		const data = await response.json();
 		if (response.status === 201) {
 			console.log("\nAccount created successfully! Please check your email to verify your account.")
-			alert(`Account created successfully! Please check your email to verify your account.`);
 			window.location.href = data.redirectPath
 		} else if (response.status === 409) {
 			alert("Username or email already in use.")
@@ -65,7 +64,6 @@ document.getElementById("signUp").onclick = async function () {
 		}
 	} catch (error) {
 		console.error("Error: ", error);
-		alert(`Error creating user: ${error.message}`);
 	}
 }
 
@@ -91,7 +89,6 @@ document.getElementById("login").onclick = async function () {
 		localStorage.setItem('token', token);
 		console.log('Token:', token);
 		if (response.status === 200) {
-			alert("Successfully connected");
 			window.location.href = data.redirectPath
 		} else if (response.status === 401) {
 			alert("Unable to log in. Please verify your credentials and try again.")
