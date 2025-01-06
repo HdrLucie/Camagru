@@ -1,12 +1,14 @@
 .nav {
 	top:0;
+	display: flex;
+	justify-content: center;
 	width:100%;
 	border-right: 1px solid rgba(255, 255, 255, 0.2);
     background-color: #000;
     list-style-type: none;
     font: 500 20px/24px "Montserrat", Arial, sans-serif;
     position: fixed;
-    left: 0;
+    /*left: 0;*/
     right: 0;
     z-index: 10;
     overflow-y: auto;
@@ -51,8 +53,7 @@
     color: #be3d77;
 }
 
-@media (min-width: 768px) {
-
+@media (min-width: 880px) {
     .nav {
         padding: 0;
 		height:90px;
@@ -95,10 +96,12 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
     transition: background-color 0.2s ease;
     margin: 18px;
-    position: relative;
+    position: fixed;
     z-index: 11;
     cursor: pointer;
 	float:right;
+	right: 0;
+	top: 0;
 }
 
 .logo {
@@ -116,7 +119,7 @@
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 880px) {
     .burger {
         display: none;
     }

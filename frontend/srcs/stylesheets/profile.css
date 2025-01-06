@@ -6,6 +6,8 @@
 }
 
 body {
+	width: 100%;
+	position: relative;
 	margin: 0px;
 	padding: 0px;
 	display: flex;
