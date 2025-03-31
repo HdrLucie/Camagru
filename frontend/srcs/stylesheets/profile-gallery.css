@@ -20,3 +20,41 @@
 	opacity: 1;
 	visibility: visible;
 }
+
+@media (min-width:768px) {
+	.responsive-menu {
+		visibility: hidden;
+		display: none;
+	}
+}
+/**/
+/*.container {*/
+/*  display: grid;*/
+/*  grid-auto-flow: column;*/
+/*  grid-auto-columns:0.33333fr; /* 0.333 = 1/3 */
+/*  border: 1px solid #c1c1c1;*/
+/*  border-radius: 5px;*/
+/*}*/
+/**/
+
+
+@media (max-width: 768px) {
+	.responsive-menu {
+		display: grid;
+		grid-auto-flow: column;
+		grid-auto-columns: 0.33333fr;
+		width: 1000px;
+		height: 50px;
+		max-width: 100%;
+		color: white;
+		background-color: blue;
+		font-size: 1em;
+	}
+	.responsive-menu > div {
+		height: 100%;
+		border-bottom: 10px solid white;
+	}
+	body {
+		flex-direction: column;
+	}
+}
