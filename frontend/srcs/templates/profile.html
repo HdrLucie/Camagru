@@ -19,15 +19,13 @@
 		{{ template "navbar" . }}
 		<!--<div class="main">-->
 		<div class="responsive-menu">
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
+			<div data-tab="stickers">Stickers</div>
+			<div data-tab="photos">Pictures</div>
+			<div data-tab="settings">Settings</div>
 		</div>
 			<div class="card">
 				<header>
-					<div class="avatar" id="avatarId"></div>
+					<div class="avatar" data-tab="avatarId"></div>
 				</header>
 				<h3 user-data="username"></h3>
 				<div class="desc">
@@ -35,9 +33,9 @@
 					amet, consectetur adipisicing elit et cupiditate deleniti.
 				</div>
 				<div class="contacts">
-					<a id="show-photos"><i class="fa fa-images"></i></a>
-					<a id="show-settings"><i class="fa fa-cogs"></i></a>
-					<a id="show-stickers"><i class="fa fa-icons"></i></a>
+					<a data-tab="photos"><i class="fa fa-images"></i></a>
+					<a data-tab="settings"><i class="fa fa-cogs"></i></a>
+					<a data-tab="stickers"><i class="fa fa-icons"></i></a>
 					<div class="clear"></div>
 				</div>
 				<footer>

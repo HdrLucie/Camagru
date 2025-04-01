@@ -52,40 +52,41 @@ async function loadUserData() {
     });
 }
 
+
+
 document.addEventListener('DOMContentLoaded', function() {
-    const showPhotos = document.getElementById('show-photos');
-    const showSettings = document.getElementById('show-settings');
-    const showStickers = document.getElementById('show-stickers');
+    const photoButtons = document.querySelectorAll('[data-tab="photos"]');
+    const settingsButtons = document.querySelectorAll('[data-tab="settings"]');
+    const stickersButtons = document.querySelectorAll('[data-tab="stickers"]');
+    const image_input = document.getElementById( 'image_input' );
     const photosList = document.getElementById('photos-list');
     const settings = document.getElementById('settings');
     const stickers = document.getElementById('stickers');
-	const image_input = document.getElementById( 'image_input' );
-
-	function showContent(contentToShow) {
+    function showContent(contentToShow) {
         [photosList, settings, stickers].forEach(content => {
-            content.classList.remove('active');
+            if (content) content.classList.remove('active');
         });
-        contentToShow.classList.add('active');
+        if (contentToShow) contentToShow.classList.add('active');
     }
-
-    showPhotos.addEventListener('click', function(e) {
-        e.preventDefault();
-        showContent(photosList);
+    photoButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            showContent(photosList);
+        });
     });
-
-    showSettings.addEventListener('click', function(e) {
-        e.preventDefault();
-        showContent(settings);
+    settingsButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            showContent(settings);
+        });
     });
-
-    showStickers.addEventListener('click', function(e) {
-        e.preventDefault();
-        showContent(stickers);
+    stickersButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            showContent(stickers);
+        });
     });
-    // La liste des photos est affichée par défaut
-    showContent(photosList);
-
-	image_input.addEventListener('click', function() {
+    image_input.addEventListener('click', function() {
 	  const file_reader = new FileReader();
 	  file_reader.addEventListener("load", () => {
 	    const uploaded_image = file_reader.result;
@@ -93,4 +94,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	  });
 	  file_reader.readAsDataURL(this.files[0]);
 	});
+
+    showContent(photosList);
 });

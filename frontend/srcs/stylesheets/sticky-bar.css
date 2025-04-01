@@ -1,6 +1,5 @@
 .nav {
 	top:0;
-	display: flex;
 	justify-content: center;
 	width:100%;
 	border-right: 1px solid rgba(255, 255, 255, 0.2);
@@ -8,6 +7,7 @@
     list-style-type: none;
     font: 500 20px/24px "Montserrat", Arial, sans-serif;
     position: fixed;
+	display: none;
     /*left: 0;*/
     right: 0;
     z-index: 10;
@@ -25,6 +25,7 @@
 .nav._active {
     transform: translateY(0);
     opacity: 1;
+	display: flex;
     pointer-events: auto;
 }
 
