@@ -334,7 +334,7 @@ h3 {
 /* STICKERS GRID */
 
 .stickers-grid {
-	height: 128px;
+	/*height: 128px;*/
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
 	gap: 2em;
