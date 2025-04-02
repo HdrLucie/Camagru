@@ -126,3 +126,12 @@ func (app *App) getStickers(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Set("Content-Type", "application/json")
     json.NewEncoder(writer).Encode(app.stickers)
 }
+
+// ! ||--------------------------------------------------------------------------------||
+// ! ||                                 PICTURES GETTER                                ||
+// ! ||--------------------------------------------------------------------------------||
+
+func (app *App) getPictures(writer http.ResponseWriter, request *http.Request) {
+	writer.Header().Set("Content-type", "application/json")
+	json.(writer).Encode(app.pictures)
+}

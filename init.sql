@@ -14,3 +14,9 @@ CREATE TABLE stickers (
     name VARCHAR(255),
     image_path TEXT
 );
+
+CREATE TABLE images (
+	id SERIAL PRIMARY KEY,
+	user SERIAL,
+	image_path TEXT
+);

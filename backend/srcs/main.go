@@ -28,6 +28,7 @@ type App struct {
 	dataBase	*sql.DB
 	users		[]User
 	stickers	[]Stickers
+	pictures	[]Pictures
 }
 
 type User struct {
@@ -47,6 +48,11 @@ type Stickers struct {
 	Path	string `json:"path"`
 }
 
+type Pictures struct {
+	Id		int `json:"id"`
+	Author	int `json:"user"`
+	Path	string `json:"path"`
+}
 type TemplateData struct {
 	Page string
 }

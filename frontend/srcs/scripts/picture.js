@@ -1,13 +1,40 @@
-window.onload = checkToken;
+document.addEventListener('DOMContentLoaded', () => {
+	checkToken();
+    loadUserData();
+});
 
-function checkToken() {
-  console.log("Function check token")
-  const token = localStorage.getItem('token');
-  console.log(token)
-  if (!token) {
-    alert('No token found. Please login.');
-    window.location.href = '/';
-  }
+async function checkToken() {
+    const token = localStorage.getItem('token');
+    console.log("Function check token")    
+    console.log(token)
+    if (!token) {
+        // alert('No token found. Please login.');
+        window.location.href = '/';
+    }
+}
+
+async function getUser() {
+    const token = localStorage.getItem('token');
+    try {
+        const response = await fetch("/getUser", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+        const userData = await response.json();
+		console.log(userData);
+		return userData;
+    } catch (error) {
+        console.error("Erreur:", error);
+        return null;
+    }
+}
+
+async function sendPicture() {
+	const user = getUser();
+
 }
 
 (() => {
@@ -15,8 +42,8 @@ function checkToken() {
   // width to the value defined here, but the height will be
   // calculated based on the aspect ratio of the input stream.
 
-  const width = 0; // We will scale the photo width to this
-  let height = 0; // This will be computed based on the input stream
+  const width = 100; // We will scale the photo width to this
+  let height = 100; // This will be computed based on the input stream
 
   // |streaming| indicates whether or not we're currently streaming
   // video from the camera. Obviously, we start at false.
