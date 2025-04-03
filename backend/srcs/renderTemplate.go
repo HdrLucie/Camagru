@@ -92,6 +92,7 @@ func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/editEmail", app.authMiddleware(app.modifyEmail))
 	router.HandleFunc("/getUser", app.authMiddleware(app.getUser))
 	router.HandleFunc("/getStickers", app.authMiddleware(app.getStickers))
+	// router.HandleFunc("/sendImage", app.authMiddleware(app.downloadImage))
 }
 
 func renderTemplate(router *http.ServeMux, app *App) {

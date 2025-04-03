@@ -16,7 +16,6 @@ CREATE TABLE stickers (
 );
 
 CREATE TABLE images (
-	id SERIAL PRIMARY KEY,
-	user SERIAL,
+	JWT VARCHAR(255) NULL,
 	image_path TEXT
 );
