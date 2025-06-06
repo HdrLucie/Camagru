@@ -9,7 +9,6 @@ import (
 
 func (app *App) downloadImage(writer http.ResponseWriter, request http.Request) {
 	var picture Pictures
-	// var token string
 
 	fmt.Println(Yellow + "Download image" + Reset)
 	writer.Header().Set("Content-Type", "application/json")
@@ -28,6 +27,4 @@ func (app *App) downloadImage(writer http.ResponseWriter, request http.Request) 
 		http.Error(writer, err.Error(), http.StatusBadRequest)
 		return
 	}
-
-	fmt.Println(picture.Path, picture.JWT)
 }

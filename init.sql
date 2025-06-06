@@ -16,6 +16,8 @@ CREATE TABLE stickers (
 );
 
 CREATE TABLE images (
-	JWT VARCHAR(255) NULL,
-	image_path TEXT
+	image_path TEXT,
+	id SERIAL PRIMARY KEY NOT NULL,
+	userId SERIAL PRIMARY KEY NOT NULL,
+	uploadTime timestamp with time zone NOT NULL
 );

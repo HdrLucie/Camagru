@@ -49,8 +49,10 @@ type Stickers struct {
 }
 
 type Pictures struct {
-	JWT		string `json:"token"`
 	Path	string `json:"path"`
+	Id		int `json:"id"`
+	userId	int `json:"id"`
+	uploadTime int64 `json:"uploadTime"`
 }
 type TemplateData struct {
 	Page string

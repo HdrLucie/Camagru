@@ -170,10 +170,17 @@ async function getUser() {
 		var token;
 		var path;
 
-		const data = canvas.toDataURL("image/png");
-		photo.setAttribute("src", data);
-		path = data;
-		console.log(path);
+		const imgBlob = await new Promise(resolve => {
+            canvas.toBlob(resolve, 'image/jpeg', 0.8); // Compression JPEG à 80%
+        });
+		const blobUrl = URL.createObjectURL(imgBlob);
+		console.log("Votre photo capturée:", blobUrl);
+		const formData = new FormData();
+        formData.append('image', imgBlob, 'photo.jpg');
+        // formData.append('userId', userData?.id || '');
+        formData.append('timestamp', new Date().toISOString());
+        // formData.append('deviceInfo', navigator.userAgent);
+		console.log(formData);
 	}
 	// Set up our event listener to run the startup process
 	// once loading is complete.
