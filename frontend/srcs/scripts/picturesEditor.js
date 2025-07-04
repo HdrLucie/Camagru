@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function checkToken() {
 	const token = localStorage.getItem('token');
-	console.log("Function check token")    
+	console.log("Function check token")
 	console.log(token)
 	if (!token) {
 		// alert('No token found. Please login.');
@@ -24,7 +24,6 @@ async function getUser() {
 			},
 		});
 		const userData = await response.json();
-		console.log(userData);
 		return userData;
 	} catch (error) {
 		console.error("Erreur:", error);
@@ -167,9 +166,9 @@ async function getUser() {
 	async function sendPictures() {
 
 		console.log("\n\nsendButton function.\n\n");
-		var token;
 		var path;
-
+		const token = localStorage.getItem('token');
+		const user = await getUser();
 		const imgBlob = await new Promise(resolve => {
             canvas.toBlob(resolve, 'image/jpeg', 0.8); // Compression JPEG à 80%
         });
@@ -177,10 +176,19 @@ async function getUser() {
 		console.log("Votre photo capturée:", blobUrl);
 		const formData = new FormData();
         formData.append('image', imgBlob, 'photo.jpg');
-        // formData.append('userId', userData?.id || '');
+		formData.append('id', user.id);
         formData.append('timestamp', new Date().toISOString());
         // formData.append('deviceInfo', navigator.userAgent);
 		console.log(formData);
+		const response = await fetch("/sendImage", {
+			method: "POST",
+			headers: {
+				"Authorization": `Bearer ${token}`
+			},
+			body: formData
+		});
+		console.log(await response.json());
+
 	}
 	// Set up our event listener to run the startup process
 	// once loading is complete.

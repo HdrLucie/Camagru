@@ -83,6 +83,7 @@ func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/profile", serveTemplate("profile.html"))
 	router.HandleFunc("/signUp", app.signUp)
 	router.HandleFunc("/login", app.login)
+	router.HandleFunc("/sendImage", app.authMiddleware(app.downloadImage))
 	router.HandleFunc("/logout", app.authMiddleware(app.logout))
 	router.HandleFunc("/verifyAccount", app.verifyAccount)
 	router.HandleFunc("/sendResetLink", app.sendResetLink)
@@ -92,7 +93,6 @@ func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/editEmail", app.authMiddleware(app.modifyEmail))
 	router.HandleFunc("/getUser", app.authMiddleware(app.getUser))
 	router.HandleFunc("/getStickers", app.authMiddleware(app.getStickers))
-	// router.HandleFunc("/sendImage", app.authMiddleware(app.downloadImage))
 }
 
 func renderTemplate(router *http.ServeMux, app *App) {

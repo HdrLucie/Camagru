@@ -3,12 +3,11 @@ package main
 import (
 	"fmt"
 	// "encoding/hex"
-	"encoding/json"
+	// "encoding/json"
 	"net/http"
 )
 
-func (app *App) downloadImage(writer http.ResponseWriter, request http.Request) {
-	var picture Pictures
+func (app *App) downloadImage(writer http.ResponseWriter, request *http.Request) {
 
 	fmt.Println(Yellow + "Download image" + Reset)
 	writer.Header().Set("Content-Type", "application/json")
@@ -18,13 +17,21 @@ func (app *App) downloadImage(writer http.ResponseWriter, request http.Request) 
 		http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
+    err := request.ParseMultipartForm(10 << 20)
+    if err != nil {
+        http.Error(writer, "Erreur parsing formulaire: "+err.Error(), http.StatusBadRequest)
+        return
+    }
 
-	// NewDecoder.Decode and NewEncoder.Encode encode/décode un JSON -> golang/golang -> JSON. Retourne une structure.
-	// Nous permet de travailelr avec du JSON.
-	err := json.NewDecoder(request.Body).Decode(&picture)
-	if err != nil {
-		fmt.Println(Red + "Error : Decode Json object" + Reset)
-		http.Error(writer, err.Error(), http.StatusBadRequest)
-		return
-	}
+    file, _, err := request.FormFile("image")
+    if err != nil {
+        http.Error(writer, "Erreur récupération image: "+err.Error(), http.StatusBadRequest)
+        return
+    }
+    defer file.Close()
+	timeStamp := request.FormValue("timestamp");
+	userId := request.FormValue("id");
+	fmt.Println(timeStamp, userId);
+
+	
 }
