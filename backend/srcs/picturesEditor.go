@@ -6,7 +6,21 @@ import (
 	// "encoding/hex"
 	// "encoding/json"
 	"net/http"
+	"mime/multipart"
 )
+
+// Il faut créer un dossier qui contiendra toutes mes images, s'il n'existe pas. 
+// Regarder si le path mon image n'existe pas déjà.
+// Générer un nom d'image puis créer le fichier sur le serveur.
+// Copier le contenu de mon image dans le file. 
+
+func createFolder() error {
+	return (nil);
+}
+
+func createImage(file multipart.File) {
+
+}
 
 func (app *App) downloadImage(writer http.ResponseWriter, request *http.Request) {
 	// var image Pictures;
@@ -24,7 +38,6 @@ func (app *App) downloadImage(writer http.ResponseWriter, request *http.Request)
         http.Error(writer, "Erreur parsing formulaire: "+err.Error(), http.StatusBadRequest)
         return
     }
-
     file, _, err := request.FormFile("image")
     if err != nil {
         http.Error(writer, "Erreur récupération image: "+err.Error(), http.StatusBadRequest)
