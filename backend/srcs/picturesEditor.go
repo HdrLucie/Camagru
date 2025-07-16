@@ -7,7 +7,9 @@ import (
 	// "encoding/hex"
 	// "encoding/json"
 	"net/http"
-	"mime/multipart"
+	"io"
+	"time"
+	// "mime/multipart"
 	"os"
 )
 
@@ -28,27 +30,6 @@ func createDirectory() error {
 	return (nil);
 }
 
-func createImage(file multipart.File, id int, timeStamp string) {
-	fmt.Println(file, id, timeStamp);
-	filename := fmt.Sprintf("user_%d_%d_%s", tmpId, timestamp, fileHeader.Filename)
-	filepath := filepath.Join(uploadsDir, filename)
-
-	// Créer le fichier sur le serveur
-	dst, err := os.Create(filepath)
-	if err != nil {
-		http.Error(writer, "Erreur création fichier: "+err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer dst.Close()
-
-	// Copier le contenu de l'image dans le fichier
-	_, err = io.Copy(dst, file)
-	if err != nil {
-		http.Error(writer, "Erreur sauvegarde image: "+err.Error(), http.StatusInternalServerError)
-		return
-	}
-}
-
 func (app *App) downloadImage(writer http.ResponseWriter, request *http.Request) {
 	// var image Pictures;
 
@@ -65,17 +46,66 @@ func (app *App) downloadImage(writer http.ResponseWriter, request *http.Request)
         http.Error(writer, "Erreur parsing formulaire: "+err.Error(), http.StatusBadRequest)
         return
     }
-    file, _, err := request.FormFile("image")
+    file, fileHeader, err := request.FormFile("image")
     if err != nil {
         http.Error(writer, "Erreur récupération image: "+err.Error(), http.StatusBadRequest)
         return
     }
-    defer file.Close()
-	timeStamp := request.FormValue("timestamp");
-	userId := request.FormValue("id");
-	tmpId, _ := strconv.Atoi(userId);
-	fmt.Println(timeStamp, userId);
-	createImage(file, tmpId, timeStamp);
+    defer file.Close();
+	timeStamp := request.FormValue("timestamp")
+	userId := request.FormValue("id")
+	tmpId, err := strconv.Atoi(userId)
+	if err != nil {
+		http.Error(writer, "ID utilisateur invalide", http.StatusBadRequest)
+		return
+	}
+
+	uploadsDir := "uploads"
+	if _, err := os.Stat(uploadsDir); os.IsNotExist(err) {
+		err = os.MkdirAll(uploadsDir, 0755)
+		if err != nil {
+			http.Error(writer, "Erreur création dossier: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+
+	timestamp := time.Now().Unix()
+	filename := fmt.Sprintf("user_%d_%d_%s", tmpId, timestamp, fileHeader.Filename)
+	filepath := filepath.Join(uploadsDir, filename)
+
+	dst, err := os.Create(filepath)
+	if err != nil {
+		http.Error(writer, "Erreur création fichier: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer dst.Close()
+
+	_, err = io.Copy(dst, file)
+	if err != nil {
+		http.Error(writer, "Erreur sauvegarde image: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	var imageId int
+	err = app.dataBase.QueryRow("INSERT INTO images (image_path, userId, uploadTime) VALUES ($1, $2, $3) RETURNING id", 
+		filepath, tmpId, timeStamp).Scan(&imageId)
+	if err != nil {
+		fmt.Println(Red + "Error : insert image in DB" + Reset)
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// response := map[string]interface{}{
+	// 	"success": true,
+	// 	"message": "Image sauvegardée avec succès",
+	// 	"imageId": imageId,
+	// 	"path": filepath,
+	// }
+	
+	writer.Header().Set("Content-Type", "application/json")
+	fmt.Fprintf(writer, `{"success": true, "message": "Image sauvegardée", "imageId": %d, "path": "%s"}`, imageId, filepath)
+
+	fmt.Println(Green + "Image sauvegardée: " + filepath + Reset)
 	err = app.dataBase.QueryRow("INSERT INTO images (image_path, userId, uploadTime) VALUES ($1, $2, $3) RETURNING id", "path", tmpId, timeStamp).Scan(&userId);
 	if err != nil {
 		fmt.Println(Red + "Error : insert image in DB" + Reset);
