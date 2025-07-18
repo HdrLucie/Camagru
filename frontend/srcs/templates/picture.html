@@ -16,7 +16,7 @@
 		{{ template "navbar" . }} 
 		<div class="main-container">
 			<main class="camera-section">
-				<div class="camera">
+				<div class="camera" ondragover="handleDragOver(event);" ondrop="handleDrop(event);">
 					<video id="video"></video>
 					<button id="startbutton">
 						<i class="fa-solid fa-camera"></i>
@@ -28,15 +28,15 @@
 				</div>
 				<button id="sendButton">Send your image</button>
 			</main>
-			<!--<aside class="stickers-sidebar">-->
-			<!--	<a>-->
-			<!--	<i class="fa-solid fa-sliders"></i>-->
-			<!--	</a>-->
-			<!--	<div class="content-title">-->
-			<!--		Stickers-->
-			<!--	</div>-->
-			<!--	<div class="stickers-grid" id="stickersContainer"></div>-->
-			<!--</aside>-->
+			<aside class="stickers-sidebar">
+				<a>
+				<i class="fa-solid fa-sliders"></i>
+				</a>
+				<div class="content-title">
+					Stickers
+				</div>
+				<div class="stickers-grid" id="stickersContainer"></div>
+			</aside>
 		</div>
 		<!--<div class="contentarea">-->
 		<!--   <div class="camera">-->

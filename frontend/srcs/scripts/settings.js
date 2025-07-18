@@ -52,8 +52,6 @@ async function loadUserData() {
     });
 }
 
-
-
 document.addEventListener('DOMContentLoaded', function() {
     const photoButtons = document.querySelectorAll('[data-tab="photos"]');
     const settingsButtons = document.querySelectorAll('[data-tab="settings"]');

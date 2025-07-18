@@ -58,7 +58,7 @@ async function getUser() {
 			// Ensure that if our document is in a frame, we get the user
 			// to first open it in its own tab or window. Otherwise, it
 			// won't be able to request permission for camera access.
-				document.querySelector(".contentarea").remove();
+			document.querySelector(".contentarea").remove();
 			const button = document.createElement("button");
 			button.textContent = "View live result of the example code above";
 			document.body.append(button);

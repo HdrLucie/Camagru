@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"encoding/json"
 	"strings"
+	"strconv"
 )
 
 // ! ||--------------------------------------------------------------------------------||
@@ -125,6 +126,31 @@ func (app *App) getUser(writer http.ResponseWriter, request *http.Request) {
 func (app *App) getStickers(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Set("Content-Type", "application/json")
     json.NewEncoder(writer).Encode(app.stickers)
+}
+
+func (app *App) getStickerById(writer http.ResponseWriter, request *http.Request) {
+	var sticker Stickers;
+	fmt.Println(Red + "GET STICKER" + Reset);
+    if request.Method != http.MethodGet {
+        http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
+        return
+    }
+    path := strings.TrimPrefix(request.URL.Path, "/getSticker/")
+    id, err := strconv.Atoi(path)
+	fmt.Println(id);
+    if err != nil {
+        http.Error(writer, "Invalid ID", http.StatusBadRequest)
+        return
+    }
+	query := "SELECT name, image_path FROM Stickers WHERE id = $1"
+	row := app.dataBase.QueryRow(query, id)
+	err = row.Scan(&sticker.Name, &sticker.Path)
+	fmt.Println(sticker)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(sticker.Id, sticker.Name)
+	json.NewEncoder(writer).Encode(sticker);
 }
 
 // ! ||--------------------------------------------------------------------------------||
