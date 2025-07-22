@@ -16,7 +16,7 @@
 		{{ template "navbar" . }} 
 		<div class="main-container">
 			<main class="camera-section">
-				<div class="camera" ondragover="handleDragOver(event);" ondrop="handleDrop(event);">
+				<div class="camera" id="camera" ondragover="handleDragOver(event);" ondrop="handleDrop(event);">
 					<video id="video"></video>
 					<button id="startbutton">
 						<i class="fa-solid fa-camera"></i>

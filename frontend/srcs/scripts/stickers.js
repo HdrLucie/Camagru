@@ -49,7 +49,12 @@ async function createStickerOnImage(stickerId, x, y) {
     if (existingSticker) {
         existingSticker.remove();
     }
-	
+    if (document.readyState === 'loading') {
+        await new Promise(resolve => {
+            document.addEventListener('DOMContentLoaded', resolve);
+        });
+    }
+
 	const name = await getStickerNameById(stickerId);
 	console.log(name);
     const stickerElement = document.createElement('img');
@@ -58,10 +63,12 @@ async function createStickerOnImage(stickerId, x, y) {
     stickerElement.style.position = 'absolute';
     stickerElement.style.left = x + 'px';
     stickerElement.style.top = y + 'px';
-    stickerElement.style.width = '50px';
-    stickerElement.style.height = '50px';
+    stickerElement.style.width = 'auto';
+    stickerElement.style.height = 'auto';
+	stickerElement.style.zIndex = 1000;
     stickerElement.style.pointerEvents = 'none';
-    const dropZone = document.getElementById('canvas');
+    const dropZone = document.getElementById('camera');
+	console.log(dropZone);
     dropZone.appendChild(stickerElement);
 }
 
@@ -75,7 +82,6 @@ function handleDrop(event) {
 	const dropX = event.offsetX;
     const dropY = event.offsetY;
     console.log("Drop position:", dropX, dropY);
-    
     createStickerOnImage(id, dropX, dropY);
 }
 
@@ -94,7 +100,6 @@ function handleDragStart(event) {
 async function displayStickers() {
     const stickers = await getStickers();
     const container = document.getElementById('stickersContainer');
-    // Nettoyer le conteneur
     container.innerHTML = '';
     if (stickers && stickers.length > 0) {
         stickers.forEach(sticker => {
