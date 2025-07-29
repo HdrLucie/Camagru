@@ -60,16 +60,19 @@ async function createStickerOnImage(stickerId, x, y) {
     const stickerElement = document.createElement('img');
     stickerElement.src = "/stickers/" + name;
     stickerElement.className = 'placed-sticker';
-    stickerElement.style.position = 'absolute';
-    stickerElement.style.left = x + 'px';
-    stickerElement.style.top = y + 'px';
-    stickerElement.style.width = 'auto';
-    stickerElement.style.height = 'auto';
-	stickerElement.style.zIndex = 1000;
-    stickerElement.style.pointerEvents = 'none';
-    const dropZone = document.getElementById('camera');
-	console.log(dropZone);
-    dropZone.appendChild(stickerElement);
+    stickerElement.style.position = 'absolute !important';
+    stickerElement.style.width = '128px';
+    stickerElement.style.height = '128px';
+	const dropZone = document.getElementById('video');
+	console.log(dropZone.offsetWidth, dropZone.offsetHeight);
+	const percentX = (x / dropZone.offsetWidth) * 80;
+    const percentY = (y / dropZone.offsetHeight) * 80;
+    stickerElement.style.left = percentX + '%';
+    stickerElement.style.top = percentY + '%';
+    stickerElement.dataset.relativeX = percentX;
+    stickerElement.dataset.relativeY = percentY;
+	const tmp = document.getElementById('camera');
+    tmp.appendChild(stickerElement);
 }
 
 function handleDrop(event) {
