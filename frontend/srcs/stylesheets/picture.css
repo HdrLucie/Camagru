@@ -65,6 +65,8 @@ html {
     position: absolute !important;
     z-index: 10 !important;
     pointer-events: none !important;
+	width: 128px;
+	height: 128px;
 }
 
 .output {
@@ -93,6 +95,10 @@ html {
 	font-size: 14px;
 	font-family: "Lucida Grande", "Arial", sans-serif;
 	color: rgb(255 255 255 / 100%);
+}
+
+#sendButton {
+	width: 680px;
 }
 
 .contentarea {

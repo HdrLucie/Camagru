@@ -131,9 +131,6 @@ async function getUser() {
 		clearphoto();
 	}
 
-	// Fill the photo with an indication that none has been
-	// captured.
-
 		function clearphoto() {
 			const context = canvas.getContext("2d");
 			context.fillStyle = "#AAA";
@@ -142,12 +139,6 @@ async function getUser() {
 			const data = canvas.toDataURL("image/png");
 			photo.setAttribute("src", data);
 		}
-
-	// Capture a photo by fetching the current contents of the video
-	// and drawing it into a canvas, then converting that to a PNG
-	// format data URL. By drawing it on an offscreen canvas and then
-	// drawing that to the screen, we can change its size and/or apply
-	// other changes before drawing it.
 
 		function takepicture() {
 			const context = canvas.getContext("2d");
@@ -168,6 +159,9 @@ async function getUser() {
 		console.log("\n\nsendButton function.\n\n");
 		var path;
 		const token = localStorage.getItem('token');
+		const sticker = document.getElementsByClassName('placed-sticker');
+		const str = sticker[0];
+		console.log(sticker[0], sticker);
 		const user = await getUser();
 		const imgBlob = await new Promise(resolve => {
             canvas.toBlob(resolve, 'image/jpeg', 0.8); // Compression JPEG à 80%
@@ -177,8 +171,13 @@ async function getUser() {
 		const formData = new FormData();
         formData.append('image', imgBlob, 'photo.jpg');
 		formData.append('id', user.id);
+		formData.append('imageId', sticker[0].id);
+		const relativeX = sticker[0].relativeX;
+		const relativeY = sticker[0].relativeY;
+
+		formData.append('posX', JSON.stringify(relativeX));
+		formData.append('posY', JSON.stringify(relativeY));
         formData.append('timestamp', new Date().toISOString());
-        // formData.append('deviceInfo', navigator.userAgent);
 		console.log(formData);
 		const response = await fetch("/sendImage", {
 			method: "POST",
@@ -190,8 +189,6 @@ async function getUser() {
 		console.log(await response.json());
 
 	}
-	// Set up our event listener to run the startup process
-	// once loading is complete.
 		window.addEventListener("load", startup, false);
 })();
 

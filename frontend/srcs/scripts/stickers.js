@@ -45,6 +45,7 @@ async function getStickerNameById(stickerId) {
 }
 
 async function createStickerOnImage(stickerId, x, y) {
+	console.log("ID :" + stickerId);
     const existingSticker = document.querySelector('.placed-sticker');
     if (existingSticker) {
         existingSticker.remove();
@@ -56,16 +57,12 @@ async function createStickerOnImage(stickerId, x, y) {
     }
 
 	const name = await getStickerNameById(stickerId);
-	console.log(name);
     const stickerElement = document.createElement('img');
     stickerElement.src = "/stickers/" + name;
     stickerElement.className = 'placed-sticker';
-    stickerElement.style.position = 'absolute !important';
-    stickerElement.style.width = '128px';
-    stickerElement.style.height = '128px';
 	const dropZone = document.getElementById('video');
-	console.log(dropZone.offsetWidth, dropZone.offsetHeight);
 	const percentX = (x / dropZone.offsetWidth) * 80;
+	stickerElement.id = stickerId;
     const percentY = (y / dropZone.offsetHeight) * 80;
     stickerElement.style.left = percentX + '%';
     stickerElement.style.top = percentY + '%';
