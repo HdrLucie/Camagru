@@ -6,7 +6,6 @@ const draggableItem = document.getElementById("draggableItem");
 
 async function getStickers() {
     const token = localStorage.getItem('token');
-    console.log("getStickers function")    
     try {
         const response = await fetch("/getStickers", {
             method: "GET",
@@ -45,7 +44,6 @@ async function getStickerNameById(stickerId) {
 }
 
 async function createStickerOnImage(stickerId, x, y) {
-	console.log("ID :" + stickerId);
     const existingSticker = document.querySelector('.placed-sticker');
     if (existingSticker) {
         existingSticker.remove();
@@ -74,14 +72,11 @@ async function createStickerOnImage(stickerId, x, y) {
 
 function handleDrop(event) {
 	event.preventDefault();
-	console.log("handle drop");
 	const id = event
 	.dataTransfer
 	.getData('text/plain');
-	console.log(id);
 	const dropX = event.offsetX;
     const dropY = event.offsetY;
-    console.log("Drop position:", dropX, dropY);
     createStickerOnImage(id, dropX, dropY);
 }
 
@@ -90,11 +85,9 @@ function handleDragOver(event) {
 }
 
 function handleDragStart(event) {
-	console.log("Handle drag start");
 	event
     .dataTransfer
     .setData('text/plain', event.target.id);
-	console.log(event.target.id);
 }
 
 async function displayStickers() {

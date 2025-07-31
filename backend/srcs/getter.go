@@ -153,6 +153,15 @@ func (app *App) getStickerById(writer http.ResponseWriter, request *http.Request
 	json.NewEncoder(writer).Encode(sticker);
 }
 
+func (app *App)	getStickerPathById(id int) string {
+	for i, _ := range app.stickers {
+		if app.stickers[i].Id == id {
+			return app.stickers[i].Path;
+		}
+	}
+	return "";
+}
+
 // ! ||--------------------------------------------------------------------------------||
 // ! ||                                 PICTURES GETTER                                ||
 // ! ||--------------------------------------------------------------------------------||

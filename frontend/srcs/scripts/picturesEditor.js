@@ -36,8 +36,8 @@ async function getUser() {
 	// width to the value defined here, but the height will be
 	// calculated based on the aspect ratio of the input stream.
 
-	const width = 100; // We will scale the photo width to this
-	let height = 100; // This will be computed based on the input stream
+	const width = 680; // We will scale the photo width to this
+	let height = 500; // This will be computed based on the input stream
 
 	// |streaming| indicates whether or not we're currently streaming
 	// video from the camera. Obviously, we start at false.
@@ -155,30 +155,26 @@ async function getUser() {
 		}
 
 	async function sendPictures() {
-
 		console.log("\n\nsendButton function.\n\n");
 		var path;
 		const token = localStorage.getItem('token');
 		const sticker = document.getElementsByClassName('placed-sticker');
-		const str = sticker[0];
-		console.log(sticker[0], sticker);
 		const user = await getUser();
 		const imgBlob = await new Promise(resolve => {
             canvas.toBlob(resolve, 'image/jpeg', 0.8); // Compression JPEG à 80%
         });
 		const blobUrl = URL.createObjectURL(imgBlob);
-		console.log("Votre photo capturée:", blobUrl);
 		const formData = new FormData();
+		console.log(sticker[0]);
         formData.append('image', imgBlob, 'photo.jpg');
 		formData.append('id', user.id);
 		formData.append('imageId', sticker[0].id);
-		const relativeX = sticker[0].relativeX;
-		const relativeY = sticker[0].relativeY;
-
-		formData.append('posX', JSON.stringify(relativeX));
-		formData.append('posY', JSON.stringify(relativeY));
+		const relativeX = sticker[0].dataset.relativeX;
+		const relativeY = sticker[0].dataset.relativeY;
+		formData.append('stickerPath', sticker[0].src);
+		formData.append('posX', JSON.stringify(Math.floor(relativeX)));
+		formData.append('posY', JSON.stringify(Math.floor(relativeY)));
         formData.append('timestamp', new Date().toISOString());
-		console.log(formData);
 		const response = await fetch("/sendImage", {
 			method: "POST",
 			headers: {
