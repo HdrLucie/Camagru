@@ -71,20 +71,6 @@ func createImage(file multipart.File, fileHeader *multipart.FileHeader, tmpId in
 	return filepath, err;	
 }
 
-func DecodePixelsFromImage(img image.Image, offsetX, offsetY int) []*Pixel {
-    pixels := []*Pixel{}
-    for y := 0; y <= img.Bounds().Max.Y; y++ {
-        for x := 0; x <= img.Bounds().Max.X; x++ {
-            p := &Pixel{
-                Point: image.Point{x + offsetX, y + offsetY},
-                Color: img.At(x, y),
-            }
-            pixels = append(pixels, p)
-        }
-    }
-    return pixels
-}
-
 func concatImage(imgPath string, stickerPath string, posX int, posY int) {
 	img, err := openAndDecode(imgPath)
 	if err != nil {
@@ -99,7 +85,7 @@ func concatImage(imgPath string, stickerPath string, posX int, posY int) {
 	finImage := image.NewRGBA(img.Bounds())
 	fmt.Println(posX, posY)	
 	draw.Draw(finImage, img.Bounds(), img, image.Point{0, 0}, draw.Src)
-	stickerPos := image.Point{posX, posY}
+	stickerPos := image.Point{posX * 7, posY * 5}
 	stickerRect := image.Rectangle{
 		Min: stickerPos,
 		Max: stickerPos.Add(sticker.Bounds().Size()),

@@ -32,21 +32,10 @@ async function getUser() {
 }
 
 (() => {
-	// The width and height of the captured photo. We will set the
-	// width to the value defined here, but the height will be
-	// calculated based on the aspect ratio of the input stream.
 
 	const width = 680; // We will scale the photo width to this
-	let height = 500; // This will be computed based on the input stream
-
-	// |streaming| indicates whether or not we're currently streaming
-	// video from the camera. Obviously, we start at false.
-
+	let height = 550; // This will be computed based on the input stream
 	let streaming = false;
-
-	// The various HTML elements we need to configure or control. These
-	// will be set by the startup() function.
-
 	let video = null;
 	let canvas = null;
 	let photo = null;
@@ -55,9 +44,6 @@ async function getUser() {
 
 	function showViewLiveResultButton() {
 		if (window.self !== window.top) {
-			// Ensure that if our document is in a frame, we get the user
-			// to first open it in its own tab or window. Otherwise, it
-			// won't be able to request permission for camera access.
 			document.querySelector(".contentarea").remove();
 			const button = document.createElement("button");
 			button.textContent = "View live result of the example code above";
@@ -94,8 +80,6 @@ async function getUser() {
 				if (!streaming) {
 					height = video.videoHeight / (video.videoWidth / width);
 
-					// Firefox currently has a bug where the height can't be read from
-					// the video, so we will make assumptions if this happens.
 
 						if (isNaN(height)) {
 							height = width / (4 / 3);
@@ -187,5 +171,3 @@ async function getUser() {
 	}
 		window.addEventListener("load", startup, false);
 })();
-
-
