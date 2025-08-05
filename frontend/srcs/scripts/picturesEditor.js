@@ -13,6 +13,43 @@ async function checkToken() {
 	}
 }
 
+async function getPictures() {
+    const token = localStorage.getItem('token');
+    try {
+        const response = await fetch("/getPictures", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+        const pictures = await response.json();
+        return pictures;
+    } catch (error) {
+        console.error("Erreur:", error);
+        return null;
+    }
+}
+
+async function displayGallery() {
+    const pictures = await getPictures();
+    const container = document.getElementById('galleryContainer');
+    container.innerHTML = '';
+    if (pictures && pictures.length > 0) {
+        pictures.forEach(picture => {
+            const img = document.createElement('img');
+            img.src = "/pictures/" + sticker.Path;
+			img.alt = sticker.Path;
+			img.id = sticker.id;
+            container.appendChild(img);
+        });
+    } else {
+        const message = document.createElement('p');
+        message.textContent = 'No sticker available';
+        container.appendChild(message);
+    }
+}
+
 async function getUser() {
 	const token = localStorage.getItem('token');
 	try {

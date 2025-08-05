@@ -28,16 +28,15 @@ type Pixel struct {
 	Color color.Color
 }
 
-func createDirectory() error {
-	path := "photosDirectory"
-	if _, err := os.Stat(path); !os.IsNotExist(err) {
-        return fmt.Errorf("directory already exists: %s", path);
-    }
-	err := os.MkdirAll(path, 0755)
-    if err != nil {
-		return fmt.Errorf("failed to create directory: %v", err);
+func (app *App) createUploadsDirectory() error {
+	uploadsDir := "uploads"
+	if _, err := os.Stat(uploadsDir); os.IsNotExist(err) {
+		err = os.MkdirAll(uploadsDir, 0755)
+		if err != nil {
+			return err
+		}
 	}
-	return (nil);
+	return nil
 }
 
 func openAndDecode(filepath string) (image.Image, error) {
@@ -150,13 +149,13 @@ func (app *App) downloadImage(writer http.ResponseWriter, request *http.Request)
 	}
 
 	uploadsDir := "uploads"
-	if _, err := os.Stat(uploadsDir); os.IsNotExist(err) {
-		err = os.MkdirAll(uploadsDir, 0755)
-		if err != nil {
-			http.Error(writer, "Erreur création dossier: "+err.Error(), http.StatusInternalServerError)
-			return
-		}
-	}
+	// if _, err := os.Stat(uploadsDir); os.IsNotExist(err) {
+	// 	err = os.MkdirAll(uploadsDir, 0755)
+	// 	if err != nil {
+	// 		http.Error(writer, "Erreur création dossier: "+err.Error(), http.StatusInternalServerError)
+	// 		return
+	// 	}
+	// }
 		
 	var imageId int
 	filepath, err := createImage(file, fileHeader, tmpId, uploadsDir);

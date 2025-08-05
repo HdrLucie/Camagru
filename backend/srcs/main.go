@@ -51,8 +51,8 @@ type Stickers struct {
 type Pictures struct {
 	Path	string `json:"path"`
 	Id		int `json:"id"`
-	userId	int `json:"id"`
-	uploadTime int64 `json:"uploadTime"`
+	userId	int `json:"userId"`
+	uploadTime string `json:"uploadTime"`
 }
 type TemplateData struct {
 	Page string
@@ -75,10 +75,12 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading stickers directory")
 	}
+	err = app.createUploadsDirectory();
+	if err != nil {
+		log.Fatal("Error creating uploads directory");
+	}
 	renderTemplate(router, app)
 
 	fmt.Println("Server started at http://localhost:" + port)
 	http.ListenAndServe(":"+port, router)
-	// fmt.Println("Server started at http://localhost:" + port)
-	// http.ListenAndServe("paul-f4Ar8s2.clusters.42paris.fr:"+port, router)
 }

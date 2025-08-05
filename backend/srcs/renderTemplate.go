@@ -94,6 +94,7 @@ func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/getUser", app.authMiddleware(app.getUser))
 	router.HandleFunc("/getStickers", app.authMiddleware(app.getStickers))
 	router.HandleFunc("/getSticker/", app.authMiddleware(app.getStickerById))
+	router.HandleFunc("/getPictures", app.authMiddleware(app.getAllPictures))
 }
 
 func renderTemplate(router *http.ServeMux, app *App) {

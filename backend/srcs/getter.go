@@ -166,7 +166,45 @@ func (app *App)	getStickerPathById(id int) string {
 // ! ||                                 PICTURES GETTER                                ||
 // ! ||--------------------------------------------------------------------------------||
 
-func (app *App) getPictures(writer http.ResponseWriter, request *http.Request) {
-	writer.Header().Set("Content-type", "application/json")
-	json.NewEncoder(writer).Encode(app.pictures)
+
+// ! ||--------------------------------------------------------------------------------||
+// ! ||                            HELPER FUNCTIONS - DB QUERIES                      ||
+// ! ||--------------------------------------------------------------------------------||
+
+func (app *App) getAllPictures(writer http.ResponseWriter, request *http.Request) {
+    fmt.Println(Yellow + "Get all pictures from DB" + Reset)
+    writer.Header().Set("Content-Type", "application/json")
+    if request.Method != http.MethodGet {
+        http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
+        return
+    }
+    pictures, err := app.fetchAllPicturesFromDB()
+    if err != nil {
+        fmt.Println(Red + "Error fetching pictures: " + err.Error() + Reset)
+        http.Error(writer, "Error fetching pictures", http.StatusInternalServerError)
+        return
+    }
+    json.NewEncoder(writer).Encode(pictures)
+}
+
+func (app *App) fetchAllPicturesFromDB() ([]Pictures, error) {
+    var pictures []Pictures
+    
+    query := "SELECT id, image_path, userId, uploadTime FROM images ORDER BY uploadTime DESC"
+    rows, err := app.dataBase.Query(query)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+    
+    for rows.Next() {
+        var pic Pictures
+        err := rows.Scan(&pic.Id, &pic.Path, &pic.userId, &pic.uploadTime)
+        if err != nil {
+            return nil, err
+        }
+        pictures = append(pictures, pic)
+    }
+    
+    return pictures, nil
 }
