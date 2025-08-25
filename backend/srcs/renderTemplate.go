@@ -46,6 +46,11 @@ func serveStickersFiles(router *http.ServeMux) {
 	router.Handle("/stickers/", http.StripPrefix("/stickers", stickers))
 }
 
+func servePicturesFiles(router *http.ServeMux) {
+	stickers := http.FileServer(http.Dir("/uploads/"))
+	router.Handle("/uploads/", http.StripPrefix("/uploads", stickers))
+}
+
 func (app *App) verifyJWT(JWT string) (*User, error) {
 	user, error := app.getUserByJWT(JWT)
 	if error != nil {
@@ -102,6 +107,7 @@ func renderTemplate(router *http.ServeMux, app *App) {
 	serveScriptsFiles(router)
 	serveImgFiles(router)
 	serveStickersFiles(router)
+	servePicturesFiles(router)
 
 	app.router(router)
 }
