@@ -30,15 +30,15 @@ async function displayGallery() {
     if (pictures && pictures.length > 0) {
         pictures.forEach(picture => {
             const img = document.createElement('img');
-            img.src = "/backend/srcs/" + picture.path;
-			img.alt = "/backend/srcs/" + picture.path;
+            img.src = picture.path;
+			img.alt = picture.path;
 			img.id = picture.id;
 			console.log(img);
             container.appendChild(img);
         });
     } else {
         const message = document.createElement('p');
-        message.textContent = 'No sticker available';
+        message.textContent = 'No image available';
         container.appendChild(message);
     }
 }

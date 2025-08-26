@@ -47,7 +47,7 @@ func serveStickersFiles(router *http.ServeMux) {
 }
 
 func servePicturesFiles(router *http.ServeMux) {
-	stickers := http.FileServer(http.Dir("/uploads/"))
+	stickers := http.FileServer(http.Dir("./uploads/"))
 	router.Handle("/uploads/", http.StripPrefix("/uploads", stickers))
 }
 
