@@ -50,6 +50,19 @@ async function loadUserData() {
         const field = element.getAttribute('user-data');
         element.textContent = userData[field];
     });
+	const emailInput = document.getElementById('email');
+	if (emailInput && userData.email) {
+		emailInput.placeholder = userData.email;
+	}
+	const usernameInput = document.getElementById('username');
+	if (usernameInput && userData.username) {
+		username.placeholder = userData.username;
+	}
+	// const emailInput = document.getElementById('email');
+	// if (emailInput && userData.email) {
+	// 	emailInput.placeholder = userData.email;
+	// }
+
 }
 
 document.addEventListener('DOMContentLoaded', function() {
