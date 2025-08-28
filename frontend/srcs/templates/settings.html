@@ -11,13 +11,13 @@
 					<div class="data-user-title">Username</div>
 				</div>
 				<div class="data-user-text">
-					<input type="text" name="username" id="username" placeholder="">
+					<input type="text" name="username" id="Username" placeholder="">
 				</div>
 				<div class="sub-data-user">
 					<div class="data-user-title">Email</div>
 				</div>
 				<div class="data-user-text">
-					<input type="text" name="email" id="email" placeholder="">
+					<input type="text" name="email" id="Email" placeholder="">
 				</div>
 				<div class="sub-data-user">
 					<div class="data-user-title">Tell us about yourself</div>
@@ -40,11 +40,8 @@
 
 				</div>
 				<div class="sub-data-user">
-					<div class="data-user-title" style="text-decoration: underline";>Reset your password</div>
+					<div class="data-user-title" id="forgetPassword" style="text-decoration: underline";>Reset your password</div>
 				</div>
-				<button class="save-change">
-					Save changes
-				</button>
 			</div>
 		</div>
 		<div class="right-column">
@@ -53,6 +50,9 @@
 				</div>
 				<input class="custom-file-input" type="file" accept="image/jpeg, image/png, image/jpg"id="image_input"></input>
 			</div>
+			<button class="save-change" onclick="getModifications()">
+				Save changes
+			</button>
 		</div>
 	</div>
 </div>

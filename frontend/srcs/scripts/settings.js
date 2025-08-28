@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function checkToken() {
     const token = localStorage.getItem('token');
-    console.log("Function check token")    
+    console.log("Function check token")
     console.log(token)
     if (!token) {
         // alert('No token found. Please login.');
@@ -50,19 +50,14 @@ async function loadUserData() {
         const field = element.getAttribute('user-data');
         element.textContent = userData[field];
     });
-	const emailInput = document.getElementById('email');
+	const emailInput = document.getElementById('Email');
 	if (emailInput && userData.email) {
 		emailInput.placeholder = userData.email;
 	}
-	const usernameInput = document.getElementById('username');
+	const usernameInput = document.getElementById('Username');
 	if (usernameInput && userData.username) {
-		username.placeholder = userData.username;
+		usernameInput.placeholder = userData.username;
 	}
-	// const emailInput = document.getElementById('email');
-	// if (emailInput && userData.email) {
-	// 	emailInput.placeholder = userData.email;
-	// }
-
 }
 
 document.addEventListener('DOMContentLoaded', function() {
