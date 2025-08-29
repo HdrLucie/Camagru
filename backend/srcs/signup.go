@@ -125,6 +125,7 @@ func (app *App)	signUp(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 	user.Id = userID
+	user.Notify = true
 	app.users = append(app.users, user)
 	writer.WriteHeader(http.StatusCreated)
 	response := map[string]string{

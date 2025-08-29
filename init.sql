@@ -5,8 +5,9 @@ CREATE TABLE users (
     password VARCHAR(255) UNIQUE NOT NULL,
     JWT VARCHAR(255) NULL,
     authToken VARCHAR(255) NULL,
-    authStatus BOOLEAN,
-	avatar	TEXT
+    authStatus BOOLEAN DEFAULT FALSE,
+	avatar	TEXT,
+	notify BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE stickers (

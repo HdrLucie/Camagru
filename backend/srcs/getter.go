@@ -31,9 +31,9 @@ func (app *App) getUserByJWT(JWT string) (*User, error) {
 	if (getterMsg == 1) {
 		fmt.Println(Yellow + "Get user by JWT" + Reset)
 	}
-	query := "SELECT id, email, username, password, JWT, authToken, authStatus, avatar FROM Users WHERE JWT = $1"
+	query := "SELECT id, email, username, password, JWT, authToken, authStatus, avatar, notify FROM Users WHERE JWT = $1"
 	row := app.dataBase.QueryRow(query, JWT)
-	err := row.Scan(&user.Id, &user.Email, &user.Username, &user.Password, &user.JWT, &user.AuthToken, &user.AuthStatus, &user.Avatar)
+	err := row.Scan(&user.Id, &user.Email, &user.Username, &user.Password, &user.JWT, &user.AuthToken, &user.AuthStatus, &user.Avatar, &user.Notify)
 	if err != nil {
 		return nil, err
 	}
@@ -57,9 +57,9 @@ func (app *App) getUserByUsername(username string) (*User, error) {
 	if (getterMsg == 1) {
 		fmt.Println(Yellow + "Get user by username" + Reset)
 	}
-	query := "SELECT id, email, username, password, authToken, authStatus FROM Users WHERE username = $1"
+	query := "SELECT id, email, username, password, authToken, authStatus, notify FROM Users WHERE username = $1"
 	row := app.dataBase.QueryRow(query, username)
-	err := row.Scan(&user.Id, &user.Email, &user.Username, &user.Password, &user.AuthToken, &user.AuthStatus)
+	err := row.Scan(&user.Id, &user.Email, &user.Username, &user.Password, &user.AuthToken, &user.AuthStatus, &user.Notify)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
@@ -115,6 +115,7 @@ func (app *App) getUser(writer http.ResponseWriter, request *http.Request) {
 	user, _ := app.getUserByJWT(token)
 	user.Password = ""
 	user.AuthToken = ""
+	fmt.Println(user);
 	writer.Header().Set("Content-Type", "application/json")
     json.NewEncoder(writer).Encode(user)
 }
@@ -130,7 +131,6 @@ func (app *App) getStickers(writer http.ResponseWriter, request *http.Request) {
 
 func (app *App) getStickerById(writer http.ResponseWriter, request *http.Request) {
 	var sticker Stickers;
-	fmt.Println(Red + "GET STICKER" + Reset);
     if request.Method != http.MethodGet {
         http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
         return
@@ -172,7 +172,6 @@ func (app *App)	getStickerPathById(id int) string {
 // ! ||--------------------------------------------------------------------------------||
 
 func (app *App) getAllPictures(writer http.ResponseWriter, request *http.Request) {
-    fmt.Println(Yellow + "Get all pictures from DB" + Reset)
     writer.Header().Set("Content-Type", "application/json")
     if request.Method != http.MethodGet {
         http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)

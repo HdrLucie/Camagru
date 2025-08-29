@@ -40,6 +40,7 @@ type User struct {
 	AuthToken	string`json:"authToken"`
 	AuthStatus	bool`json:"authStatus"`
 	Avatar		string `json:"avatar"`
+	Notify		bool`json:"notify"`
 }
 
 type Stickers struct {
