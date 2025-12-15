@@ -1,5 +1,4 @@
 // TO DO LIST Fonction pour changer capturer les changements.
-// Vérifier la validité des changements : si username - email OK. 
 // Fonction pour récupérer le nouvel avatar.
 // Fonction pour sauvegarder les nouvelles informations/refresh de la page avec les nouvelles info. 
 
@@ -42,15 +41,51 @@ function syncNotificationCheckbox(enabled) {
 	console.log("État final checkbox:", enabled);
 }
 
+function emailIsValid (email) {
+	if (email == "")
+		return true
+	return /\S+@\S+\.\S+/.test(email)
+}
+
+async function getUser() {
+    const token = localStorage.getItem('token');
+    try {
+        const response = await fetch("/getUser", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+        const userData = await response.json();
+		console.log(userData);
+		return userData;
+    } catch (error) {
+        console.error("Erreur:", error);
+        return null;
+    }
+}
+
 async function getModifications() {
 	var tmpUser = document.getElementById("Username")
 	var tmpEmail = document.getElementById("Email")
 	var notifyState = checkNotifyState();
-	var token = checkToken();
-
+	var token = checkToken();	
 	var login = tmpUser.value
-	var email = tmpEmail.value
-	console.log(login, email);
+	let email = tmpEmail.value;
+	var avatar = document.getElementById("Avatar");
+	console.log("avatar: " + avatar);
+    if (!emailIsValid(email)) {
+        alert("Wrong email");
+
+        const user = await getUser();
+        if (!user) {
+            console.error("Impossible de récupérer l'utilisateur");
+            return;
+        }
+
+        email = user.email;
+    }
 		// try {
 		const response = await fetch("/setUserDatas", {
 			method: "POST",
