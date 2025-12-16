@@ -40,6 +40,10 @@ func serveImgFiles(router *http.ServeMux) {
 	assets := http.FileServer(http.Dir("../../frontend/srcs/assets/img"))
 	router.Handle("/assets/", http.StripPrefix("/assets", assets))
 }
+func serveAvatarFiles(router *http.ServeMux) {
+	avatar := http.FileServer(http.Dir("../../frontend/srcs/assets/avatars/"))
+	router.Handle("/avatars/", http.StripPrefix("/avatars", avatar))
+}
 
 func serveStickersFiles(router *http.ServeMux) {
 	stickers := http.FileServer(http.Dir("../../frontend/srcs/assets/stickers/"))
@@ -99,6 +103,7 @@ func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/getStickers", app.authMiddleware(app.getStickers))
 	router.HandleFunc("/getSticker/", app.authMiddleware(app.getStickerById))
 	router.HandleFunc("/getPictures", app.authMiddleware(app.getAllPictures))
+	router.HandleFunc("/getAvatars", app.authMiddleware(app.getAvatars))
 }
 
 func renderTemplate(router *http.ServeMux, app *App) {
@@ -107,6 +112,6 @@ func renderTemplate(router *http.ServeMux, app *App) {
 	serveImgFiles(router)
 	serveStickersFiles(router)
 	servePicturesFiles(router)
-
+	serveAvatarFiles(router)
 	app.router(router)
 }

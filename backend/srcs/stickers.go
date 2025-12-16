@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func (app *App) extractPathFiles() error {
+func (app *App) extractPathStickersFiles() error {
 	path := "../../frontend/srcs/assets/stickers/"
 	directory, err := os.Open(path)
 	if err != nil {
@@ -46,7 +46,7 @@ func (app *App) manageStickersInsertError(imagePath string) (bool, error) {
 
 func (app *App) InsertSticker() error {
 	var exists bool
-	err := app.extractPathFiles()
+	err := app.extractPathStickersFiles()
 	if err != nil {
 		return err
 	}

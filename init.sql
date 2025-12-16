@@ -24,3 +24,9 @@ CREATE TABLE images (
 	like_count INTEGER DEFAULT 0,
 	comment_count INTEGER DEFAULT 0
 );
+
+CREATE TABLE avatars (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    image_path TEXT
+);

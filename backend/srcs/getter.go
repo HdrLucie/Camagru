@@ -162,13 +162,18 @@ func (app *App)	getStickerPathById(id int) string {
 	return "";
 }
 
+func (app *App) getAvatars(writer http.ResponseWriter, request *http.Request) {
+	writer.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(writer).Encode(app.stickers)
+}
+
 // ! ||--------------------------------------------------------------------------------||
 // ! ||                                 PICTURES GETTER                                ||
 // ! ||--------------------------------------------------------------------------------||
 
 
 // ! ||--------------------------------------------------------------------------------||
-// ! ||                            HELPER FUNCTIONS - DB QUERIES                      ||
+// ! ||                            HELPER FUNCTIONS - DB QUERIES                       ||
 // ! ||--------------------------------------------------------------------------------||
 
 func (app *App) getAllPictures(writer http.ResponseWriter, request *http.Request) {
