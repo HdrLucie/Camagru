@@ -164,7 +164,7 @@ func (app *App)	getStickerPathById(id int) string {
 
 func (app *App) getAvatars(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Set("Content-Type", "application/json")
-    json.NewEncoder(writer).Encode(app.stickers)
+    json.NewEncoder(writer).Encode(app.avatars)
 }
 
 // ! ||--------------------------------------------------------------------------------||

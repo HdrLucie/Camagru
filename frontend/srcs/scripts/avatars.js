@@ -21,8 +21,8 @@ async function getAvatars() {
 }
 
 async function displayStickers() {
-    const avatars = await getStickers();
-    const container = document.getElementById('avatarsContainer');
+    const avatars = await getAvatars();
+    const container = document.getElementById('avatar-grid');
     container.innerHTML = '';
     if (avatars && avatars.length > 0) {
         avatars.forEach(avatar => {

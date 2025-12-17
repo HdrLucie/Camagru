@@ -41,19 +41,18 @@
 				<div class="sub-data-user">
 					<div class="data-user-title" id="forgetPassword" style="text-decoration: underline";>Reset your password</div>
 				</div>
+			<button class="save-change" style="margin-top: 1em"; onclick="getModifications()">
+				Save changes
+			</button>
 			</div>
 		</div>
 		<div class="right-column">
 			<div class="change-avatar">
 				<div class="avatar" id="avatarId" style="display:flex; width: 128px; height: 128px;border: 2px solid #fff">
 				</div>
-				<input class="custom-file-input" id="Avatar" type="file" accept="image/jpeg, image/png, image/jpg"id="image_input"></input>
+				<div class="avatar-grid" id="avatar-grid"></div>
 			</div>
-			<button class="save-change" onclick="getModifications()">
-				Save changes
-			</button>
 		</div>
 	</div>
 </div>
-
 {{ end }}

@@ -45,6 +45,7 @@
 .change-avatar {
 	display: flex;
 	align-items: center;
+	flex-direction: column;
 	align-content: center;
 	height: 100%;
 	background-color: transparent;
@@ -201,4 +202,20 @@
 #button-1 .knob:before,
 #button-1 .btn-bg {
   transition: 0.3s ease all;
+}
+
+.avatar-grid {
+	width: 100%;
+    max-width: 320px; /* ajuste selon ton design */
+    margin-top: 1.5em;
+	position: absolute;
+	top: 35%;
+    display: grid;
+    gap: 1em;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    padding: 1em;
+    object-fit: contain;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
 }
