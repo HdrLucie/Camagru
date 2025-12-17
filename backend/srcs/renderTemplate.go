@@ -90,6 +90,8 @@ func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/verify", serveTemplate("verify.html"))
 	router.HandleFunc("/resetPassword", serveTemplate("resetPassword.html"))
 	router.HandleFunc("/profile", serveTemplate("profile.html"))
+	router.HandleFunc("/photo", serveTemplate("photo.html"))
+
 	router.HandleFunc("/signUp", app.signUp)
 	router.HandleFunc("/login", app.login)
 	router.HandleFunc("/sendImage", app.authMiddleware(app.downloadImage))

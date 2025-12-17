@@ -33,7 +33,10 @@ async function displayGallery() {
             img.src = picture.path;
 			img.alt = picture.path;
 			img.id = picture.id;
-			console.log(img);
+			img.style.cursor = 'pointer';
+            img.addEventListener('click', function() {
+                window.location.href = `/photo`;
+            });
             container.appendChild(img);
         });
     } else {
@@ -42,5 +45,4 @@ async function displayGallery() {
         container.appendChild(message);
     }
 }
-
 
