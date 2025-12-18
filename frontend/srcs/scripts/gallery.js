@@ -35,7 +35,7 @@ async function displayGallery() {
 			img.id = picture.id;
 			img.style.cursor = 'pointer';
             img.addEventListener('click', function() {
-                window.location.href = `/photo`;
+                window.location.href = `/photo/${picture.id}`;
             });
             container.appendChild(img);
         });

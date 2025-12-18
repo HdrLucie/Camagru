@@ -59,7 +59,9 @@ html {
 .datas-photo {
 	height: 20%;
 	width: 100%;
-	background-color: purple;
+	background-color: transparent;
+	flex-direction: column;
+	display: flex;
 }
 
 .right-container {

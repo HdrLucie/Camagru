@@ -171,6 +171,25 @@ func (app *App) getAvatars(writer http.ResponseWriter, request *http.Request) {
 // ! ||                                 PICTURES GETTER                                ||
 // ! ||--------------------------------------------------------------------------------||
 
+func (app *App) getPictureById(id int) (*Pictures, error) {
+	var picture Pictures;
+
+	query := "SELECT image_path, id, userId, uploadTime, like_count, comment_count FROM images WHERE id = $1"
+	err := app.dataBase.QueryRow(query, id).Scan(
+		&picture.Path,
+		&picture.Id,
+		&picture.userId,
+		&picture.uploadTime,
+		&picture.likes,
+		&picture.comments,
+			
+	)
+	if err != nil {
+        return nil, err
+    }
+
+    return &picture, nil
+}
 
 // ! ||--------------------------------------------------------------------------------||
 // ! ||                            HELPER FUNCTIONS - DB QUERIES                       ||

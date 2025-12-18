@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"path/filepath"
 	"context"
+	"strings"
+	"strconv"
 )
 
 func serveTemplate(templateName string) http.HandlerFunc {
@@ -80,6 +82,46 @@ func (app *App) authMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
+func (app *App) viewPhoto(w http.ResponseWriter, r *http.Request) {
+    path := r.URL.Path
+    id := strings.TrimPrefix(path, "/photo/")
+    if id == "" || id == "/" {
+        http.Error(w, "Photo ID required", http.StatusBadRequest)
+        return
+    }
+    photoID, err := strconv.Atoi(id)
+    if err != nil {
+        http.Error(w, "Invalid photo ID", http.StatusBadRequest)
+        return
+    }
+    picture, err := app.getPictureById(photoID)
+    if err != nil {
+        http.Error(w, "Photo not found", http.StatusNotFound)
+        fmt.Println("Error getting picture:", err)
+        return
+    }
+    data := struct {
+        Page    string
+        Picture *Pictures
+	}{
+        Page:    "photo.html",
+        Picture: picture,
+    }
+    templateDir := "../../frontend/srcs/templates"
+    tmpl, err := template.ParseGlob(filepath.Join(templateDir, "*.html"))
+    if err != nil {
+        http.Error(w, "Could not parse templates", http.StatusInternalServerError)
+        fmt.Println("Error parsing templates:", err)
+        return
+    }
+    
+    err = tmpl.ExecuteTemplate(w, "photo.html", data)
+    if err != nil {
+        http.Error(w, "Could not execute template", http.StatusInternalServerError)
+        fmt.Println("Error executing template:", err)
+    }
+}
+
 func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/", serveTemplate("firstPage.html"))
 	router.HandleFunc("/connection", serveTemplate("login.html"))
@@ -90,7 +132,7 @@ func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/verify", serveTemplate("verify.html"))
 	router.HandleFunc("/resetPassword", serveTemplate("resetPassword.html"))
 	router.HandleFunc("/profile", serveTemplate("profile.html"))
-	router.HandleFunc("/photo", serveTemplate("photo.html"))
+	router.HandleFunc("/photo/", app.viewPhoto)
 
 	router.HandleFunc("/signUp", app.signUp)
 	router.HandleFunc("/login", app.login)
