@@ -9,6 +9,8 @@
 		<script src="https://kit.fontawesome.com/76ec232e00.js" crossorigin="anonymous"></script>
 		<link rel="stylesheet" type="text/css" href="/styles/sticky-bar.css" />
 		<link rel="stylesheet" type="text/css" href="/styles/photo.css" />
+		<link rel="stylesheet" type="text/css" href="/styles/comments.css" />
+
 		<link rel="icon" href="/assets/favicon.svg" />
 
 		<link rel="icon" href="/assets/favicon.svg" />
@@ -17,17 +19,71 @@
 	<body>
 		{{ template "navbar" . }}
 		<div class="container">
-		<div class="left-container">
-			<div class="photo"></div>
-			<div class="datas-photo">
-				<div style="background-color: purple; width: 33%; height: 100%"></div>
+			<div class="left-container">
+				<div class="photo" id="photo"></div>
+				<div class="datas-photo">
+				<button id="sendLikes">
+				<i class="fa-regular fa-heart"></i>
+				</button>	
+				<!-- <div style="background-color: purple; width: 33%; height: 100%"></div> -->
+				</div>
 			</div>
-		</div>
-		<div class="right-container"></div>
+			<div class="right-container">
+				<div class="detailBox">
+					<div class="titleBox">
+						<label>Comment Box</label>
+						<button type="button" class="close" aria-hidden="true">&times;</button>
+					</div>
+					<div class="commentBox">
+
+					</div>
+					<div class="actionBox">
+						<ul class="commentList">
+							<li>
+								<div class="commenterImage">
+									<img src="http://placekitten.com/50/50" />
+								</div>
+								<div class="commentText">
+									<p class="">Hello this is a test comment.</p> <span class="date sub-text">on March 5th, 2014</span>
+
+								</div>
+							</li>
+							<li>
+								<div class="commenterImage">
+									<img src="http://placekitten.com/45/45" />
+								</div>
+								<div class="commentText">
+									<p class="">Hello this is a test comment and this comment is particularly very long and it goes on and on and on.</p> <span class="date sub-text">on March 5th, 2014</span>
+
+								</div>
+							</li>
+							<li>
+								<div class="commenterImage">
+									<img src="http://placekitten.com/40/40" />
+								</div>
+								<div class="commentText">
+									<p class="">Hello this is a test comment.</p> <span class="date sub-text">on March 5th, 2014</span>
+
+								</div>
+							</li>
+						</ul>
+						<form class="form-inline" role="form">
+							<div class="form-group">
+								<input class="form-control" type="text" placeholder="Your comments" />
+							</div>
+							<div class="form-group">
+								<button class="btn btn-default">Add</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
 		</div>
 	</body>
 	<script src="/scripts/menu.js"></script>
-<script src="/scripts/logout.js"></script>
-<script src="/scripts/gallery.js"></script>
+	<script src="/scripts/logout.js"></script>
+	<script src="/scripts/gallery.js"></script>
+	<script src="/scripts/socialInteract.js"></script>
+	<script src="/scripts/picture.js"></script>
 
 </html>

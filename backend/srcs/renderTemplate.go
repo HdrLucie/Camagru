@@ -28,6 +28,7 @@ func serveTemplate(templateName string) http.HandlerFunc {
         }
     }
 }
+
 func	serveStyleFiles(router *http.ServeMux) {
 	styles := http.FileServer(http.Dir("../../frontend/srcs/stylesheets/"))
 	router.Handle("/styles/", http.StripPrefix("/styles", styles))
@@ -42,6 +43,7 @@ func serveImgFiles(router *http.ServeMux) {
 	assets := http.FileServer(http.Dir("../../frontend/srcs/assets/img"))
 	router.Handle("/assets/", http.StripPrefix("/assets", assets))
 }
+
 func serveAvatarFiles(router *http.ServeMux) {
 	avatar := http.FileServer(http.Dir("../../frontend/srcs/assets/avatars/"))
 	router.Handle("/avatars/", http.StripPrefix("/avatars", avatar))
@@ -133,7 +135,6 @@ func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/resetPassword", serveTemplate("resetPassword.html"))
 	router.HandleFunc("/profile", serveTemplate("profile.html"))
 	router.HandleFunc("/photo/", app.viewPhoto)
-
 	router.HandleFunc("/signUp", app.signUp)
 	router.HandleFunc("/login", app.login)
 	router.HandleFunc("/sendImage", app.authMiddleware(app.downloadImage))
@@ -148,6 +149,8 @@ func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/getSticker/", app.authMiddleware(app.getStickerById))
 	router.HandleFunc("/getPictures", app.authMiddleware(app.getAllPictures))
 	router.HandleFunc("/getAvatars", app.authMiddleware(app.getAvatars))
+	router.HandleFunc("/sendLikes", app.sendLikes)
+	router.HandleFunc("/getPicture", app.getPictureById)
 }
 
 func renderTemplate(router *http.ServeMux, app *App) {

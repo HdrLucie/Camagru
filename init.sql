@@ -30,3 +30,16 @@ CREATE TABLE avatars (
     name VARCHAR(255),
     image_path TEXT
 );
+
+CREATE TABLE comments (
+	comment TEXT,
+	post_id bigint,
+	user_id bigint,
+	post_time timestamp with time zone,
+);
+
+CREATE TABLE likes (
+	post_id bigint,
+	user_id bigint, 
+	time	timestamp with time zone,
+);

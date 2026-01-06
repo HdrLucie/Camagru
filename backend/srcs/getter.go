@@ -82,6 +82,28 @@ func (app *App) getUserByEmail(email string) (*User, error) {
 	return &user, nil
 }
 
+func (app *App) getUserByPhotoId(id int) (*User, error) {
+	var userId int64;
+	var user	User;
+
+	fmt.Println(Yellow + "Get User" + Reset)
+	query := "SELECT userId FROM images WHERE id = $1"
+	row := app.dataBase.QueryRow(query, id)
+	err := row.Scan(&userId)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	query = "SELECT id, email, username, password, authToken, authStatus, notify FROM Users WHERE id = $1"
+	row = app.dataBase.QueryRow(query, userId);
+	err = row.Scan(&user.Id, &user.Email, &user.Username, &user.Password, &user.AuthToken, &user.AuthStatus, &user.Notify)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	return &user, nil;
+}
+
 // ! ||--------------------------------------------------------------------------------||
 // ! ||                                  FRONT GETTERS                                 ||
 // ! ||--------------------------------------------------------------------------------||
@@ -96,7 +118,6 @@ func (app *App) deserializeUserData(writer http.ResponseWriter, request *http.Re
 		http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
 	}
 	err := json.NewDecoder(request.Body).Decode(&u)
-	fmt.Println(u)
 	if err != nil {
 		fmt.Println(Red + "Error : Decode Json object" + Reset)
 		http.Error(writer, err.Error(), http.StatusBadRequest)
@@ -115,7 +136,6 @@ func (app *App) getUser(writer http.ResponseWriter, request *http.Request) {
 	user, _ := app.getUserByJWT(token)
 	user.Password = ""
 	user.AuthToken = ""
-	fmt.Println(user);
 	writer.Header().Set("Content-Type", "application/json")
     json.NewEncoder(writer).Encode(user)
 }
