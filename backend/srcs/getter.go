@@ -192,7 +192,6 @@ func (app *App) getAvatars(writer http.ResponseWriter, request *http.Request) {
 // ! ||--------------------------------------------------------------------------------||
 
 func (app *App) getPicture(writer http.ResponseWriter, request *http.Request) {
-	fmt.Println(Red + "Get picture" + Reset)	
 
 	var picture Pictures;
     if request.Method != http.MethodGet {
@@ -200,9 +199,7 @@ func (app *App) getPicture(writer http.ResponseWriter, request *http.Request) {
         return
     }
     path := strings.TrimPrefix(request.URL.Path, "/getPicture/")
-	fmt.Println(path)
     id, err := strconv.Atoi(path)
-	fmt.Println(id);
     if err != nil {
 		fmt.Println("Erreur")
         http.Error(writer, "Invalid ID", http.StatusBadRequest)
@@ -211,8 +208,6 @@ func (app *App) getPicture(writer http.ResponseWriter, request *http.Request) {
 	query := "SELECT image_path, id, userId, uploadTime, like_count, comment_count FROM images WHERE id = $1"
 	row := app.dataBase.QueryRow(query, id)
 	err = row.Scan(&picture.Path, &picture.Id, &picture.userId, &picture.uploadTime, &picture.likes, &picture.comments)
-	fmt.Println(Red + "HERE" + Reset)	
-	fmt.Println(picture.Id, picture.uploadTime)
 	if err != nil {
 		fmt.Println(err)
 	}

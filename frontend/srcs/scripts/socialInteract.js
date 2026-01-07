@@ -8,7 +8,6 @@ async function checkToken() {
     console.log("Function check token")
     console.log(token)
     if (!token) {
-        // alert('No token found. Please login.');
         window.location.href = '/';
     }
 }
@@ -55,3 +54,34 @@ document.getElementById("sendLikes").onclick = async function () {
 		console.error("Error:", error);
 	}
 }
+
+const form = document.getElementById('com-form');
+
+form.addEventListener('submit', async function (e) {
+  e.preventDefault();
+	console.log('\n\nSend Comments\n\n');
+	var c = document.getElementById('comment');
+	var u = await getUser();
+	const token = localStorage.getItem('token');
+	const pId = window.location.pathname.split("/").pop();
+
+	try {
+		const response = await fetch("/sendComments", {
+			method: "POST",
+			headers: {
+				"Authorization": `Bearer ${token}`,
+				"Content-type": "application/json"
+			},
+			body: JSON.stringify({
+				"Username": u.username,
+				"Id": u.id,
+				"Photo": Number(pId),
+				"Comment": c.value,
+			})
+		});
+		const data = await response.json();
+	} catch (error) {
+		console.error("Error: ", error);
+	}
+});
+
