@@ -11,10 +11,11 @@ function checkToken() {
 	return token
 }
 
-async function getPicture() {
+async function getPicture(pictureId) {
+	console.log("Id" + pictureId)
 	const token = localStorage.getItem('token');
 	try {
-		const response = await fetch("/getPicture", {
+		const response = await fetch(`/getPicture/${pictureId}`, {
 			method: "GET",
 			headers: {
 				"Authorization": `Bearer ${token}`,
@@ -32,12 +33,14 @@ async function getPicture() {
 
 async function displayPicture() {
 	console.log("Display picture");
-	const picture = await getPicture();
+	const pictureId = window.location.pathname.split("/").pop();
+	const picture = await getPicture(pictureId);
+	console.log(picture.path);
 	const container = document.getElementById('photo');
 	container.innerHTML = '';
-	if (picture && picture.path > 0) {
+	if (picture.path != '') {
 		const img = document.createElement('img');
-		img.src = picture.path;
+		img.src = "/" + picture.path;
 		img.alt = picture.path;
 		img.id = picture.id;
 		img.style.cursor = 'pointer';

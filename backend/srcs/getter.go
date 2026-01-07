@@ -191,6 +191,35 @@ func (app *App) getAvatars(writer http.ResponseWriter, request *http.Request) {
 // ! ||                                 PICTURES GETTER                                ||
 // ! ||--------------------------------------------------------------------------------||
 
+func (app *App) getPicture(writer http.ResponseWriter, request *http.Request) {
+	fmt.Println(Red + "Get picture" + Reset)	
+
+	var picture Pictures;
+    if request.Method != http.MethodGet {
+        http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
+        return
+    }
+    path := strings.TrimPrefix(request.URL.Path, "/getPicture/")
+	fmt.Println(path)
+    id, err := strconv.Atoi(path)
+	fmt.Println(id);
+    if err != nil {
+		fmt.Println("Erreur")
+        http.Error(writer, "Invalid ID", http.StatusBadRequest)
+        return
+    }
+	query := "SELECT image_path, id, userId, uploadTime, like_count, comment_count FROM images WHERE id = $1"
+	row := app.dataBase.QueryRow(query, id)
+	err = row.Scan(&picture.Path, &picture.Id, &picture.userId, &picture.uploadTime, &picture.likes, &picture.comments)
+	fmt.Println(Red + "HERE" + Reset)	
+	fmt.Println(picture.Id, picture.uploadTime)
+	if err != nil {
+		fmt.Println(err)
+	}
+	writer.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(writer).Encode(picture);
+}
+
 func (app *App) getPictureById(id int) (*Pictures, error) {
 	var picture Pictures;
 

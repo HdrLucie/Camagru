@@ -150,7 +150,7 @@ func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/getPictures", app.authMiddleware(app.getAllPictures))
 	router.HandleFunc("/getAvatars", app.authMiddleware(app.getAvatars))
 	router.HandleFunc("/sendLikes", app.sendLikes)
-	router.HandleFunc("/getPicture", app.getPictureById)
+	router.HandleFunc("/getPicture/", app.authMiddleware(app.getPicture))
 }
 
 func renderTemplate(router *http.ServeMux, app *App) {
