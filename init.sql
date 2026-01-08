@@ -35,11 +35,11 @@ CREATE TABLE comments (
 	comment TEXT,
 	post_id bigint,
 	user_id bigint,
-	post_time timestamp with time zone,
+	post_time timestamp with time zone
 );
 
 CREATE TABLE likes (
-	post_id bigint,
-	user_id bigint, 
-	time	timestamp with time zone,
+	user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    post_id INT NOT NULL REFERENCES images(id) ON DELETE CASCADE,
+    PRIMARY KEY (user_id, post_id)
 );
