@@ -19,7 +19,7 @@ CREATE TABLE stickers (
 CREATE TABLE images (
 	image_path TEXT,
 	id SERIAL PRIMARY KEY,
-	userId bigint,
+	userId INT,
 	uploadTime timestamp with time zone,
 	like_count INTEGER DEFAULT 0,
 	comment_count INTEGER DEFAULT 0
@@ -33,8 +33,8 @@ CREATE TABLE avatars (
 
 CREATE TABLE comments (
 	comment TEXT,
-	post_id bigint,
-	user_id bigint,
+	post_id INT,
+	user_id INT,
 	post_time timestamp with time zone
 );
 

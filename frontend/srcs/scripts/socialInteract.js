@@ -55,6 +55,11 @@ document.getElementById("sendLikes").onclick = async function () {
 	}
 }
 
+document.getElementById('sendLikes').addEventListener('click', function() {
+    this.classList.toggle('fa-regular');
+    this.classList.toggle('fa-solid');
+});
+
 const form = document.getElementById('com-form');
 
 form.addEventListener('submit', async function (e) {

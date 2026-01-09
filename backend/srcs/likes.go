@@ -30,21 +30,22 @@ func (app *App)	checkLikeValidity(Uid int, Pid int) (bool, error) {
 	return true, nil
 }
 
-func (app *App) insertLikeIntoDB(Uid int, Pid int, user *User, r LikeRequest) (error, bool) {
+func (app *App) insertLikeIntoDB(Uid int, Pid int, user *User, r LikeRequest) (bool, error) {
 	liked, err := app.checkLikeValidity(Uid, Pid);
 	if err != nil {
-		return err, liked
+		fmt.Println(Green + "Validity" + Reset);
+		return liked, err
 	}
 	if liked {
 		_, err = app.dataBase.Exec("DELETE FROM likes WHERE user_id = $1 AND post_id = $2", Uid, Pid);
 		if err != nil {
 			fmt.Println(Red + "Error : delete like to the database" + Reset)
-			return err, liked
+			return liked, err
 		}
 		_, err = app.dataBase.Exec("UPDATE images SET like_count = like_count - 1 WHERE id = $1", Pid);
 		if err != nil {
 			fmt.Println(Red + "Error : delete like_count to the database" + Reset)
-			return err, liked
+			return liked, err
 		}
 
 	} else {
@@ -52,12 +53,12 @@ func (app *App) insertLikeIntoDB(Uid int, Pid int, user *User, r LikeRequest) (e
 		_, err = app.dataBase.Exec("INSERT INTO likes (post_id, user_id) VALUES ($1, $2)", Pid, Uid);
 		if err != nil {
 			fmt.Println(Red + "Error : insert like to the database" + Reset)
-			return err, liked
+			return liked, err
 		}
 		_, err = app.dataBase.Exec("UPDATE images SET like_count = like_count + 1 WHERE id = $1", Pid)
 		if err != nil {
 			fmt.Println(Red + "Error : set count likes" + Reset)
-			return err, liked
+			return liked, err
 		}
 		if (user.Notify == true) {
 			fmt.Println(Red + "Email" + Reset)
@@ -73,9 +74,9 @@ func (app *App) insertLikeIntoDB(Uid int, Pid int, user *User, r LikeRequest) (e
 				panic(err);
 			}
 		}
-		return nil, liked
+		return liked, nil
 	}
-	return nil, liked
+	return liked, nil
 }
 
 func (app *App) sendLikes(writer http.ResponseWriter, request *http.Request) {
@@ -95,7 +96,10 @@ func (app *App) sendLikes(writer http.ResponseWriter, request *http.Request) {
 	}
 	defer request.Body.Close()
 	user, err := app.getUserByPhotoId(r.Photo);
-	err, liked := app.insertLikeIntoDB(r.Id, r.Photo, user, r);
+	if err != nil {
+		fmt.Println(Red + "Error : Get user by photo id" + Reset)
+	}
+	liked, err := app.insertLikeIntoDB(r.Id, r.Photo, user, r);
 
 	if err != nil {
 		fmt.Println(Red + "Error with like management" + Reset);
