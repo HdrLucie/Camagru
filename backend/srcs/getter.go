@@ -31,9 +31,9 @@ func (app *App) getUserByJWT(JWT string) (*User, error) {
 	if (getterMsg == 1) {
 		fmt.Println(Yellow + "Get user by JWT" + Reset)
 	}
-	query := "SELECT id, email, username, password, JWT, authToken, authStatus, avatar FROM Users WHERE JWT = $1"
+	query := "SELECT id, email, username, password, JWT, authToken, authStatus, avatar, notify FROM Users WHERE JWT = $1"
 	row := app.dataBase.QueryRow(query, JWT)
-	err := row.Scan(&user.Id, &user.Email, &user.Username, &user.Password, &user.JWT, &user.AuthToken, &user.AuthStatus, &user.Avatar)
+	err := row.Scan(&user.Id, &user.Email, &user.Username, &user.Password, &user.JWT, &user.AuthToken, &user.AuthStatus, &user.Avatar, &user.Notify)
 	if err != nil {
 		return nil, err
 	}
@@ -57,9 +57,9 @@ func (app *App) getUserByUsername(username string) (*User, error) {
 	if (getterMsg == 1) {
 		fmt.Println(Yellow + "Get user by username" + Reset)
 	}
-	query := "SELECT id, email, username, password, authToken, authStatus FROM Users WHERE username = $1"
+	query := "SELECT id, email, username, password, authToken, authStatus, notify FROM Users WHERE username = $1"
 	row := app.dataBase.QueryRow(query, username)
-	err := row.Scan(&user.Id, &user.Email, &user.Username, &user.Password, &user.AuthToken, &user.AuthStatus)
+	err := row.Scan(&user.Id, &user.Email, &user.Username, &user.Password, &user.AuthToken, &user.AuthStatus, &user.Notify)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
@@ -82,6 +82,28 @@ func (app *App) getUserByEmail(email string) (*User, error) {
 	return &user, nil
 }
 
+func (app *App) getUserByPhotoId(id int) (*User, error) {
+	var userId int64;
+	var user	User;
+
+	fmt.Println(Yellow + "Get User" + Reset)
+	query := "SELECT userId FROM images WHERE id = $1"
+	row := app.dataBase.QueryRow(query, id)
+	err := row.Scan(&userId)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	query = "SELECT id, email, username, password, authToken, authStatus, notify FROM Users WHERE id = $1"
+	row = app.dataBase.QueryRow(query, userId);
+	err = row.Scan(&user.Id, &user.Email, &user.Username, &user.Password, &user.AuthToken, &user.AuthStatus, &user.Notify)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	return &user, nil;
+}
+
 // ! ||--------------------------------------------------------------------------------||
 // ! ||                                  FRONT GETTERS                                 ||
 // ! ||--------------------------------------------------------------------------------||
@@ -96,7 +118,6 @@ func (app *App) deserializeUserData(writer http.ResponseWriter, request *http.Re
 		http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
 	}
 	err := json.NewDecoder(request.Body).Decode(&u)
-	fmt.Println(u)
 	if err != nil {
 		fmt.Println(Red + "Error : Decode Json object" + Reset)
 		http.Error(writer, err.Error(), http.StatusBadRequest)
@@ -119,6 +140,12 @@ func (app *App) getUser(writer http.ResponseWriter, request *http.Request) {
     json.NewEncoder(writer).Encode(user)
 }
 
+func (app *App) getComments(writer http.ResponseWriter, request *http.Request) {
+	_ = request;
+	writer.Header().Set("Content-Type", "application/json");
+	json.NewEncoder(writer).Encode(app.comments);
+}
+
 // ! ||--------------------------------------------------------------------------------||
 // ! ||                                 GETTER STICKERS                                ||
 // ! ||--------------------------------------------------------------------------------||
@@ -130,7 +157,6 @@ func (app *App) getStickers(writer http.ResponseWriter, request *http.Request) {
 
 func (app *App) getStickerById(writer http.ResponseWriter, request *http.Request) {
 	var sticker Stickers;
-	fmt.Println(Red + "GET STICKER" + Reset);
     if request.Method != http.MethodGet {
         http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
         return
@@ -162,17 +188,64 @@ func (app *App)	getStickerPathById(id int) string {
 	return "";
 }
 
+func (app *App) getAvatars(writer http.ResponseWriter, request *http.Request) {
+	writer.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(writer).Encode(app.avatars)
+}
+
 // ! ||--------------------------------------------------------------------------------||
 // ! ||                                 PICTURES GETTER                                ||
 // ! ||--------------------------------------------------------------------------------||
 
+func (app *App) getPicture(writer http.ResponseWriter, request *http.Request) {
+
+	var picture Pictures;
+    if request.Method != http.MethodGet {
+        http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
+        return
+    }
+    path := strings.TrimPrefix(request.URL.Path, "/getPicture/")
+    id, err := strconv.Atoi(path)
+    if err != nil {
+		fmt.Println("Erreur")
+        http.Error(writer, "Invalid ID", http.StatusBadRequest)
+        return
+    }
+	query := "SELECT image_path, id, userId, uploadTime, like_count, comment_count FROM images WHERE id = $1"
+	row := app.dataBase.QueryRow(query, id)
+	err = row.Scan(&picture.Path, &picture.Id, &picture.userId, &picture.uploadTime, &picture.likes, &picture.comments)
+	if err != nil {
+		fmt.Println(err)
+	}
+	writer.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(writer).Encode(picture);
+}
+
+func (app *App) getPictureById(id int) (*Pictures, error) {
+	var picture Pictures;
+
+	query := "SELECT image_path, id, userId, uploadTime, like_count, comment_count FROM images WHERE id = $1"
+	err := app.dataBase.QueryRow(query, id).Scan(
+		&picture.Path,
+		&picture.Id,
+		&picture.userId,
+		&picture.uploadTime,
+		&picture.likes,
+		&picture.comments,
+			
+	)
+	if err != nil {
+        return nil, err
+    }
+
+    return &picture, nil
+}
 
 // ! ||--------------------------------------------------------------------------------||
-// ! ||                            HELPER FUNCTIONS - DB QUERIES                      ||
+// ! ||                            HELPER FUNCTIONS - DB QUERIES                       ||
 // ! ||--------------------------------------------------------------------------------||
 
 func (app *App) getAllPictures(writer http.ResponseWriter, request *http.Request) {
-    fmt.Println(Yellow + "Get all pictures from DB" + Reset)
     writer.Header().Set("Content-Type", "application/json")
     if request.Method != http.MethodGet {
         http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)

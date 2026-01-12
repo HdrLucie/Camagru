@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"path/filepath"
 	"context"
+	"strings"
+	"strconv"
 )
 
 func serveTemplate(templateName string) http.HandlerFunc {
@@ -26,6 +28,7 @@ func serveTemplate(templateName string) http.HandlerFunc {
         }
     }
 }
+
 func	serveStyleFiles(router *http.ServeMux) {
 	styles := http.FileServer(http.Dir("../../frontend/srcs/stylesheets/"))
 	router.Handle("/styles/", http.StripPrefix("/styles", styles))
@@ -39,6 +42,11 @@ func serveScriptsFiles(router *http.ServeMux) {
 func serveImgFiles(router *http.ServeMux) {
 	assets := http.FileServer(http.Dir("../../frontend/srcs/assets/img"))
 	router.Handle("/assets/", http.StripPrefix("/assets", assets))
+}
+
+func serveAvatarFiles(router *http.ServeMux) {
+	avatar := http.FileServer(http.Dir("../../frontend/srcs/assets/avatars/"))
+	router.Handle("/avatars/", http.StripPrefix("/avatars", avatar))
 }
 
 func serveStickersFiles(router *http.ServeMux) {
@@ -76,6 +84,46 @@ func (app *App) authMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
+func (app *App) viewPhoto(w http.ResponseWriter, r *http.Request) {
+    path := r.URL.Path
+    id := strings.TrimPrefix(path, "/photo/")
+    if id == "" || id == "/" {
+        http.Error(w, "Photo ID required", http.StatusBadRequest)
+        return
+    }
+    photoID, err := strconv.Atoi(id)
+    if err != nil {
+        http.Error(w, "Invalid photo ID", http.StatusBadRequest)
+        return
+    }
+    picture, err := app.getPictureById(photoID)
+    if err != nil {
+        http.Error(w, "Photo not found", http.StatusNotFound)
+        fmt.Println("Error getting picture:", err)
+        return
+    }
+    data := struct {
+        Page    string
+        Picture *Pictures
+	}{
+        Page:    "photo.html",
+        Picture: picture,
+    }
+    templateDir := "../../frontend/srcs/templates"
+    tmpl, err := template.ParseGlob(filepath.Join(templateDir, "*.html"))
+    if err != nil {
+        http.Error(w, "Could not parse templates", http.StatusInternalServerError)
+        fmt.Println("Error parsing templates:", err)
+        return
+    }
+    
+    err = tmpl.ExecuteTemplate(w, "photo.html", data)
+    if err != nil {
+        http.Error(w, "Could not execute template", http.StatusInternalServerError)
+        fmt.Println("Error executing template:", err)
+    }
+}
+
 func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/", serveTemplate("firstPage.html"))
 	router.HandleFunc("/connection", serveTemplate("login.html"))
@@ -86,6 +134,7 @@ func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/verify", serveTemplate("verify.html"))
 	router.HandleFunc("/resetPassword", serveTemplate("resetPassword.html"))
 	router.HandleFunc("/profile", serveTemplate("profile.html"))
+	router.HandleFunc("/photo/", app.viewPhoto)
 	router.HandleFunc("/signUp", app.signUp)
 	router.HandleFunc("/login", app.login)
 	router.HandleFunc("/sendImage", app.authMiddleware(app.downloadImage))
@@ -93,13 +142,17 @@ func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/verifyAccount", app.verifyAccount)
 	router.HandleFunc("/sendResetLink", app.sendResetLink)
 	router.HandleFunc("/newPassword", app.resetPassword)
-	router.HandleFunc("/editUsername", app.authMiddleware(app.modifyUsername))
+	router.HandleFunc("/setUserDatas", app.authMiddleware(app.modifyProfile))
 	router.HandleFunc("/editPassword", app.authMiddleware(app.modifyPassword))
-	router.HandleFunc("/editEmail", app.authMiddleware(app.modifyEmail))
 	router.HandleFunc("/getUser", app.authMiddleware(app.getUser))
 	router.HandleFunc("/getStickers", app.authMiddleware(app.getStickers))
 	router.HandleFunc("/getSticker/", app.authMiddleware(app.getStickerById))
 	router.HandleFunc("/getPictures", app.authMiddleware(app.getAllPictures))
+	router.HandleFunc("/getAvatars", app.authMiddleware(app.getAvatars))
+	router.HandleFunc("/sendLikes", app.sendLikes)
+	router.HandleFunc("/getPicture/", app.authMiddleware(app.getPicture))
+	router.HandleFunc("/sendComments", app.authMiddleware(app.manageComment))
+	router.HandleFunc("/getComments", app.authMiddleware(app.getComments));
 }
 
 func renderTemplate(router *http.ServeMux, app *App) {
@@ -108,6 +161,6 @@ func renderTemplate(router *http.ServeMux, app *App) {
 	serveImgFiles(router)
 	serveStickersFiles(router)
 	servePicturesFiles(router)
-
+	serveAvatarFiles(router)
 	app.router(router)
 }

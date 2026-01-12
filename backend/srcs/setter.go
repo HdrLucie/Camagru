@@ -128,3 +128,26 @@ func (app *App) setEmail(id int, email string) error {
 	}
 	return nil
 }
+
+func (app *App) setNotifyState(state bool, user *User) error {
+	result, err := app.dataBase.Exec("UPDATE users SET notify = $1 WHERE id = $2", state, user.Id)
+	if err != nil {
+		fmt.Println(Red + "Error : set notify" + Reset)
+		fmt.Println("Error details:", err)
+		return err
+	}
+	rowsAffected, err := result.RowsAffected()
+    if err != nil {
+        fmt.Println(Red + "Error getting rows affected" + Reset)
+        return err
+    }
+    if rowsAffected == 0 {
+        fmt.Println(Yellow + "Warning: No rows were updated" + Reset)
+    }
+	for i, _ := range app.users {
+		if app.users[i].Id == user.Id {
+			app.users[i].Notify = state;
+		}
+	}
+	return nil
+}

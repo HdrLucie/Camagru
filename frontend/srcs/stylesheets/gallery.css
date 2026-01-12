@@ -45,6 +45,6 @@ html {
 }
 
 .gallery-container img {
-    max-width: 100%;
-    height: auto;
+    max-width: 500px;
+    height: 350px;
 }

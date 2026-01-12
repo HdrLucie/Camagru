@@ -29,6 +29,8 @@ type App struct {
 	users		[]User
 	stickers	[]Stickers
 	pictures	[]Pictures
+	avatars		[]Avatars
+	comments	[]Comments
 }
 
 type User struct {
@@ -40,6 +42,7 @@ type User struct {
 	AuthToken	string`json:"authToken"`
 	AuthStatus	bool`json:"authStatus"`
 	Avatar		string `json:"avatar"`
+	Notify		bool`json:"notify"`
 }
 
 type Stickers struct {
@@ -49,13 +52,27 @@ type Stickers struct {
 }
 
 type Pictures struct {
-	Path	string `json:"path"`
-	Id		int `json:"id"`
-	userId	int `json:"userId"`
-	uploadTime string `json:"uploadTime"`
+	Path		string `json:"path"`
+	Id			int `json:"id"`
+	userId		int `json:"userId"`
+	uploadTime	string `json:"uploadTime"`
+	likes		int `json:"likes"`
+	comments	int `json:"comments"`
 }
+
 type TemplateData struct {
 	Page string
+}
+
+type Avatars struct {
+	Id		int `json:"id"`
+	Name	string `json:"name"`
+	Path	string `json:"path"`
+}
+
+type Comments struct {
+	Username	string `json:"Username"`
+	Comment		string `json:"Comment"`
 }
 
 func main() {
@@ -75,10 +92,14 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading stickers directory")
 	}
+	err = app.InsertAvatars();
+	if err != nil {
+		log.Fatal("Error loading avatars directory")
+	}
 	err = app.createUploadsDirectory();
 	if err != nil {
 		log.Fatal("Error creating uploads directory");
-	}
+	}	
 	renderTemplate(router, app)
 
 	fmt.Println("Server started at http://localhost:" + port)

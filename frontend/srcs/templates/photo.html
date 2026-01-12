@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Camagru</title>
+		<script src="https://kit.fontawesome.com/76ec232e00.js" crossorigin="anonymous"></script>
+		<link rel="stylesheet" type="text/css" href="/styles/sticky-bar.css" />
+		<link rel="stylesheet" type="text/css" href="/styles/photo.css" />
+		<link rel="stylesheet" type="text/css" href="/styles/comments.css" />
+
+		<link rel="icon" href="/assets/favicon.svg" />
+
+		<link rel="icon" href="/assets/favicon.svg" />
+	</head>
+
+	<body>
+		{{ template "navbar" . }}
+		<div class="container">
+			<div class="left-container">
+				<div class="photo" id="photo"></div>
+				<div class="datas-photo">
+				<i id="sendLikes" class="fa-regular fa-heart likebtn"></i>
+				</div>
+			</div>
+			<div class="right-container">
+				<div class="detailBox">
+					<div class="titleBox">
+						<label>Comment Box</label>
+						<button type="button" class="close" aria-hidden="true">&times;</button>
+					</div>
+					<div class="commentBox">
+
+					</div>
+					<div class="actionBox">
+						<ul class="commentList" id="commentList">
+						</ul>
+						<form class="form-inline" id="com-form" role="form">
+							<div class="form-group">
+								<input id="comment" class="form-control" type="text" placeholder="Your comments"/>
+							</div>
+							<div class="form-group">
+								<button type="submit" class="btn btn-default" id="sendComments">Add</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="/scripts/menu.js"></script>
+	<script src="/scripts/logout.js"></script>
+	<script src="/scripts/gallery.js"></script>
+	<script src="/scripts/socialInteract.js"></script>
+	<script src="/scripts/picture.js"></script>
+
+</html>

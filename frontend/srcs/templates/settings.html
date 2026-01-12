@@ -10,32 +10,49 @@
 				<div class="sub-data-user">
 					<div class="data-user-title">Username</div>
 				</div>
-				<div class="data-user-text" user-data="username"></div>
+				<div class="data-user-text">
+					<input type="text" name="username" id="Username" placeholder="">
+				</div>
 				<div class="sub-data-user">
 					<div class="data-user-title">Email</div>
 				</div>
-				<div class="data-user-text" user-data="email"></div>
+				<div class="data-user-text">
+					<input type="text" name="email" id="Email" placeholder="">
+				</div>
 				<div class="sub-data-user">
 					<div class="data-user-title">Tell us about yourself</div>
 				</div>
 				<div class="data-user-text">
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit et cupiditate deleniti. Lorem ipsum dolor sit
-					amet, consectetur adipisicing elit et cupiditate deleniti.
+					<input type="text" placeholder="Tell us about yourself">
 				</div>
-
 				<div class="sub-data-user">
-					<div class="data-user-title">Reset your password</div>
+					<div class="data-user-title">
+						Notifications
+					</div>
+					<div class="data-user-text">
+						<div class="btn-notify btn-pill" id="button-1">
+							<input type="checkbox" class="checkbox-notify" />
+							<div class="knob" id="knob"></div>
+							<div class="btn-bg"></div>
+						</div>
+					</div>
+
 				</div>
+				<div class="sub-data-user">
+					<div class="data-user-title" id="forgetPassword" style="text-decoration: underline";>Reset your password</div>
+				</div>
+			<button class="save-change" style="margin-top: 1em"; onclick="getModifications()">
+				Save changes
+			</button>
 			</div>
 		</div>
 		<div class="right-column">
 			<div class="change-avatar">
 				<div class="avatar" id="avatarId" style="display:flex; width: 128px; height: 128px;border: 2px solid #fff">
 				</div>
-				<input class="custom-file-input" type="file" accept="image/jpeg, image/png, image/jpg"id="image_input"></input>
+				<div class="avatar-grid" id="avatar-grid"></div>
 			</div>
 		</div>
 	</div>
 </div>
-
 {{ end }}

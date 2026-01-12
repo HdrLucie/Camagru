@@ -3,9 +3,7 @@
 	grid-template-columns: 1fr 1fr;
 	grid-template-rows: auto 1fr;
 	width:100%;
-	/*gap: 20px;*/
 	max-width: 1000px;
-	/*margin: 0 auto;*/
 	height: 650px;
 	background-color: #000;
 	color: #fff;
@@ -13,14 +11,11 @@
 
 .content-title {
 	grid-column: 1 / 3;
-	/*background-color: #000;*/
 	padding: 1em;
-	/*border-radius: 8px;*/
 	text-align: center;
 	font-size: xx-large;
 	font-stretch: expanded;
 	font-variant-caps: petite-caps;
-	/*animation: rainbow-colors 50s linear infinite;*/
 	background: linear-gradient(to right,#FE4365,#C49CDE, #FC913A, #d36e9c, #d36e9c, #FE4265);
 	-webkit-background-clip: text;
 	background-clip: text;
@@ -34,9 +29,7 @@
 	gap: 20px;
 	height: 100%;
 	max-height: 490px;
-	/*background-color: #f4f4f4;*/
 	padding: 20px;
-	/*border-radius: 8px;*/
 }
 
 .right-column {
@@ -52,8 +45,8 @@
 .change-avatar {
 	display: flex;
 	align-items: center;
+	flex-direction: column;
 	align-content: center;
-	/*width: 100%;*/
 	height: 100%;
 	background-color: transparent;
 	position: relative;
@@ -88,15 +81,16 @@
 	display: ruby;
 }
 .data-user-title{
-	font-size: x-large;
-	margin:20px;	
-	letter-spacing: 2px;
+	font-size: large;
+	/* margin-left:20px; */
+	/* margin-bottom:10px; */
+	letter-spacing: 1px;
 	font-variant-caps: petite-caps;
 	/*animation: rainbow-colors 50s linear infinite;*/
-	background: linear-gradient(to right,#FE4365,#C49CDE, #FC913A, #d36e9c, #d36e9c, #FE4265);
+	/* background: linear-gradient(to right,#FE4365,#C49CDE, #FC913A, #d36e9c, #d36e9c, #FE4265); */
 	-webkit-background-clip: text;
 	background-clip: text;
-	color: transparent;
+	color: #be3d77;
 	background-size: 500% 100%;
 }
 
@@ -108,4 +102,120 @@
 .data-user-text {
 	margin:20px;
 	width:auto;
+}
+
+.toggle-button {
+  position: relative;
+  height: 100px;
+  margin: 20px;
+  background-color: #fff;
+  box-shadow: 0 10px 20px -8px #c5d6d6;
+  border-radius: 4px;
+}
+
+.toggle-button:before {
+  counter-increment: button-counter;
+  content: counter(button-counter);
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  color: #d7e3e3;
+  font-size: 12px;
+  line-height: 1;
+  padding: 5px;
+}
+
+.knob,
+.btn-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.btn-notify {
+  position: relative;
+  top: 50%;
+  width: 74px;
+  height: 36px;
+  margin: -5px;
+  overflow: hidden;
+}
+
+.btn-notify.btn-pill,
+.btn-notify.btn-pill > .btn-bg {
+  border-radius: 100px;
+}
+
+.checkbox-notify {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.knob {
+  z-index: 2;
+}
+
+.btn-bg {
+  width: 100%;
+  background-color: #ebf7fc;
+  transition: 0.3s ease all;
+  z-index: 1;
+}
+
+#button-1 .knob:before {
+  content: "YES";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 20px;
+  height: 10px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1;
+  padding: 9px 4px;
+  background-color: #FE4365;
+  border-radius: 50%;
+  transition: 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
+}
+
+#button-1 .checkbox-notify:checked + .knob:before {
+  content: "NO";
+  left: 42px;
+  background-color: gray;
+}
+
+#button-1 .checkbox-notify:checked ~ .btn-bg {
+  background-color: darkgray;
+}
+
+#button-1 .knob,
+#button-1 .knob:before,
+#button-1 .btn-bg {
+  transition: 0.3s ease all;
+}
+
+.avatar-grid {
+	width: 100%;
+    max-width: 320px; /* ajuste selon ton design */
+    margin-top: 1.5em;
+	position: absolute;
+	top: 35%;
+    display: grid;
+    gap: 1em;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    padding: 1em;
+    object-fit: contain;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
 }

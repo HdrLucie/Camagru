@@ -10,8 +10,10 @@
 		<link rel="stylesheet" href="/styles/settings.css" />
 		<link rel="stylesheet" href="/styles/profile.css" />
 		<link rel="stylesheet" href="/styles/profile-menu.css" />
+		<link rel="stylesheet" href="/styles/gallery.css" />
 		<link rel="stylesheet" href="/styles/sticky-bar.css" />
 		<link rel="icon" href="/assets/favicon.svg" />
+		<link rel="stylesheet" href="/styles/sticky-bar.css" />
 		<script src="https://kit.fontawesome.com/76ec232e00.js" crossorigin="anonymous"></script>
 	</head>
 
@@ -48,6 +50,7 @@
 			<div class="content-title">
 				Your pictures
 			</div>
+			<div id="galleryContainer" class="stickers-grid" style="grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); height: 500px;";></div>
 		</div>
 		<div id="stickers" class="content-div stickers">
 			<div class="content-title">
@@ -58,9 +61,14 @@
 		{{ template "settings-container" . }}
 
 	</body>
+	<script src="/scripts/gallery.js"></script>
 	<script src="/scripts/menu.js"></script>
 	<script src="/scripts/settings.js"></script>
 	<script src="/scripts/logout.js"></script>
 	<script src="/scripts/stickers.js"></script>
+	<script src="/scripts/login.js"></script>
+	<script src="/scripts/avatars.js"></script>
+
+	<script src="/scripts/userDataManagement.js"></script>
 
 </html>
