@@ -96,7 +96,7 @@ async function getModifications() {
 			body: JSON.stringify({
 				"email": email,
 				"username": login,
-				"notifyState": notifyState,
+				"notifyState": !notifyState,
 			})
 		});
 	// 	if (!response.ok) {
