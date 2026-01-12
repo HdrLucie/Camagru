@@ -30,6 +30,7 @@ type App struct {
 	stickers	[]Stickers
 	pictures	[]Pictures
 	avatars		[]Avatars
+	comments	[]Comments
 }
 
 type User struct {
@@ -67,6 +68,11 @@ type Avatars struct {
 	Id		int `json:"id"`
 	Name	string `json:"name"`
 	Path	string `json:"path"`
+}
+
+type Comments struct {
+	Username	string `json:"Username"`
+	Comment		string `json:"Comment"`
 }
 
 func main() {

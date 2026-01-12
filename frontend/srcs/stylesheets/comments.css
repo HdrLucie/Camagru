@@ -32,7 +32,7 @@
 .commentList {
     padding:0;
     list-style:none;
-    max-height:200px;
+    height:550px;
     overflow:auto;
 }
 .commentList li {
@@ -65,4 +65,12 @@
     padding:10px;
 }
 
+
+.username {
+	color: white;
+}
+
+.comment-item {
+	color: white;
+}
 /* LIKES */

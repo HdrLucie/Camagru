@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 	checkToken();
-    // loadUserData();
+	displayComments();
 });
 
 async function checkToken() {
@@ -10,6 +10,47 @@ async function checkToken() {
     if (!token) {
         window.location.href = '/';
     }
+}
+
+async function getComments() {
+	const token = localStorage.getItem('token');
+    try {
+        const response = await fetch("/getComments", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+        const comments = await response.json();
+		return comments;
+    } catch (error) {
+        console.error("Erreur:", error);
+        return null;
+    }
+
+}
+
+async function displayComments() {
+	comments = await getComments();
+	listComments = document.getElementById("commentList");
+
+	comments.forEach(comment=>{
+
+		const li = document.createElement("li");
+		li.classList.add("comment-item");
+
+		const username = document.createElement("span");
+		username.classList.add("username");
+		username.textContent = comment.Username;
+
+		const content = document.createElement("p");
+		content.textContent = comment.Comment;
+
+		li.appendChild(username);
+		li.appendChild(content);
+		listComments.appendChild(li);
+	});
 }
 
 async function getUser() {
@@ -85,6 +126,23 @@ form.addEventListener('submit', async function (e) {
 			})
 		});
 		const data = await response.json();
+		listComments = document.getElementById("commentList");
+		const li = document.createElement("li");
+		li.classList.add("comment-item");
+
+		const username = document.createElement("span");
+		username.classList.add("username");
+		username.textContent = data.Username;
+
+		const content = document.createElement("p");
+		content.textContent = data.Comment;
+
+		li.appendChild(username);
+		li.appendChild(content);
+		listComments.appendChild(li);
+		c = "";
+		form.reset();
+	
 	} catch (error) {
 		console.error("Error: ", error);
 	}

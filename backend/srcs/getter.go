@@ -140,6 +140,12 @@ func (app *App) getUser(writer http.ResponseWriter, request *http.Request) {
     json.NewEncoder(writer).Encode(user)
 }
 
+func (app *App) getComments(writer http.ResponseWriter, request *http.Request) {
+	_ = request;
+	writer.Header().Set("Content-Type", "application/json");
+	json.NewEncoder(writer).Encode(app.comments);
+}
+
 // ! ||--------------------------------------------------------------------------------||
 // ! ||                                 GETTER STICKERS                                ||
 // ! ||--------------------------------------------------------------------------------||
