@@ -64,7 +64,6 @@ async function getUser() {
             },
         });
         const userData = await response.json();
-		console.log(userData);
 		return userData;
     } catch (error) {
         console.error("Erreur:", error);
@@ -75,9 +74,7 @@ async function getUser() {
 document.getElementById("sendLikes").onclick = async function () {
 	console.log("Likes button");
 	const photoId = window.location.pathname.split("/").pop();
-	console.log(photoId);
 	const user = await getUser();
-	console.log(user);
 	try {
 		const response = await fetch("/sendLikes", {
 			method: "POST",
@@ -96,6 +93,32 @@ document.getElementById("sendLikes").onclick = async function () {
 	}
 }
 
+document.getElementById("deleteButton").onclick = async function () {
+	console.log("Delete button\n");
+	const pId = window.location.pathname.split("/").pop();
+	const user = await getUser();
+	const token = localStorage.getItem('token');
+	console.log("User id", user.id);
+	const response = await fetch("/deleteImg", {
+		method: "POST",
+		headers: {
+			"Authorization": `Bearer ${token}`,
+			"Content-type": "application/json"
+		},
+		body: JSON.stringify({
+			"Username": user.username,
+			"uId": user.id,
+			"pId": Number(pId),
+		})
+	});
+	if (response.ok) {
+		window.location.href = "/gallery";
+	} else if (response.status === 403) {
+		const data = await response.json();
+		alert(data.error); // "You are not allowed to delete this image"
+	}
+}
+
 document.getElementById('sendLikes').addEventListener('click', function() {
     this.classList.toggle('fa-regular');
     this.classList.toggle('fa-solid');
@@ -110,12 +133,12 @@ form.addEventListener('submit', async function (e) {
 	var u = await getUser();
 	const token = localStorage.getItem('token');
 	const pId = window.location.pathname.split("/").pop();
-
+	console.log(token);
 	try {
 		const response = await fetch("/sendComments", {
 			method: "POST",
 			headers: {
-				"Authorization": `Bearer ${token}`,
+				"authorization": `Bearer ${token}`,
 				"Content-type": "application/json"
 			},
 			body: JSON.stringify({

@@ -40,6 +40,19 @@ func (app *App) getUserByJWT(JWT string) (*User, error) {
 	return &user, nil
 }
 
+func (app *App) getUserById(id int) (*User, error) {
+    var user User
+    query := "SELECT id, email, username, password, authToken, authStatus, avatar, notify FROM Users WHERE id = $1"
+    err := app.dataBase.QueryRow(query, id).Scan(
+        &user.Id, &user.Email, &user.Username, &user.Password,
+        &user.AuthToken, &user.AuthStatus, &user.Avatar, &user.Notify,
+    )
+    if err != nil {
+        return nil, err
+    }
+    return &user, nil
+}
+
 func (app *App) getStatus(id int) (bool) {
 	if (getterMsg == 1) {
 		fmt.Println(Yellow + "Get Status" + Reset)
@@ -91,6 +104,7 @@ func (app *App) getUserByPhotoId(id int) (*User, error) {
 	row := app.dataBase.QueryRow(query, id)
 	err := row.Scan(&userId)
 	if err != nil {
+		fmt.Println("Here")
 		fmt.Println(err)
 		return nil, err
 	}
