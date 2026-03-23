@@ -1,6 +1,6 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
 	checkToken();
-	displayComments();
+	await displayComments();
 });
 
 async function checkToken() {
@@ -13,9 +13,10 @@ async function checkToken() {
 }
 
 async function getComments() {
+	const pId = window.location.pathname.split("/").pop();
 	const token = localStorage.getItem('token');
     try {
-        const response = await fetch("/getComments", {
+        const response = await fetch(`/getComments/${pId}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -25,7 +26,6 @@ async function getComments() {
         const comments = await response.json();
 		return comments;
     } catch (error) {
-        console.error("Erreur:", error);
         return null;
     }
 

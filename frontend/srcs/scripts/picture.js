@@ -12,7 +12,6 @@ function checkToken() {
 }
 
 async function getPicture(pictureId) {
-	console.log("Id" + pictureId)
 	const token = localStorage.getItem('token');
 	try {
 		const response = await fetch(`/getPicture/${pictureId}`, {

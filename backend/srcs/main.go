@@ -71,8 +71,9 @@ type Avatars struct {
 }
 
 type Comments struct {
-	Username	string `json:"Username"`
-	Comment		string `json:"Comment"`
+	Username	string	`json:"Username"`
+	Comment		string	`json:"Comment"`
+	PId			int		`json:"pId"`
 }
 
 func main() {

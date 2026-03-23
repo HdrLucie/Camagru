@@ -8,6 +8,10 @@ import (
 	"strconv"
 )
 
+type	cInfo struct {
+	PId	int	`json:"pId"`
+}
+
 // ! ||--------------------------------------------------------------------------------||
 // ! ||                                  USER GETTERS                                  ||
 // ! ||--------------------------------------------------------------------------------||
@@ -99,7 +103,6 @@ func (app *App) getUserByPhotoId(id int) (*User, error) {
 	var userId int64;
 	var user	User;
 
-	fmt.Println(Yellow + "Get User" + Reset)
 	query := "SELECT userId FROM images WHERE id = $1"
 	row := app.dataBase.QueryRow(query, id)
 	err := row.Scan(&userId)
@@ -110,7 +113,7 @@ func (app *App) getUserByPhotoId(id int) (*User, error) {
 	}
 	query = "SELECT id, email, username, password, authToken, authStatus, notify FROM Users WHERE id = $1"
 	row = app.dataBase.QueryRow(query, userId);
-	err = row.Scan(&user.Id, &user.Email, &user.Username, &user.Password, &user.AuthToken, &user.AuthStatus, &user.Notify)
+	err = row.Scan(&user.Id, &user.Email, &user.Username, &user.Password, &user.AuthToken, &user.AuthStatus, &user.Notify);
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
@@ -155,9 +158,20 @@ func (app *App) getUser(writer http.ResponseWriter, request *http.Request) {
 }
 
 func (app *App) getComments(writer http.ResponseWriter, request *http.Request) {
-	_ = request;
-	writer.Header().Set("Content-Type", "application/json");
-	json.NewEncoder(writer).Encode(app.comments);
+    writer.Header().Set("Content-Type", "application/json")
+    parts := strings.Split(request.URL.Path, "/getComments/")
+    pId, err := strconv.Atoi(parts[len(parts)-1])
+    if err != nil {
+        http.Error(writer, "Invalid photo ID", http.StatusBadRequest)
+        return
+    }
+    var filtered []Comments
+    for _, c := range app.comments {
+        if c.PId == pId {
+            filtered = append(filtered, c)
+        }
+    }
+    json.NewEncoder(writer).Encode(filtered)
 }
 
 // ! ||--------------------------------------------------------------------------------||

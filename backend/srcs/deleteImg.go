@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"encoding/json"
+	"slices"
 )
 
 type dRequest struct {
@@ -12,12 +13,22 @@ type dRequest struct {
 	PId			int		`json:"pId"`
 }
 
+func (app *App) deleteCommentFromApp(pId int) {
+	for i, c := range app.comments {
+		if c.PId == pId {
+			app.comments = slices.Delete(app.comments, i, i+1)
+            break
+		}
+	}
+}
+
 func (app *App) deleteCommentFromDB(pId int) (int64, error) {
 	sql := `DELETE FROM comments WHERE post_id = $1`
 	result, err := app.dataBase.Exec(sql, pId);
 	if err != nil {
 		return 0, err 
 	}
+	app.deleteCommentFromApp(pId);
 	return result.RowsAffected();
 }
 
