@@ -1,7 +1,6 @@
 window.onload = verifyAccount;
 
 function getToken(str, char) {
-    console.log("GetToken")
     const parts = str.split(char);
     if (parts.length > 1) {
         return parts.slice(1).join(char);
@@ -12,9 +11,6 @@ function getToken(str, char) {
 async function verifyAccount() {
     var pathName = window.location.search
     var token = getToken(pathName, '=')
-    console.log(pathName)
-    console.log(token)
-    console.log("Verify Account")
     try {
         const response = await fetch("/verifyAccount", {
             method: "POST",
@@ -30,7 +26,6 @@ async function verifyAccount() {
         if (responseText) {
             data = JSON.parse(responseText);
         }
-        console.log(response.status)
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }

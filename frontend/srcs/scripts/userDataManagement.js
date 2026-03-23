@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function initialNotifyState() {
 	const user = getUser();
-	console.log(user.Notify);
 	return user.notify;
 }
 
@@ -38,7 +37,6 @@ function syncNotificationCheckbox(enabled) {
 		checkbox.dispatchEvent(new Event('change'));
 	}
 	notifyState = enabled;
-	console.log("État final checkbox:", enabled);
 }
 
 function emailIsValid (email) {
@@ -58,7 +56,6 @@ async function getUser() {
             },
         });
         const userData = await response.json();
-		console.log(userData);
 		return userData;
     } catch (error) {
         console.error("Erreur:", error);
@@ -74,7 +71,6 @@ async function getModifications() {
 	var login = tmpUser.value
 	let email = tmpEmail.value;
 	var avatar = document.getElementById("Avatar");
-	console.log("avatar: " + avatar);
     if (!emailIsValid(email)) {
         alert("Wrong email");
 
@@ -105,7 +101,6 @@ async function getModifications() {
 	//
 	// 	const data = await response.json();
 	// 	if (response.status === 201) {
-	// 		console.log("\nAccount created successfully! Please check your email to verify your account.")
 	// 		window.location.href = data.redirectPath
 	// 	} else if (response.status === 409) {
 	// 		alert("Username or email already in use.")

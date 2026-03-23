@@ -1,14 +1,45 @@
 document.addEventListener('DOMContentLoaded', async () => {
 	checkToken();
 	await displayComments();
+	await getLikes();
 });
 
 async function checkToken() {
     const token = localStorage.getItem('token');
-    console.log("Function check token")
-    console.log(token)
     if (!token) {
         window.location.href = '/';
+    }
+}
+
+async function getLikes() {
+	console.log("Get likes");
+	const pId = window.location.pathname.split("/").pop();
+	const token = localStorage.getItem('token');
+	console.log(token);
+    try {
+        const response = await fetch(`/getLikes/${pId}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+        const likes = await response.json();
+		console.log("Likes :", likes);
+		const hasLiked = likes.some(like => like.uId === user.id);
+
+        const heart = document.getElementById('sendLikes');
+
+        if (hasLiked) {
+            heart.classList.remove('fa-regular');
+            heart.classList.add('fa-solid');
+        } else {
+            heart.classList.remove('fa-solid');
+            heart.classList.add('fa-regular');
+        }
+		return likes;
+    } catch (error) {
+        return null;
     }
 }
 
@@ -33,6 +64,8 @@ async function getComments() {
 
 async function displayComments() {
 	comments = await getComments();
+
+    if (!comments) return;
 	listComments = document.getElementById("commentList");
 
 	comments.forEach(comment=>{
@@ -72,7 +105,6 @@ async function getUser() {
 }
 
 document.getElementById("sendLikes").onclick = async function () {
-	console.log("Likes button");
 	const photoId = window.location.pathname.split("/").pop();
 	const user = await getUser();
 	try {
@@ -94,11 +126,9 @@ document.getElementById("sendLikes").onclick = async function () {
 }
 
 document.getElementById("deleteButton").onclick = async function () {
-	console.log("Delete button\n");
 	const pId = window.location.pathname.split("/").pop();
 	const user = await getUser();
 	const token = localStorage.getItem('token');
-	console.log("User id", user.id);
 	const response = await fetch("/deleteImg", {
 		method: "POST",
 		headers: {
@@ -128,12 +158,10 @@ const form = document.getElementById('com-form');
 
 form.addEventListener('submit', async function (e) {
   e.preventDefault();
-	console.log('\n\nSend Comments\n\n');
 	var c = document.getElementById('comment');
 	var u = await getUser();
 	const token = localStorage.getItem('token');
 	const pId = window.location.pathname.split("/").pop();
-	console.log(token);
 	try {
 		const response = await fetch("/sendComments", {
 			method: "POST",

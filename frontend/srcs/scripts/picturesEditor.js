@@ -5,8 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function checkToken() {
 	const token = localStorage.getItem('token');
-	console.log("Function check token")
-	console.log(token)
 	if (!token) {
 		// alert('No token found. Please login.');
 		window.location.href = '/';
@@ -176,7 +174,6 @@ async function getUser() {
 		}
 
 	async function sendPictures() {
-		console.log("\n\nsendButton function.\n\n");
 		var path;
 		const token = localStorage.getItem('token');
 		const sticker = document.getElementsByClassName('placed-sticker');
@@ -186,7 +183,6 @@ async function getUser() {
         });
 		const blobUrl = URL.createObjectURL(imgBlob);
 		const formData = new FormData();
-		console.log(sticker[0]);
         formData.append('image', imgBlob, 'photo.jpg');
 		formData.append('id', user.id);
 		formData.append('imageId', sticker[0].id);
@@ -203,7 +199,6 @@ async function getUser() {
 			},
 			body: formData
 		});
-		console.log(await response.json());
 
 	}
 		window.addEventListener("load", startup, false);

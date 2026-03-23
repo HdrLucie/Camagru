@@ -174,6 +174,25 @@ func (app *App) getComments(writer http.ResponseWriter, request *http.Request) {
     json.NewEncoder(writer).Encode(filtered)
 }
 
+func (app *App) getLikes(writer http.ResponseWriter, request *http.Request) {
+	fmt.Println("GET LIKEEES");
+    writer.Header().Set("Content-Type", "application/json")
+    parts := strings.Split(request.URL.Path, "/getLikes/")
+    pId, err := strconv.Atoi(parts[len(parts)-1])
+    if err != nil {
+        http.Error(writer, "Invalid photo ID", http.StatusBadRequest)
+        return
+    }
+    var filtered []Likes
+    for _, c := range app.likes {
+        if c.PId == pId {
+            filtered = append(filtered, c)
+        }
+    }
+    json.NewEncoder(writer).Encode(filtered)
+}
+
+
 // ! ||--------------------------------------------------------------------------------||
 // ! ||                                 GETTER STICKERS                                ||
 // ! ||--------------------------------------------------------------------------------||
