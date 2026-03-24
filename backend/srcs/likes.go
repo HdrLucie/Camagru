@@ -49,7 +49,6 @@ func (app *App) insertLikeIntoDB(Uid int, Pid int, user *User, r LikeRequest) (b
 		}
 
 	} else {
-		fmt.Println(Green + "Insert Like" + Reset)
 		_, err = app.dataBase.Exec("INSERT INTO likes (post_id, user_id) VALUES ($1, $2)", Pid, Uid);
 		if err != nil {
 			fmt.Println(Red + "Error : insert like to the database" + Reset)

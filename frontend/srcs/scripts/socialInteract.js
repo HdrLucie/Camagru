@@ -29,11 +29,9 @@ async function getLikes() {
 
         const heart = document.getElementById('sendLikes');
         if (hasLiked) {
-            heart.classList.remove('fa-regular');
-            heart.classList.add('fa-solid');
+            heart.classList.add('liked');
         } else {
-            heart.classList.remove('fa-solid');
-            heart.classList.add('fa-regular');
+            heart.classList.remove('liked');
         }
         return likes;
     } catch (error) {
@@ -148,8 +146,7 @@ document.getElementById("deleteButton").onclick = async function () {
 }
 
 document.getElementById('sendLikes').addEventListener('click', function() {
-    this.classList.toggle('fa-regular');
-    this.classList.toggle('fa-solid');
+	this.classList.toggle('liked');
 });
 
 const form = document.getElementById('com-form');
