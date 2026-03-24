@@ -12,10 +12,8 @@ async function checkToken() {
 }
 
 async function getLikes() {
-	console.log("Get likes");
-	const pId = window.location.pathname.split("/").pop();
-	const token = localStorage.getItem('token');
-	console.log(token);
+    const pId = window.location.pathname.split("/").pop();
+    const token = localStorage.getItem('token');
     try {
         const response = await fetch(`/getLikes/${pId}`, {
             method: "GET",
@@ -25,11 +23,11 @@ async function getLikes() {
             },
         });
         const likes = await response.json();
-		console.log("Likes :", likes);
-		const hasLiked = likes.some(like => like.uId === user.id);
+
+        const user = await getUser();
+        const hasLiked = likes.some(like => like.uId === user.id);
 
         const heart = document.getElementById('sendLikes');
-
         if (hasLiked) {
             heart.classList.remove('fa-regular');
             heart.classList.add('fa-solid');
@@ -37,7 +35,7 @@ async function getLikes() {
             heart.classList.remove('fa-solid');
             heart.classList.add('fa-regular');
         }
-		return likes;
+        return likes;
     } catch (error) {
         return null;
     }

@@ -190,17 +190,27 @@ func (app *App) getLikes(writer http.ResponseWriter, request *http.Request) {
         return
     }
 
-    var count int
-    query := `SELECT COUNT(*) FROM likes WHERE post_id = $1`
-    err = app.dataBase.QueryRow(query, pId).Scan(&count)
+    rows, err := app.dataBase.Query(`SELECT user_id FROM likes WHERE post_id = $1`, pId)
     if err != nil {
         http.Error(writer, "Database error", http.StatusInternalServerError)
-        fmt.Println(err)
         return
     }
+    defer rows.Close()
 
-    fmt.Println("Likes : ", count)
-    json.NewEncoder(writer).Encode(map[string]int{"likes": count})
+    type LikeEntry struct {
+        UId int `json:"uId"`
+    }
+    var likes []LikeEntry
+    for rows.Next() {
+        var l LikeEntry
+        if err := rows.Scan(&l.UId); err == nil {
+            likes = append(likes, l)
+        }
+    }
+    if likes == nil {
+        likes = []LikeEntry{}
+    }
+    json.NewEncoder(writer).Encode(likes)
 }
 
 // ! ||--------------------------------------------------------------------------------||
