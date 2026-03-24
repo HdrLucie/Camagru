@@ -108,7 +108,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error creating uploads directory");
 	}	
-	renderTemplate(router, app)
+	renderTemplate(router, app);
 
 	fmt.Println("Server started at http://localhost:" + port)
 	http.ListenAndServe(":"+port, router)

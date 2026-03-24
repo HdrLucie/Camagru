@@ -165,17 +165,23 @@ func (app *App) getComments(writer http.ResponseWriter, request *http.Request) {
         http.Error(writer, "Invalid photo ID", http.StatusBadRequest)
         return
     }
-    var filtered []Comments
-    for _, c := range app.comments {
-        if c.PId == pId {
-            filtered = append(filtered, c)
+	query := `SELECT comment, post_id, user_id FROM comments WHERE post_id = $1`;
+	rows, _ := app.dataBase.Query(query, pId);
+	defer rows.Close()
+    var comments []Comments
+    for rows.Next() {
+        var c Comments
+        err = rows.Scan(&c.Comment, &c.PId, &c.Username)
+        if err != nil {
+            fmt.Println(err)
+            continue
         }
+        comments = append(comments, c)
     }
-    json.NewEncoder(writer).Encode(filtered)
+    json.NewEncoder(writer).Encode(comments)
 }
 
 func (app *App) getLikes(writer http.ResponseWriter, request *http.Request) {
-	fmt.Println("GET LIKEEES");
     writer.Header().Set("Content-Type", "application/json")
     parts := strings.Split(request.URL.Path, "/getLikes/")
     pId, err := strconv.Atoi(parts[len(parts)-1])
@@ -183,15 +189,19 @@ func (app *App) getLikes(writer http.ResponseWriter, request *http.Request) {
         http.Error(writer, "Invalid photo ID", http.StatusBadRequest)
         return
     }
-    var filtered []Likes
-    for _, c := range app.likes {
-        if c.PId == pId {
-            filtered = append(filtered, c)
-        }
-    }
-    json.NewEncoder(writer).Encode(filtered)
-}
 
+    var count int
+    query := `SELECT COUNT(*) FROM likes WHERE post_id = $1`
+    err = app.dataBase.QueryRow(query, pId).Scan(&count)
+    if err != nil {
+        http.Error(writer, "Database error", http.StatusInternalServerError)
+        fmt.Println(err)
+        return
+    }
+
+    fmt.Println("Likes : ", count)
+    json.NewEncoder(writer).Encode(map[string]int{"likes": count})
+}
 
 // ! ||--------------------------------------------------------------------------------||
 // ! ||                                 GETTER STICKERS                                ||
