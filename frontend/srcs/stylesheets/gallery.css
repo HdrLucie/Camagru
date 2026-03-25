@@ -12,7 +12,8 @@ html {
     height: 100%;
     margin: 0px;
     padding: 0px;
-    background: #111;
+    background: white;
+	color: black;
     /*font-size: 13px;*/
     font-family: 'Arvo', monospace;
 }
