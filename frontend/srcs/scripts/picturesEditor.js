@@ -180,6 +180,10 @@ async function getUser() {
 		var path;
 		const token = localStorage.getItem('token');
 		const sticker = document.getElementsByClassName('placed-sticker');
+		if (!sticker || sticker.length === 0) {
+			alert('Veuillez placer un sticker sur votre photo avant d\'envoyer !');
+        return;
+		}
 		const user = await getUser();
 		const imgBlob = await new Promise(resolve => {
             canvas.toBlob(resolve, 'image/jpeg', 0.8); // Compression JPEG à 80%
