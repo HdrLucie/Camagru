@@ -20,7 +20,7 @@ async function getPictures() {
         const response = await fetch("/getPictures", {
             method: "GET",
             headers: {
-                "Authorization": `Bearer ${token}`,
+                // "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
         });

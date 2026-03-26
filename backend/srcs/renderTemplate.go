@@ -146,7 +146,7 @@ func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/getUser", app.authMiddleware(app.getUser))
 	router.HandleFunc("/getStickers", app.authMiddleware(app.getStickers))
 	router.HandleFunc("/getSticker/", app.authMiddleware(app.getStickerById))
-	router.HandleFunc("/getPictures", app.authMiddleware(app.getAllPictures))
+	router.HandleFunc("/getPictures", app.getAllPictures)
 	router.HandleFunc("/getAvatars", app.authMiddleware(app.getAvatars))
 	router.HandleFunc("/sendLikes", app.sendLikes)
 	router.HandleFunc("/getPicture/", app.authMiddleware(app.getPicture))
