@@ -128,6 +128,7 @@ func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/connection", serveTemplate("login.html"))
 	router.HandleFunc("/gallery", serveTemplate("gallery.html"))
 	router.HandleFunc("/takePicture", serveTemplate("take-picture.html"))
+	router.HandleFunc("/loadImage", serveTemplate("loadImage.html"))
 	router.HandleFunc("/authentification", serveTemplate("authentification.html"))
 	router.HandleFunc("/forgetPassword", serveTemplate("forgetPassword.html"))
 	router.HandleFunc("/verify", serveTemplate("verify.html"))

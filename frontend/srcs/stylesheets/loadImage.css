@@ -1,0 +1,86 @@
+body,
+html {
+	display: flex;
+	/* justify-content: center; */
+	align-items: center;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+	background: #111;
+	font-size: 13px;
+	font-family: 'Arvo', monospace;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	width: 100%;
+}
+
+::-webkit-scrollbar {
+	width: 0;
+	height: 0;
+	background: transparent;
+}
+
+.main-container {
+	width: 100%;
+	display: flex;
+	align-content: center;
+	justify-content: center;
+	margin-top: 200px;
+	flex-direction: column;
+}
+
+#uploadedImageContainer {
+    width: 680px;
+	position: relative;
+    height: 550px;
+}
+
+#uploadedPhoto {
+    width: 680px;
+    height: 550px;
+    object-fit: cover;
+}
+
+input::file-selector-button {
+  background: #c0392b;
+  color: #fff;
+  font-weight: 100;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.35s linear;
+}
+
+input::file-selector-button:hover {
+  background: transparent;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: black;
+}
+
+.stickers-sidebar {
+	width: 100%; /* Largeur fixe */
+	overflow-y: auto; /* Scrollable si beaucoup de stickers */
+	background-color: black;
+	/* right:5%; */
+	position: relative;
+}
+
+.stickers-grid {
+	height: 150px;
+	width:100%;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+	gap: 2em;
+	padding: 1em;
+	object-fit:contain;	
+	background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}

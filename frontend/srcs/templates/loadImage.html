@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Camagru</title>
+		<script src="https://kit.fontawesome.com/76ec232e00.js" crossorigin="anonymous"></script>
+		<link rel="stylesheet" type="text/css" href="/styles/sticky-bar.css" />
+		<link rel="stylesheet" type="text/css" href="/styles/loadImage.css" />
+		<link rel="stylesheet" type="text/css" href="style/profile-menu.css" />
+	</head>
+
+	<body>
+		{{ template "navbar" . }}
+	<div class="main-container">
+		<div id="uploadedImageContainer">
+			<img id="uploadedPhoto" src="#" alt="Uploaded image" ondragover="handleDragOver(event);" ondrop="handleDrop(event);" />
+		</div>
+		<input id="uploadPhoto" type='file' />
+		<button onclick="sendPictures()">Send your image</button>
+	<aside class="stickers-sidebar">
+		<div class="stickers-grid" id="stickersContainer"></div>
+	</aside>
+	</div>
+	</body>
+	<script src="/scripts/loadImage.js"></script>
+	<script src="/scripts/menu.js"></script>
+</html>
