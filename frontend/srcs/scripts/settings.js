@@ -5,8 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function checkToken() {
     const token = localStorage.getItem('token');
-    console.log("Function check token")
-    console.log(token)
     if (!token) {
         // alert('No token found. Please login.');
         window.location.href = '/';
@@ -24,7 +22,6 @@ async function getUser() {
             },
         });
         const userData = await response.json();
-		console.log(userData);
 		return userData;
     } catch (error) {
         console.error("Erreur:", error);

@@ -15,7 +15,6 @@ function redirectionPage(path) {
 }
 
 async function getPictures() {
-	console.log("Get all pictures");
     const token = localStorage.getItem('token');
     try {
         const response = await fetch("/getPictures", {
@@ -26,7 +25,6 @@ async function getPictures() {
             },
         });
         const pictures = await response.json();
-		console.log(pictures);
         return pictures;
     } catch (error) {
         console.error("Erreur:", error);
@@ -35,7 +33,6 @@ async function getPictures() {
 }
 
 async function displayGallery() {
-	console.log("Display gallery");
     const pictures = await getPictures();
     const container = document.getElementById('galleryContainer');
     container.innerHTML = '';

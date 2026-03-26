@@ -1,21 +1,49 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
 	checkToken();
-	displayComments();
+	await displayComments();
+	await getLikes();
 });
 
 async function checkToken() {
     const token = localStorage.getItem('token');
-    console.log("Function check token")
-    console.log(token)
     if (!token) {
         window.location.href = '/';
     }
 }
 
+async function getLikes() {
+    const pId = window.location.pathname.split("/").pop();
+    const token = localStorage.getItem('token');
+    try {
+        const response = await fetch(`/getLikes/${pId}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+        const likes = await response.json();
+
+        const user = await getUser();
+        const hasLiked = likes.some(like => like.uId === user.id);
+
+        const heart = document.getElementById('sendLikes');
+        if (hasLiked) {
+            heart.classList.add('liked');
+        } else {
+            heart.classList.remove('liked');
+        }
+        return likes;
+    } catch (error) {
+        return null;
+    }
+}
+
 async function getComments() {
+	const pId = window.location.pathname.split("/").pop();
 	const token = localStorage.getItem('token');
     try {
-        const response = await fetch("/getComments", {
+        const response = await fetch(`/getComments/${pId}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -25,7 +53,6 @@ async function getComments() {
         const comments = await response.json();
 		return comments;
     } catch (error) {
-        console.error("Erreur:", error);
         return null;
     }
 
@@ -33,6 +60,8 @@ async function getComments() {
 
 async function displayComments() {
 	comments = await getComments();
+
+    if (!comments) return;
 	listComments = document.getElementById("commentList");
 
 	comments.forEach(comment=>{
@@ -64,7 +93,6 @@ async function getUser() {
             },
         });
         const userData = await response.json();
-		console.log(userData);
 		return userData;
     } catch (error) {
         console.error("Erreur:", error);
@@ -73,11 +101,8 @@ async function getUser() {
 }
 
 document.getElementById("sendLikes").onclick = async function () {
-	console.log("Likes button");
 	const photoId = window.location.pathname.split("/").pop();
-	console.log(photoId);
 	const user = await getUser();
-	console.log(user);
 	try {
 		const response = await fetch("/sendLikes", {
 			method: "POST",
@@ -96,26 +121,47 @@ document.getElementById("sendLikes").onclick = async function () {
 	}
 }
 
+document.getElementById("deleteButton").onclick = async function () {
+	const pId = window.location.pathname.split("/").pop();
+	const user = await getUser();
+	const token = localStorage.getItem('token');
+	const response = await fetch("/deleteImg", {
+		method: "POST",
+		headers: {
+			"Authorization": `Bearer ${token}`,
+			"Content-type": "application/json"
+		},
+		body: JSON.stringify({
+			"Username": user.username,
+			"uId": user.id,
+			"pId": Number(pId),
+		})
+	});
+	if (response.ok) {
+		window.location.href = "/gallery";
+	} else if (response.status === 403) {
+		const data = await response.json();
+		alert(data.error); // "You are not allowed to delete this image"
+	}
+}
+
 document.getElementById('sendLikes').addEventListener('click', function() {
-    this.classList.toggle('fa-regular');
-    this.classList.toggle('fa-solid');
+	this.classList.toggle('liked');
 });
 
 const form = document.getElementById('com-form');
 
 form.addEventListener('submit', async function (e) {
   e.preventDefault();
-	console.log('\n\nSend Comments\n\n');
 	var c = document.getElementById('comment');
 	var u = await getUser();
 	const token = localStorage.getItem('token');
 	const pId = window.location.pathname.split("/").pop();
-
 	try {
 		const response = await fetch("/sendComments", {
 			method: "POST",
 			headers: {
-				"Authorization": `Bearer ${token}`,
+				"authorization": `Bearer ${token}`,
 				"Content-type": "application/json"
 			},
 			body: JSON.stringify({

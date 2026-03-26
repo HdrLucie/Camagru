@@ -12,7 +12,6 @@ function checkToken() {
 }
 
 async function getPicture(pictureId) {
-	console.log("Id" + pictureId)
 	const token = localStorage.getItem('token');
 	try {
 		const response = await fetch(`/getPicture/${pictureId}`, {
@@ -23,7 +22,6 @@ async function getPicture(pictureId) {
 			},
 		});
 		const picture = await response.json();
-		console.log(picture);
 		return picture;
 	} catch (error) {
 		console.error("Erreur:", error);
@@ -32,10 +30,8 @@ async function getPicture(pictureId) {
 }
 
 async function displayPicture() {
-	console.log("Display picture");
 	const pictureId = window.location.pathname.split("/").pop();
 	const picture = await getPicture(pictureId);
-	console.log(picture.path);
 	const container = document.getElementById('photo');
 	container.innerHTML = '';
 	if (picture.path != '') {

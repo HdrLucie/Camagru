@@ -8,7 +8,7 @@ import (
 	"context"
 	"strings"
 	"strconv"
-)
+)	
 
 func serveTemplate(templateName string) http.HandlerFunc {
     return func(w http.ResponseWriter, r *http.Request) {
@@ -116,7 +116,6 @@ func (app *App) viewPhoto(w http.ResponseWriter, r *http.Request) {
         fmt.Println("Error parsing templates:", err)
         return
     }
-    
     err = tmpl.ExecuteTemplate(w, "photo.html", data)
     if err != nil {
         http.Error(w, "Could not execute template", http.StatusInternalServerError)
@@ -128,7 +127,7 @@ func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/", serveTemplate("firstPage.html"))
 	router.HandleFunc("/connection", serveTemplate("login.html"))
 	router.HandleFunc("/gallery", serveTemplate("gallery.html"))
-	router.HandleFunc("/takePicture", serveTemplate("picture.html"))
+	router.HandleFunc("/takePicture", serveTemplate("take-picture.html"))
 	router.HandleFunc("/authentification", serveTemplate("authentification.html"))
 	router.HandleFunc("/forgetPassword", serveTemplate("forgetPassword.html"))
 	router.HandleFunc("/verify", serveTemplate("verify.html"))
@@ -152,7 +151,10 @@ func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/sendLikes", app.sendLikes)
 	router.HandleFunc("/getPicture/", app.authMiddleware(app.getPicture))
 	router.HandleFunc("/sendComments", app.authMiddleware(app.manageComment))
-	router.HandleFunc("/getComments", app.authMiddleware(app.getComments));
+	router.HandleFunc("/getComments/", app.authMiddleware(app.getComments));
+	router.HandleFunc("/deleteImg", app.authMiddleware(app.deleteImg));
+	router.HandleFunc("/getLikes/", app.authMiddleware(app.getLikes));
+
 }
 
 func renderTemplate(router *http.ServeMux, app *App) {

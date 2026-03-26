@@ -58,6 +58,7 @@ func (app *App) manageComment(writer http.ResponseWriter, request *http.Request)
 	}
 	c.Comment = comment.Comment;
 	c.Username = comment.Username;
+	c.PId = comment.PId;
 	app.comments = append(app.comments, c);
 	r := response{
 		Username:	comment.Username,

@@ -49,7 +49,6 @@ func (app *App) insertLikeIntoDB(Uid int, Pid int, user *User, r LikeRequest) (b
 		}
 
 	} else {
-		fmt.Println(Green + "Insert Like" + Reset)
 		_, err = app.dataBase.Exec("INSERT INTO likes (post_id, user_id) VALUES ($1, $2)", Pid, Uid);
 		if err != nil {
 			fmt.Println(Red + "Error : insert like to the database" + Reset)
@@ -105,6 +104,11 @@ func (app *App) sendLikes(writer http.ResponseWriter, request *http.Request) {
 		fmt.Println(Red + "Error with like management" + Reset);
 		return 
 	}
+	var p Likes;
+	p.Username = r.Username;
+	p.PId = r.Photo;
+	p.UId = r.Id;
+	app.likes = append(app.likes, p);
 	resp := LikeResponse{
 		Liked:     liked,
 	}

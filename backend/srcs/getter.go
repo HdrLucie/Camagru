@@ -8,6 +8,10 @@ import (
 	"strconv"
 )
 
+type	cInfo struct {
+	PId	int	`json:"pId"`
+}
+
 // ! ||--------------------------------------------------------------------------------||
 // ! ||                                  USER GETTERS                                  ||
 // ! ||--------------------------------------------------------------------------------||
@@ -38,6 +42,19 @@ func (app *App) getUserByJWT(JWT string) (*User, error) {
 		return nil, err
 	}
 	return &user, nil
+}
+
+func (app *App) getUserById(id int) (*User, error) {
+    var user User
+    query := "SELECT id, email, username, password, authToken, authStatus, avatar, notify FROM Users WHERE id = $1"
+    err := app.dataBase.QueryRow(query, id).Scan(
+        &user.Id, &user.Email, &user.Username, &user.Password,
+        &user.AuthToken, &user.AuthStatus, &user.Avatar, &user.Notify,
+    )
+    if err != nil {
+        return nil, err
+    }
+    return &user, nil
 }
 
 func (app *App) getStatus(id int) (bool) {
@@ -86,17 +103,17 @@ func (app *App) getUserByPhotoId(id int) (*User, error) {
 	var userId int64;
 	var user	User;
 
-	fmt.Println(Yellow + "Get User" + Reset)
 	query := "SELECT userId FROM images WHERE id = $1"
 	row := app.dataBase.QueryRow(query, id)
 	err := row.Scan(&userId)
 	if err != nil {
+		fmt.Println("Here")
 		fmt.Println(err)
 		return nil, err
 	}
 	query = "SELECT id, email, username, password, authToken, authStatus, notify FROM Users WHERE id = $1"
 	row = app.dataBase.QueryRow(query, userId);
-	err = row.Scan(&user.Id, &user.Email, &user.Username, &user.Password, &user.AuthToken, &user.AuthStatus, &user.Notify)
+	err = row.Scan(&user.Id, &user.Email, &user.Username, &user.Password, &user.AuthToken, &user.AuthStatus, &user.Notify);
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
@@ -141,9 +158,59 @@ func (app *App) getUser(writer http.ResponseWriter, request *http.Request) {
 }
 
 func (app *App) getComments(writer http.ResponseWriter, request *http.Request) {
-	_ = request;
-	writer.Header().Set("Content-Type", "application/json");
-	json.NewEncoder(writer).Encode(app.comments);
+    writer.Header().Set("Content-Type", "application/json")
+    parts := strings.Split(request.URL.Path, "/getComments/")
+    pId, err := strconv.Atoi(parts[len(parts)-1])
+    if err != nil {
+        http.Error(writer, "Invalid photo ID", http.StatusBadRequest)
+        return
+    }
+	query := `SELECT comment, post_id, user_id FROM comments WHERE post_id = $1`;
+	rows, _ := app.dataBase.Query(query, pId);
+	defer rows.Close()
+    var comments []Comments
+    for rows.Next() {
+        var c Comments
+        err = rows.Scan(&c.Comment, &c.PId, &c.Username)
+        if err != nil {
+            fmt.Println(err)
+            continue
+        }
+        comments = append(comments, c)
+    }
+    json.NewEncoder(writer).Encode(comments)
+}
+
+func (app *App) getLikes(writer http.ResponseWriter, request *http.Request) {
+    writer.Header().Set("Content-Type", "application/json")
+    parts := strings.Split(request.URL.Path, "/getLikes/")
+    pId, err := strconv.Atoi(parts[len(parts)-1])
+    if err != nil {
+        http.Error(writer, "Invalid photo ID", http.StatusBadRequest)
+        return
+    }
+
+    rows, err := app.dataBase.Query(`SELECT user_id FROM likes WHERE post_id = $1`, pId)
+    if err != nil {
+        http.Error(writer, "Database error", http.StatusInternalServerError)
+        return
+    }
+    defer rows.Close()
+
+    type LikeEntry struct {
+        UId int `json:"uId"`
+    }
+    var likes []LikeEntry
+    for rows.Next() {
+        var l LikeEntry
+        if err := rows.Scan(&l.UId); err == nil {
+            likes = append(likes, l)
+        }
+    }
+    if likes == nil {
+        likes = []LikeEntry{}
+    }
+    json.NewEncoder(writer).Encode(likes)
 }
 
 // ! ||--------------------------------------------------------------------------------||

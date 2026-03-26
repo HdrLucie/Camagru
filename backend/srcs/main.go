@@ -31,6 +31,7 @@ type App struct {
 	pictures	[]Pictures
 	avatars		[]Avatars
 	comments	[]Comments
+	likes		[]Likes
 }
 
 type User struct {
@@ -71,8 +72,15 @@ type Avatars struct {
 }
 
 type Comments struct {
-	Username	string `json:"Username"`
-	Comment		string `json:"Comment"`
+	Username	string	`json:"Username"`
+	Comment		string	`json:"Comment"`
+	PId			int		`json:"pId"`
+}
+
+type Likes struct {
+	Username	string	`json:"Username"`
+	PId			int		`json:"pId"`
+	UId			int		`json:"uId"`
 }
 
 func main() {
@@ -100,7 +108,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error creating uploads directory");
 	}	
-	renderTemplate(router, app)
+	renderTemplate(router, app);
 
 	fmt.Println("Server started at http://localhost:" + port)
 	http.ListenAndServe(":"+port, router)

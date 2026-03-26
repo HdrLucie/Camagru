@@ -47,7 +47,7 @@ html {
 	flex-direction: column;
 	height: 100%;
 	width: 40%;
-	background-color: red;
+	/* background-color: red; */
 }
 
 .photo {
@@ -74,7 +74,17 @@ html {
 
 }
 
-;likeBtn {
+.likeBtn {
 	align-items: center;
 	align-content: center;
+}
+
+.likeBtn:hover {
+	background-color: #B61A53;
+	color : white;
+}
+
+.liked {
+	background-color: #B61A53;
+	color: white;
 }
