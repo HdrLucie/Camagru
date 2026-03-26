@@ -139,10 +139,26 @@ func (app *App) downloadImage(writer http.ResponseWriter, request *http.Request)
 	tmpStickerId := request.FormValue("imageId");
 	posX := request.FormValue("posX");
 	posY := request.FormValue("posY");
-	x, err := strconv.Atoi(posX);
-	y, err := strconv.Atoi(posY);
+	x, err := strconv.Atoi(posX)
+	if err != nil {
+		http.Error(writer, "posX invalide: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+	y, err := strconv.Atoi(posY)
+	if err != nil {
+		http.Error(writer, "posY invalide: "+err.Error(), http.StatusBadRequest)
+		return
+	}
 	tmpId, err := strconv.Atoi(userId)
-	stickerId, err := strconv.Atoi(tmpStickerId);
+	if err != nil {
+		http.Error(writer, "userId invalide: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+	stickerId, err := strconv.Atoi(tmpStickerId)
+	if err != nil {
+		http.Error(writer, "stickerId invalide: "+err.Error(), http.StatusBadRequest)
+		return
+	}
 	if err != nil {
 		http.Error(writer, "ID utilisateur invalide", http.StatusBadRequest)
 		return

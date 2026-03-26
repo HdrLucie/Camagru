@@ -73,12 +73,18 @@ async function sendPictures() {
 		return;
 	}
 	const user = await getUser();
-	const uploadedImg = document.getElementById('uploadPhoto');
-	const imgBlob = uploadedImg.files[0];
+    const uploadedImg = document.getElementById('uploadPhoto');
+    const imgBlob = uploadedImg.files[0];
+    if (!imgBlob) {
+        alert('Veuillez choisir une image avant d\'envoyer !');
+        return;
+    }
+	console.log(imgBlob);
 	const formData = new FormData();
 	formData.append('id', user.id);
 	formData.append("image", imgBlob, 'photo.jpg');
-	formData.append('imageId', sticker[0].id);
+	// formData.append('imageId', sticker[0].id);
+	formData.append('imageId', sticker[0].dataset.stickerId);
 	const relativeX = sticker[0].dataset.relativeX;
 	const relativeY = sticker[0].dataset.relativeY;
 	formData.append('stickerPath', sticker[0].src);
@@ -92,6 +98,12 @@ async function sendPictures() {
 		},
 		body: formData
 	});
+	if (!response.ok) {
+    const errorText = await response.text();
+    console.error('Erreur serveur:', errorText);
+    alert('Erreur: ' + errorText);
+    return;
+}
 }
 
 async function getStickerNameById(stickerId) {
@@ -124,7 +136,7 @@ async function createStickerOnImage(stickerId, x, y) {
     const stickerElement = document.createElement('img');
     stickerElement.src = "/stickers/" + name;
     stickerElement.className = 'placed-sticker';
-
+	stickerElement.dataset.stickerId = stickerId;
     const container = document.getElementById('uploadedImageContainer');
 
     const percentX = (x / container.offsetWidth) * 100;
