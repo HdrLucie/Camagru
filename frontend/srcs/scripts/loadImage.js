@@ -62,7 +62,37 @@ async function getUser() {
 	}
 }
 
+function compressImg(file, quality = 0.7) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
 
+    img.onload = () => {
+		const canvas = document.createElement('canvas');
+
+		const MAX_WIDTH = 500;
+		const ratio = Math.min(MAX_WIDTH / img.width, 1);
+
+		canvas.width = img.width * ratio;
+		canvas.height = img.height * ratio;
+		canvas.width = img.width;
+		canvas.height = img.height;
+
+		console.log(canvas.width, canvas.height);
+
+		const ctx = canvas.getContext('2d');
+		ctx.drawImage(img, 0, 0);
+
+		canvas.toBlob((blob) => {
+			URL.revokeObjectURL(url);
+			resolve(blob);
+		}, 'image/jpeg', quality);
+	};
+
+	  img.onerror = reject;
+	  img.src = url;
+  });
+}
 
 async function sendPictures() {
 	var path;
@@ -74,16 +104,15 @@ async function sendPictures() {
 	}
 	const user = await getUser();
     const uploadedImg = document.getElementById('uploadPhoto');
-    const imgBlob = uploadedImg.files[0];
-    if (!imgBlob) {
+    const file = uploadedImg.files[0];
+    if (!file) {
         alert('Veuillez choisir une image avant d\'envoyer !');
         return;
     }
-	console.log(imgBlob);
+	const compressedImg = await compressImg(file);
 	const formData = new FormData();
 	formData.append('id', user.id);
-	formData.append("image", imgBlob, 'photo.jpg');
-	// formData.append('imageId', sticker[0].id);
+	formData.append("image", compressedImg, 'photo.jpg');
 	formData.append('imageId', sticker[0].dataset.stickerId);
 	const relativeX = sticker[0].dataset.relativeX;
 	const relativeY = sticker[0].dataset.relativeY;
@@ -99,11 +128,11 @@ async function sendPictures() {
 		body: formData
 	});
 	if (!response.ok) {
-    const errorText = await response.text();
-    console.error('Erreur serveur:', errorText);
-    alert('Erreur: ' + errorText);
-    return;
-}
+		const errorText = await response.text();
+		console.error('Erreur serveur:', errorText);
+		alert('Erreur: ' + errorText);
+		return;
+	}
 }
 
 async function getStickerNameById(stickerId) {
