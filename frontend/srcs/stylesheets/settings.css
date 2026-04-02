@@ -5,8 +5,8 @@
 	width:100%;
 	max-width: 1000px;
 	height: 650px;
-	background-color: #000;
-	color: #fff;
+	background-color: #F7F9F7;
+	color: black;
 }
 
 .content-title {
@@ -90,7 +90,7 @@
 	/* background: linear-gradient(to right,#FE4365,#C49CDE, #FC913A, #d36e9c, #d36e9c, #FE4265); */
 	-webkit-background-clip: text;
 	background-clip: text;
-	color: #be3d77;
+	color: #b23a48;
 	background-size: 500% 100%;
 }
 
@@ -165,7 +165,7 @@
 
 .btn-bg {
   width: 100%;
-  background-color: #ebf7fc;
+  background-color: #e0dede;
   transition: 0.3s ease all;
   z-index: 1;
 }
@@ -183,7 +183,7 @@
   text-align: center;
   line-height: 1;
   padding: 9px 4px;
-  background-color: #FE4365;
+  background-color: #b23a48;
   border-radius: 50%;
   transition: 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
 }

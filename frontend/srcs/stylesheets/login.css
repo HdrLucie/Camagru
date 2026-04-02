@@ -37,7 +37,7 @@ body {
 }
 
 label {
-	color: #ff6c26;
+	color: #C42847;
 	font-size: 2.3em;
 	justify-content: center;
 	display: flex;
@@ -67,7 +67,7 @@ input {
 	justify-content: center;
 	display: block;
 	color: #fff;
-	background: #ff914d;
+	background: #C42847;
 	font-size: 1em;
 	font-weight: bold;
 	margin-top: 30px;
@@ -79,12 +79,12 @@ input {
 }
 
 .btn:hover {
-	background: #ff6c26;
+	background: #b23a48;
 }
 
 .login {
 	height: 460px;
-	background: #ff6c26;
+	background: #de3c4b;
 	border-radius: 60% / 10%;
 	transform: translateY(-180px);
 	transition: 0.8s ease-in-out;

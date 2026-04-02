@@ -3,7 +3,7 @@
 	justify-content: center;
 	width:100%;
 	/* border-right: 1px solid rgba(255, 255, 255, 0.2); */
-    background-color: #ff914d;
+    background-color: #C42847;
     list-style-type: none;
     /* font: 500 20px/24px "Montserrat", Arial, sans-serif; */
 	font-size: 10rem;
@@ -55,7 +55,7 @@
 }
 
 .nav__link:hover {
-    color: #ff6c26;
+    color: #de3c4b;
 }
 
 @media (min-width: 880px) {
@@ -80,7 +80,7 @@
 	}
 
 	.nav__item:hover {
-		background-color: #ff6c26;
+		background-color: #a62841;
 
 	}
 
@@ -102,7 +102,7 @@
     padding: 8px;
     border-radius: 6px;
     color: white;
-    background-color: #ff6c26;
+    background-color: #b23a48;
     border: 1px solid rgba(255, 255, 255, 0.2);
     transition: background-color 0.2s ease;
     margin: 18px;

@@ -12,7 +12,7 @@ html {
 	height: 100%;
 	margin: 0px;
 	padding: 0px;
-	background: #111;
+	background: white;
 	font-size: 13px;
 	font-family: 'Arvo', monospace;
 }
@@ -129,7 +129,7 @@ html {
 .stickers-sidebar {
 	width: 100%; /* Largeur fixe */
 	overflow-y: auto; /* Scrollable si beaucoup de stickers */
-	background-color: black;
+	background-color: #F7F9F7;
 	/* right:5%; */
 	position: relative;
 }
