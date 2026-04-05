@@ -2,7 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
     displayStickers();
 });
 
-const draggableItem = document.getElementById("draggableItem");
+let selectedStickerId = null;
+let floatingSticker = null;
+let isDragging = false;
 
 async function getStickers() {
     const token = localStorage.getItem('token');
@@ -56,12 +58,15 @@ async function createStickerOnImage(stickerId, x, y) {
 
     const dropZone = document.getElementById('video') || document.getElementById('uploadedPhoto');
     const tmp = document.getElementById('camera') || document.getElementById('uploadedImageContainer');
-
-    const percentX = (x / dropZone.offsetWidth) * 80;
-    const percentY = (y / dropZone.offsetHeight) * 80;
+    await new Promise(resolve => { stickerElement.onload = resolve; });
+    const halfW = stickerElement.naturalWidth / 2;
+    const halfH = stickerElement.naturalHeight / 2;
+    const percentX = ((x - halfW) / dropZone.offsetWidth) * 100;
+    const percentY = ((y - halfH) / dropZone.offsetHeight) * 100;
     stickerElement.id = stickerId;
-    stickerElement.style.left = percentX + '%';
-    stickerElement.style.top = percentY + '%';
+    stickerElement.style.left = x + 'px';
+    stickerElement.style.top = y + 'px';
+	stickerElement.style.transform = 'translate(-50%, -50%)';
     stickerElement.dataset.relativeX = percentX;
     stickerElement.dataset.relativeY = percentY;
     tmp.appendChild(stickerElement);
@@ -69,12 +74,6 @@ async function createStickerOnImage(stickerId, x, y) {
 
 function handleDrop(event) {
 	event.preventDefault();
-	const id = event
-	.dataTransfer
-	.getData('text/plain');
-	const dropX = event.offsetX;
-    const dropY = event.offsetY;
-    createStickerOnImage(id, dropX, dropY);
 }
 
 function handleDragOver(event) {
@@ -82,10 +81,81 @@ function handleDragOver(event) {
 }
 
 function handleDragStart(event) {
-	event
-    .dataTransfer
-    .setData('text/plain', event.target.id);
+	event.preventDefault();
+	isDragging = true;
+	selectedStickerId = event.target.id;
+	createFloatingSticker(event.target.src, event.clientX, event.clientY);
+	document.body.style.cursor = 'grabbing';
 }
+
+function removeFloatingSticker() {
+	if (floatingSticker) {
+		floatingSticker.remove();
+		floatingSticker = null;
+	}
+}
+
+function createFloatingSticker(src, x, y) {
+	removeFloatingSticker();
+
+	floatingSticker = document.createElement('img');
+	floatingSticker.src = src;
+	floatingSticker.className = "floating-sticker";
+	floatingSticker.style.cssText = `
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.8;
+	max-width: 128px;
+	max-height: 128px;
+    transform: translate(-50%, -50%)`;
+	floatingSticker.style.left = x + 'px';
+	floatingSticker.style.top = y + 'px';
+	document.body.appendChild(floatingSticker);
+}
+
+document.addEventListener('mousemove', (event) => {
+	if (floatingSticker) {
+			floatingSticker.style.left = event.clientX + 'px';
+			floatingSticker.style.top = event.clientY + 'px';
+	}
+});
+
+function cancelSelection() {
+	selectedStickerId = null;
+	isDragging = false;
+	removeFloatingSticker();
+	document.body.style = '';
+}
+
+
+document.addEventListener('mouseup', (event) => {
+	if (!isDragging || !selectedStickerId) return;
+
+	const dropZone = document.getElementById('video') || document.getElementById('uploadedPhoto');
+	if (dropZone && dropZone.contains(event.target)) {
+		const rect = dropZone.getBoundingClientRect();
+		const x = event.clientX - rect.left;
+		const y = event.clientY - rect.top;
+		const id = selectedStickerId;
+		createStickerOnImage(id, x, y);
+	}
+	cancelSelection();
+});
+
+document.addEventListener('click', (event) => {
+	if (selectedStickerId === null) return;
+
+	const dropZone = document.getElementById('video') || document.getElementById('uploadedPhoto');
+	if (dropZone && dropZone.contains(event.target)) {
+		const rect = dropZone.getBoundingClientRect();
+		const x = event.clientX - rect.left;
+		const y = event.clientY - rect.top;
+		const id = selectedStickerId;
+		createStickerOnImage(id, x, y);
+	}
+	cancelSelection();
+});
 
 async function displayStickers() {
     const stickers = await getStickers();
@@ -99,7 +169,15 @@ async function displayStickers() {
 			img.id = sticker.id;
 			img.draggable = true;
 			img.className = 'sticker-item';
+			img.style.cursor = 'grab';
 			img.addEventListener('dragstart', handleDragStart);
+			img.addEventListener('click', (event) => {
+				event.stopPropagation();
+				if (selectedStickerId === sticker.id) return;
+				selectedStickerId = sticker.id;
+				createFloatingSticker(img.src, event.clientX, event.clientY);
+				document.body.style.cursor = 'grabbing';
+			});
             container.appendChild(img);
         });
     } else {

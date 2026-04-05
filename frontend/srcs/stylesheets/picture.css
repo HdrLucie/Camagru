@@ -65,8 +65,8 @@ html {
     position: absolute !important;
     z-index: 10 !important;
     pointer-events: none !important;
-	width: 128px;
-	height: 128px;
+	max-width: 128px;
+	max-height: 128px;
 }
 
 .output {
