@@ -56,19 +56,14 @@ async function createStickerOnImage(stickerId, x, y) {
     stickerElement.src = "/stickers/" + name;
     stickerElement.className = 'placed-sticker';
 
-    const dropZone = document.getElementById('video') || document.getElementById('uploadedPhoto');
     const tmp = document.getElementById('camera') || document.getElementById('uploadedImageContainer');
-    await new Promise(resolve => { stickerElement.onload = resolve; });
-    const halfW = stickerElement.naturalWidth / 2;
-    const halfH = stickerElement.naturalHeight / 2;
-    const percentX = ((x - halfW) / dropZone.offsetWidth) * 100;
-    const percentY = ((y - halfH) / dropZone.offsetHeight) * 100;
     stickerElement.id = stickerId;
     stickerElement.style.left = x + 'px';
     stickerElement.style.top = y + 'px';
-	stickerElement.style.transform = 'translate(-50%, -50%)';
-    stickerElement.dataset.relativeX = percentX;
-    stickerElement.dataset.relativeY = percentY;
+	// stickerElement.style.transform = 'translate(-50%, -50%)';
+    stickerElement.dataset.relativeX = x;
+    stickerElement.dataset.relativeY = y;
+	console.log(x, y);
     tmp.appendChild(stickerElement);
 }
 
@@ -108,7 +103,7 @@ function createFloatingSticker(src, x, y) {
     opacity: 0.8;
 	max-width: 128px;
 	max-height: 128px;
-    transform: translate(-50%, -50%)`;
+    // transform: translate(-50%, -50%)`;
 	floatingSticker.style.left = x + 'px';
 	floatingSticker.style.top = y + 'px';
 	document.body.appendChild(floatingSticker);

@@ -127,12 +127,9 @@ async function getUser() {
 			(ev) => {
 				if (!streaming) {
 					height = video.videoHeight / (video.videoWidth / width);
-
-
-						if (isNaN(height)) {
-							height = width / (4 / 3);
-						}
-
+					if (isNaN(height)) {
+						height = width / (4 / 3);
+					}
 					video.setAttribute("width", width);
 					video.setAttribute("height", height);
 					canvas.setAttribute("width", width);
@@ -208,6 +205,9 @@ async function getUser() {
 		formData.append('stickerPath', sticker[0].src);
 		formData.append('posX', JSON.stringify(Math.floor(relativeX)));
 		formData.append('posY', JSON.stringify(Math.floor(relativeY)));
+		for (const [key, value] of formData.entries()) {
+			console.log(key, value);
+		}
         formData.append('timestamp', new Date().toISOString());
 		const response = await fetch("/sendImage", {
 			method: "POST",

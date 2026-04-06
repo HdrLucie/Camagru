@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"image"
 	"image/png"
-	"image/draw"
 	"image/color"
 	"io"
 	"mime/multipart"
@@ -15,7 +14,7 @@ import (
 	"time"
 	"image/jpeg"
 	"strings"
-
+	"golang.org/x/image/draw"
 )
 
 // Il faut créer un dossier qui contiendra toutes mes images, s'il n'existe pas.
@@ -82,16 +81,25 @@ func concatImage(imgPath string, stickerPath string, posX int, posY int) {
 	}
 
 	finImage := image.NewRGBA(img.Bounds())
-	fmt.Println(posX, posY)	
+	fmt.Println(img.Bounds());
 	draw.Draw(finImage, img.Bounds(), img, image.Point{0, 0}, draw.Src)
-	stickerPos := image.Point{posX * 7, posY * 5}
-	stickerRect := image.Rectangle{
-		Min: stickerPos,
-		Max: stickerPos.Add(sticker.Bounds().Size()),
-	}
-	
-	draw.Draw(finImage, stickerRect, sticker, image.Point{0, 0}, draw.Over)
+	stickerPos := image.Point{posX, posY}
+	stickerRect := sticker.Bounds();
 
+	w := float64(stickerRect.Dx());
+	h := float64(stickerRect.Dy());
+
+	h = h / w * 128;
+	w = 128;
+
+	stickerRect.Max.X = int(w);
+	stickerRect.Max.Y = int(h);
+
+	stickerRect.Max = stickerRect.Max.Add(stickerPos);
+	stickerRect.Min = stickerRect.Min.Add(stickerPos);
+
+	// draw.Draw(finImage, stickerRect, sticker, image.Point{0, 0}, draw.Over)
+	draw.BiLinear.Scale(finImage, stickerRect, sticker, sticker.Bounds(), draw.Over, nil)
 	out, err := os.Create(imgPath) 
 	if err != nil {
 		panic(err)
