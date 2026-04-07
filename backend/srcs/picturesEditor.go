@@ -74,7 +74,7 @@ func concatImage(imgPath string, stickerPath string, posX int, posY int) {
 	if err != nil {
 		panic(err)
 	}
-	
+
 	sticker, err := openAndDecode(stickerPath)
 	if err != nil {
 		panic(err)
@@ -89,12 +89,15 @@ func concatImage(imgPath string, stickerPath string, posX int, posY int) {
 	w := float64(stickerRect.Dx());
 	h := float64(stickerRect.Dy());
 
-	h = h / w * 128;
-	w = 128;
-
+	if w > h {
+		h = h / w * 128;
+		w = 128;
+	} else {
+		w = w / h * 128;
+		h = 128;
+	}
 	stickerRect.Max.X = int(w);
 	stickerRect.Max.Y = int(h);
-
 	stickerRect.Max = stickerRect.Max.Add(stickerPos);
 	stickerRect.Min = stickerRect.Min.Add(stickerPos);
 
@@ -105,7 +108,7 @@ func concatImage(imgPath string, stickerPath string, posX int, posY int) {
 		panic(err)
 	}
 	defer out.Close()
-	
+
 	ext := strings.ToLower(filepath.Ext(imgPath))
 	switch ext {
 	case ".jpg", ".jpeg":
@@ -115,7 +118,7 @@ func concatImage(imgPath string, stickerPath string, posX int, posY int) {
 	default:
 		err = png.Encode(out, finImage)
 	}
-	
+
 	if err != nil {
 		panic(err)
 	}
@@ -131,17 +134,17 @@ func (app *App) downloadImage(writer http.ResponseWriter, request *http.Request)
 		http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-    err := request.ParseMultipartForm(10 << 20)
-    if err != nil {
-        http.Error(writer, "Erreur parsing formulaire: "+err.Error(), http.StatusBadRequest)
-        return
-    }
-    file, fileHeader, err := request.FormFile("image")
-    if err != nil {
-        http.Error(writer, "Erreur récupération image: "+err.Error(), http.StatusBadRequest)
-        return
-    }
-    defer file.Close();
+	err := request.ParseMultipartForm(10 << 20)
+	if err != nil {
+		http.Error(writer, "Erreur parsing formulaire: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+	file, fileHeader, err := request.FormFile("image")
+	if err != nil {
+		http.Error(writer, "Erreur récupération image: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+	defer file.Close();
 	timeStamp := request.FormValue("timestamp")
 	userId := request.FormValue("id")
 	tmpStickerId := request.FormValue("imageId");
@@ -180,19 +183,19 @@ func (app *App) downloadImage(writer http.ResponseWriter, request *http.Request)
 	// 		return
 	// 	}
 	// }
-		
+
 	var imageId int
 	filepath, err := createImage(file, fileHeader, tmpId, uploadsDir);
 	stickerPath := app.getStickerPathById(stickerId);
 	concatImage(filepath, stickerPath, x, y);
 	err = app.dataBase.QueryRow("INSERT INTO images (image_path, userId, uploadTime) VALUES ($1, $2, $3) RETURNING id", 
-		filepath, tmpId, timeStamp).Scan(&imageId)
+	filepath, tmpId, timeStamp).Scan(&imageId)
 	if err != nil {
 		fmt.Println(Red + "Error : insert image in DB" + Reset)
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	
+
 	writer.Header().Set("Content-Type", "application/json")
 	fmt.Fprintf(writer, `{"success": true, "message": "Image sauvegardée", "imageId": %d, "path": "%s"}`, imageId, filepath)
 

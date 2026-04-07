@@ -36,7 +36,7 @@ html {
 
 
 #video {
-	height: 550px;
+	/* height: 550px; */
 	position: relative;
 	display: block;
 	width: 680px;
@@ -56,7 +56,7 @@ html {
 
 .camera {
 	width: 680px;
-	height: 550px;
+	/* height: 550px; */
 	display: inline-block;
 	position: relative;
 	overflow: hidden;
@@ -80,6 +80,7 @@ html {
 	position: relative;
 	margin-left: auto;
 	margin-right: auto;
+	margin-top: -50px;
 	height: 50px;
 	width: 50px;
 	border: solid 1px #D1C4E9;
@@ -88,7 +89,7 @@ html {
 	justify-content: center;
 	align-items: center;
 	text-align: center;
-	bottom: 60px;
+	bottom: 10px;
 	background-color: rgb(255 255 255 / 50%);
 	/*border: 1px solid rgb(255 255 255 / 70%);*/
 	box-shadow: 0px 0px 1px 2px rgb(0 0 0 / 20%);
@@ -113,9 +114,10 @@ html {
 
 .main-container {
 	display: flex;
+	align-items: center;
 	flex-direction: column;
 	gap: 20px;
-	/* max-height: 80vh; */
+	margin-top: 100px;
 	padding: 20px;
 }
 
