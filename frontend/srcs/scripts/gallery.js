@@ -38,7 +38,10 @@ async function displayGallery() {
     container.innerHTML = '';
     if (pictures && pictures.length > 0) {
         pictures.forEach(picture => {
+			const div = document.createElement('div');
+			div.className = 'gallery-item';
             const img = document.createElement('img');
+			img.className = 'gallery-item'
             img.src = picture.path;
 			img.alt = picture.path;
 			img.id = picture.id;
@@ -46,7 +49,8 @@ async function displayGallery() {
             img.addEventListener('click', function() {
                 window.location.href = `/photo/${picture.id}`;
             });
-            container.appendChild(img);
+			div.appendChild(img);
+            container.appendChild(div);
         });
     } else {
         const message = document.createElement('p');

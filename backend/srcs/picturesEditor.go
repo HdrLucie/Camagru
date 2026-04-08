@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"math"
 	"time"
 	"image/jpeg"
 	"strings"
@@ -49,6 +50,51 @@ func openAndDecode(filepath string) (image.Image, error) {
 		panic(err);
 	}
 	return img, nil;
+}
+
+func (app *App) resizeImg(writer http.ResponseWriter, request *http.Request) {
+	fmt.Println(Red + "Resize" + Reset);
+
+	if request.Method != http.MethodPost {
+		fmt.Println(Red + "Error : Method" + Reset)
+		http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	err := request.ParseMultipartForm(10 << 20)
+	if err != nil {
+		http.Error(writer, "Erreur parsing formulaire: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+	file, _, err := request.FormFile("image")
+	if err != nil {
+		http.Error(writer, "Erreur récupération image: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+	defer file.Close();
+	img, _, err := image.Decode(file)
+    if err != nil {
+        http.Error(writer, "Erreur décodage image: "+err.Error(), http.StatusBadRequest)
+        return
+    }
+	fmt.Println("Before resize :" , img.Bounds().Dx() , img.Bounds().Dy());
+    width := int(float64(img.Bounds().Dx()))
+    height := int(float64(img.Bounds().Dy()))
+	var newWidth, newHeight int
+	if width > 500 || height > 700 {
+		ratioW := 500.0 / float64(width)
+		ratioH := 700.0 / float64(height)
+		r := math.Min(ratioW, ratioH)
+		newWidth = int(float64(width) * r)
+		newHeight = int(float64(height) * r)
+		resized := image.NewRGBA(image.Rect(0, 0, newWidth, newHeight))
+		draw.BiLinear.Scale(resized, resized.Bounds(), img, img.Bounds(), draw.Over, nil)	
+		fmt.Println("After resize :" , resized.Bounds().Dx() , resized.Bounds().Dy());
+		writer.Header().Set("Content-Type", "image/jpeg")
+		jpeg.Encode(writer, resized, &jpeg.Options{Quality: 85})
+	}
+	writer.Header().Set("Content-Type", "image/jpeg")
+	jpeg.Encode(writer, img, &jpeg.Options{Quality: 85})
+
 }
 
 func createImage(file multipart.File, fileHeader *multipart.FileHeader, tmpId int, uploadsDir string) (string, error) {

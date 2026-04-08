@@ -36,15 +36,14 @@ html {
 }
 
 #uploadedImageContainer {
-    width: 680px;
+	margin-top: 100px;
 	position: relative;
-    height: 550px;
 }
 
 #uploadedPhoto {
-    width: 680px;
-    height: 550px;
-    object-fit: cover;
+	width: auto;
+	height: auto;
+    /* object-fit: cover; */
 }
 
 input::file-selector-button {

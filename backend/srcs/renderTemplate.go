@@ -155,7 +155,7 @@ func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/getComments/", app.authMiddleware(app.getComments));
 	router.HandleFunc("/deleteImg", app.authMiddleware(app.deleteImg));
 	router.HandleFunc("/getLikes/", app.authMiddleware(app.getLikes));
-
+	router.HandleFunc("/resizeImg", app.resizeImg);
 }
 
 func renderTemplate(router *http.ServeMux, app *App) {

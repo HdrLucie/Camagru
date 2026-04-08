@@ -189,15 +189,15 @@ async function getUser() {
 		const sticker = document.getElementsByClassName('placed-sticker');
 		if (!sticker || sticker.length === 0) {
 			alert('Veuillez placer un sticker sur votre photo avant d\'envoyer !');
-        return;
+			return;
 		}
 		const user = await getUser();
 		const imgBlob = await new Promise(resolve => {
-            canvas.toBlob(resolve, 'image/jpeg', 0.8); // Compression JPEG à 80%
-        });
+			canvas.toBlob(resolve, 'image/jpeg', 0.8); // Compression JPEG à 80%
+		});
 		const blobUrl = URL.createObjectURL(imgBlob);
 		const formData = new FormData();
-        formData.append('image', imgBlob, 'photo.jpg');
+		formData.append('image', imgBlob, 'photo.jpg');
 		formData.append('id', user.id);
 		formData.append('imageId', sticker[0].id);
 		const relativeX = sticker[0].dataset.relativeX;
@@ -208,7 +208,7 @@ async function getUser() {
 		for (const [key, value] of formData.entries()) {
 			console.log(key, value);
 		}
-        formData.append('timestamp', new Date().toISOString());
+		formData.append('timestamp', new Date().toISOString());
 		const response = await fetch("/sendImage", {
 			method: "POST",
 			headers: {
@@ -218,5 +218,8 @@ async function getUser() {
 		});
 
 	}
+
 		window.addEventListener("load", startup, false);
 })();
+
+
