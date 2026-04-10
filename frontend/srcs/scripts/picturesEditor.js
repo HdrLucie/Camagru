@@ -11,54 +11,54 @@ async function checkToken() {
 	}
 }
 
-window.addEventListener('load', function() {
-  document.querySelector('input[type="file"]').addEventListener('change', function() {
-      if (this.files && this.files[0]) {
-          var img = document.querySelector('img');
-          img.onload = () => {
-              URL.revokeObjectURL(img.src);  // no longer needed, free memory
-          }
-
-          img.src = URL.createObjectURL(this.files[0]); // set src to blob url
-      }
-  });
-});
+// window.addEventListener('load', function() {
+// 	document.querySelector('input[type="file"]').addEventListener('change', function() {
+// 		if (this.files && this.files[0]) {
+// 			var img = document.querySelector('img');
+// 			img.onload = () => {
+// 				URL.revokeObjectURL(img.src);  // no longer needed, free memory
+// 			}
+//
+// 			img.src = URL.createObjectURL(this.files[0]); // set src to blob url
+// 		}
+// 	});
+// });
 
 async function getPictures() {
-    const token = localStorage.getItem('token');
-    try {
-        const response = await fetch("/getPictures", {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-        });
-        const pictures = await response.json();
-        return pictures;
-    } catch (error) {
-        console.error("Erreur:", error);
-        return null;
-    }
+	const token = localStorage.getItem('token');
+	try {
+		const response = await fetch("/getPictures", {
+			method: "GET",
+			headers: {
+				"Authorization": `Bearer ${token}`,
+				"Content-Type": "application/json",
+			},
+		});
+		const pictures = await response.json();
+		return pictures;
+	} catch (error) {
+		console.error("Erreur:", error);
+		return null;
+	}
 }
 
 async function displayGallery() {
-    const pictures = await getPictures();
-    const container = document.getElementById('galleryContainer');
-    container.innerHTML = '';
-    if (pictures && pictures.length > 0) {
-        pictures.forEach(picture => {
-            const img = document.createElement('img');
-            img.src = "/pictures/" + sticker.Path;
+	const pictures = await getPictures();
+	const container = document.getElementById('galleryContainer');
+	container.innerHTML = '';
+	if (pictures && pictures.length > 0) {
+		pictures.forEach(picture => {
+			const img = document.createElement('img');
+			img.src = "/pictures/" + sticker.Path;
 			img.alt = sticker.Path;
 			img.id = sticker.id;
-            container.appendChild(img);
-        });
-    } else {
-        const message = document.createElement('p');
-        message.textContent = 'No sticker available';
-        container.appendChild(message);
-    }
+			container.appendChild(img);
+		});
+	} else {
+		const message = document.createElement('p');
+		message.textContent = 'No sticker available';
+		container.appendChild(message);
+	}
 }
 
 async function getUser() {
@@ -86,7 +86,6 @@ async function getUser() {
 	let streaming = false;
 	let video = null;
 	let canvas = null;
-	let photo = null;
 	let startbutton = null;
 	let sendButton = null;
 
@@ -108,7 +107,6 @@ async function getUser() {
 		}
 		video = document.getElementById("video");
 		canvas = document.getElementById("canvas");
-		photo = document.getElementById("photo");
 		startbutton = document.getElementById("startbutton");
 		sendButton = document.getElementById("sendButton");
 
@@ -157,31 +155,28 @@ async function getUser() {
 			},
 			false
 		);
-		clearphoto();
+		// clearphoto();
 	}
 
-		function clearphoto() {
-			const context = canvas.getContext("2d");
-			context.fillStyle = "#AAA";
-			context.fillRect(0, 0, canvas.width, canvas.height);
+	function clearphoto() {
+		const context = canvas.getContext("2d");
+		context.fillStyle = "#AAA";
+		context.fillRect(0, 0, canvas.width, canvas.height);
+
+		const data = canvas.toDataURL("image/png");
+	}
+
+	function takepicture() {
+		const context = canvas.getContext("2d");
+		if (width && height) {
+			canvas.width = width;
+			canvas.height = height;
+			context.drawImage(video, 0, 0, width, height);
 
 			const data = canvas.toDataURL("image/png");
-			photo.setAttribute("src", data);
+			// photo.setAttribute("src", data);
 		}
-
-		function takepicture() {
-			const context = canvas.getContext("2d");
-			if (width && height) {
-				canvas.width = width;
-				canvas.height = height;
-				context.drawImage(video, 0, 0, width, height);
-
-				const data = canvas.toDataURL("image/png");
-				photo.setAttribute("src", data);
-			} else {
-				clearphoto();
-			}
-		}
+	}
 
 	async function sendPictures() {
 		var path;
@@ -219,7 +214,7 @@ async function getUser() {
 
 	}
 
-		window.addEventListener("load", startup, false);
+	window.addEventListener("load", startup, false);
 })();
 
 
