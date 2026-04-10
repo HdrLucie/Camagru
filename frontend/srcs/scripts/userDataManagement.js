@@ -67,7 +67,7 @@ async function getModifications() {
 	var tmpUser = document.getElementById("Username")
 	var tmpEmail = document.getElementById("Email")
 	var notifyState = checkNotifyState();
-	var token = checkToken();	
+	var token = checkToken();
 	var login = tmpUser.value
 	let email = tmpEmail.value;
 	var avatar = document.getElementById("Avatar");

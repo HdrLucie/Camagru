@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    displayAvatars();
+    // displayAvatars();
 });
 
 async function getAvatars() {

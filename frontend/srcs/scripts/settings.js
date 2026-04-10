@@ -36,6 +36,7 @@ function redirectionPage(path) {
 async function loadUserData() {
     const userData = await getUser();
     if (!userData) return;
+	console.log(userData);
 	const avatarDiv = document.getElementById('avatarId');
 	if (avatarDiv) {
         const img = document.createElement('img');
@@ -55,48 +56,8 @@ async function loadUserData() {
 	if (usernameInput && userData.username) {
 		usernameInput.placeholder = userData.username;
 	}
+	if (userData.notify == false) {
+		document.getElementById('checkedBox').checked = true;
+	}
 }
 
-// document.addEventListener('DOMContentLoaded', function() {
-//     const photoButtons = document.querySelectorAll('[data-tab="photos"]');
-//     const settingsButtons = document.querySelectorAll('[data-tab="settings"]');
-//     const stickersButtons = document.querySelectorAll('[data-tab="stickers"]');
-//     const image_input = document.getElementById( 'image_input' );
-//     const photosList = document.getElementById('photos-list');
-//     const settings = document.getElementById('settings');
-//     const stickers = document.getElementById('stickers');
-//     function showContent(contentToShow) {
-//         [photosList, settings, stickers].forEach(content => {
-//             if (content) content.classList.remove('active');
-//         });
-//         if (contentToShow) contentToShow.classList.add('active');
-//     }
-//     photoButtons.forEach(button => {
-//         button.addEventListener('click', function(e) {
-//             e.preventDefault();
-//             showContent(photosList);
-//         });
-//     });
-//     settingsButtons.forEach(button => {
-//         button.addEventListener('click', function(e) {
-//             e.preventDefault();
-//             showContent(settings);
-//         });
-//     });
-//     stickersButtons.forEach(button => {
-//         button.addEventListener('click', function(e) {
-//             e.preventDefault();
-//             showContent(stickers);
-//         });
-//     });
-//     image_input.addEventListener('click', function() {
-// 	  const file_reader = new FileReader();
-// 	  file_reader.addEventListener("load", () => {
-// 	    const uploaded_image = file_reader.result;
-// 	    document.querySelector("#display_image").style.backgroundImage = `url(${uploaded_image})`;
-// 	  });
-// 	  file_reader.readAsDataURL(this.files[0]);
-// 	});
-//
-//     showContent(photosList);
-// });
