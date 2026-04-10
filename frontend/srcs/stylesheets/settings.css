@@ -1,7 +1,4 @@
 .settings-container {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	grid-template-rows: auto 1fr;
 	width:100%;
 	max-width: 1000px;
 	height: 650px;
