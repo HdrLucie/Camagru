@@ -164,8 +164,8 @@ btn:hover {
 	width: 100%;
 	max-width: 300px;
 	height: 650px;
-	background-color: #000;
-	color: #eee;
+	background-color: #F7F9F7;
+	color: black;
 	position: relative;
 	margin: 50px;
 	/* left: -650px; */
@@ -181,7 +181,7 @@ header {
 	position: relative;
 	width: 100%;
 	height: 70px;
-	background-color: #d36e9c;
+	background-color: #b23a48;
 }
 
 header::after {
@@ -232,7 +232,7 @@ footer {
 	position: relative;
 	height: 60px;
 	top: 153px;
-	background-color: #B61A53;
+	background-color:  #C42847;
 	text-align: center;
 
 	p {
@@ -296,7 +296,7 @@ h3 {
 		margin-left: -15px;
 		width: 30px;
 		height: 1px;
-		background: #fff;
+		background: black;
 	}
 }
 
@@ -304,7 +304,7 @@ h3 {
 	padding: 0 1rem 2rem;
 	text-align: center;
 	line-height: 1.5;
-	color: #e2e2e2;
+	color: black;
 }
 /* MAIN SECTION */
 

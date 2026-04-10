@@ -14,16 +14,16 @@ body {
 	align-items: center;
 	min-height: 100vh;
 	font-family: 'Jost', sans-serif;
-	background: #111;
+	background: white;
 }
 
 .main {
 	width: 350px;
 	height: 500px;
-	background: #000;
+	background: #F7F9F7;
 	overflow: hidden;
 	border-radius: 10px;
-	box-shadow: 5px 20px 50px #000;
+	box-shadow: 5px 20px 50px #F7F9F7;
 }
 
 #chk {
@@ -37,7 +37,7 @@ body {
 }
 
 label {
-	color: #fff;
+	color: #C42847;
 	font-size: 2.3em;
 	justify-content: center;
 	display: flex;
@@ -67,7 +67,7 @@ input {
 	justify-content: center;
 	display: block;
 	color: #fff;
-	background: #d36e9c;
+	background: #C42847;
 	font-size: 1em;
 	font-weight: bold;
 	margin-top: 30px;
@@ -79,19 +79,19 @@ input {
 }
 
 .btn:hover {
-	background: #B61A53;
+	background: #b23a48;
 }
 
 .login {
 	height: 460px;
-	background: #eee;
+	background: #de3c4b;
 	border-radius: 60% / 10%;
 	transform: translateY(-180px);
 	transition: 0.8s ease-in-out;
 }
 
 .login label {
-	color: #DF3073;
+	color: white;
 	transform: scale(0.6);
 }
 
