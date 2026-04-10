@@ -11,6 +11,12 @@ import (
 type	cInfo struct {
 	PId	int	`json:"pId"`
 }
+type cResponse struct {
+	Username	string	`json:"Username"`
+	Comment		string	`json:"Comment"`
+	PId			int		`json:"pId"`
+
+}
 
 // ! ||--------------------------------------------------------------------------------||
 // ! ||                                  USER GETTERS                                  ||
@@ -168,17 +174,23 @@ func (app *App) getComments(writer http.ResponseWriter, request *http.Request) {
 	query := `SELECT comment, post_id, user_id FROM comments WHERE post_id = $1`;
 	rows, _ := app.dataBase.Query(query, pId);
 	defer rows.Close()
-    var comments []Comments
+	var response []cResponse
     for rows.Next() {
         var c Comments
-        err = rows.Scan(&c.Comment, &c.PId, &c.Username)
+		var r cResponse
+        err = rows.Scan(&c.Comment, &c.PId, &c.Username);
+		l, _ := strconv.Atoi(c.Username);
+		u, _ := app.getUserById(l);
+		r.Username = u.Username;
+		r.Comment = c.Comment;
+		r.PId = c.PId;
         if err != nil {
             fmt.Println(err)
             continue
         }
-        comments = append(comments, c)
+        response = append(response, r)
     }
-    json.NewEncoder(writer).Encode(comments)
+    json.NewEncoder(writer).Encode(response)
 }
 
 func (app *App) getLikes(writer http.ResponseWriter, request *http.Request) {

@@ -60,7 +60,6 @@ async function getComments() {
 
 async function displayComments() {
 	comments = await getComments();
-
     if (!comments) return;
 	listComments = document.getElementById("commentList");
 
