@@ -15,12 +15,12 @@ function redirectionPage(path) {
 }
 
 async function getPictures() {
+	const page = window.location.pathname.split("/").pop();
     const token = localStorage.getItem('token');
     try {
-        const response = await fetch("/getPictures", {
+        const response = await fetch(`/getPictures/${page}`, {
             method: "GET",
             headers: {
-                // "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
         });
@@ -59,3 +59,17 @@ async function displayGallery() {
     }
 }
 
+function prevPage() {
+	const next = document.getElementById('prevBtn');
+	const page = parseInt(window.location.pathname.split("/").pop());
+	
+	if (page == 1) return;
+	window.location.href = `/gallery/${page - 1}`;
+}
+
+function nextPage() {
+	const next = document.getElementById('nextBtn');
+	const page = parseInt(window.location.pathname.split("/").pop());
+	
+	window.location.href = `/gallery/${page + 1}`;
+}

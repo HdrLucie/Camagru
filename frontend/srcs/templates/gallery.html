@@ -2,22 +2,24 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Camagru</title>
-  <script src="https://kit.fontawesome.com/76ec232e00.js" crossorigin="anonymous"></script>
-  <link rel="stylesheet" type="text/css" href="/styles/sticky-bar.css" />
-  <link rel="stylesheet" type="text/css" href="/styles/gallery.css" />
-  <link rel="icon" href="/assets/favicon.svg" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<title>Camagru</title>
+<script src="https://kit.fontawesome.com/76ec232e00.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="/styles/sticky-bar.css" />
+<link rel="stylesheet" type="text/css" href="/styles/gallery.css" />
+<link rel="icon" href="/assets/favicon.svg" />
 </head>
 
 <body>
-	{{ template "navbar" . }}
-  <div class="gallery-container" id="galleryContainer">
-  </div>
+{{ template "navbar" . }}
+<div class="gallery-container" id="galleryContainer"></div>
+<div class="nav-controls">
+<button class="button-nav" id="prevBtn" onclick="prevPage()">Previous</button>
+<button class="button-nav" id="nextBtn" onclick="nextPage()">Next</button>
+</div>
 </body>
-<!-- <script src="/scripts/menu.js"></script> -->
 <script src="/scripts/logout.js"></script>
 <script src="/scripts/gallery.js"></script>
 

@@ -276,6 +276,38 @@ func (app *App) getAvatars(writer http.ResponseWriter, request *http.Request) {
 // ! ||                                 PICTURES GETTER                                ||
 // ! ||--------------------------------------------------------------------------------||
 
+type page struct {
+	pageNb	int;
+	pictures	[]Pictures
+}
+
+
+
+func (app *App) getPage(writer http.ResponseWriter, request *http.Request) {
+    fmt.Println(Red + "Get page" + Reset);
+	if request.Method != http.MethodGet {
+        http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
+        return
+    }
+	fmt.Println(request.URL.Path)
+	path := strings.TrimPrefix(request.URL.Path, "/getPictures/")
+    page, err := strconv.Atoi(path)
+	fmt.Println(page);	
+    if err != nil {
+		fmt.Println("Erreur")
+        http.Error(writer, "Invalid ID", http.StatusBadRequest)
+        return
+    }
+	pictures, err := app.fetchAllPicturesFromDB((page - 1) * 6)
+    if err != nil {
+        fmt.Println(Red + "Error fetching pictures: " + err.Error() + Reset)
+        http.Error(writer, "Error fetching pictures", http.StatusInternalServerError)
+        return
+    }
+	fmt.Println(pictures)
+    json.NewEncoder(writer).Encode(pictures)
+}
+
 func (app *App) getPicture(writer http.ResponseWriter, request *http.Request) {
 
 	var picture Pictures;
@@ -323,40 +355,41 @@ func (app *App) getPictureById(id int) (*Pictures, error) {
 // ! ||--------------------------------------------------------------------------------||
 // ! ||                            HELPER FUNCTIONS - DB QUERIES                       ||
 // ! ||--------------------------------------------------------------------------------||
+//
+// func (app *App) getAllPictures(writer http.ResponseWriter, request *http.Request) {
+//     writer.Header().Set("Content-Type", "application/json")
+//     if request.Method != http.MethodGet {
+//         http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
+//         return
+//     }
+//     pictures, err := app.fetchAllPicturesFromDB()
+//     if err != nil {
+//         fmt.Println(Red + "Error fetching pictures: " + err.Error() + Reset)
+//         http.Error(writer, "Error fetching pictures", http.StatusInternalServerError)
+//         return
+//     }
+//     json.NewEncoder(writer).Encode(pictures)
+// }
 
-func (app *App) getAllPictures(writer http.ResponseWriter, request *http.Request) {
-    writer.Header().Set("Content-Type", "application/json")
-    if request.Method != http.MethodGet {
-        http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
-        return
-    }
-    pictures, err := app.fetchAllPicturesFromDB()
-    if err != nil {
-        fmt.Println(Red + "Error fetching pictures: " + err.Error() + Reset)
-        http.Error(writer, "Error fetching pictures", http.StatusInternalServerError)
-        return
-    }
-    json.NewEncoder(writer).Encode(pictures)
-}
-
-func (app *App) fetchAllPicturesFromDB() ([]Pictures, error) {
+func (app *App) fetchAllPicturesFromDB(i int) ([]Pictures, error) {
     var pictures []Pictures
-    
-    query := "SELECT id, image_path, userId, uploadTime FROM images ORDER BY uploadTime DESC"
-    rows, err := app.dataBase.Query(query)
+
+	// gg tu chopes les 5 dernieres, maintenant va falloir utiliser OFFSET
+	// pour ajuster en fonction de la page
+    query := "SELECT id, image_path, userId, uploadTime FROM images ORDER BY uploadTime DESC LIMIT 6 OFFSET $1";
+    rows, err := app.dataBase.Query(query, i)
     if err != nil {
         return nil, err
     }
     defer rows.Close()
-    
     for rows.Next() {
         var pic Pictures
         err := rows.Scan(&pic.Id, &pic.Path, &pic.userId, &pic.uploadTime)
+		pic.Path = "/" + pic.Path;
         if err != nil {
             return nil, err
         }
         pictures = append(pictures, pic)
     }
-    
     return pictures, nil
 }

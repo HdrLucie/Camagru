@@ -211,6 +211,7 @@ async function getUser() {
 			},
 			body: formData
 		});
+		window.location.href = `/gallery/1`;
 
 	}
 
