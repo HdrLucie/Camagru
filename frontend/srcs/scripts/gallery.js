@@ -15,7 +15,9 @@ function redirectionPage(path) {
 }
 
 async function getPictures() {
-	const page = window.location.pathname.split("/").pop();
+	var page = window.location.pathname.split("/").pop();
+	if (!page)
+		window.location.href = window.location.pathname + "1";
     const token = localStorage.getItem('token');
     try {
         const response = await fetch(`/getPictures/${page}`, {

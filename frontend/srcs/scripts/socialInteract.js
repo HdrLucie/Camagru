@@ -137,10 +137,10 @@ document.getElementById("deleteButton").onclick = async function () {
 		})
 	});
 	if (response.ok) {
-		window.location.href = "/gallery";
+		window.location.href = "/gallery/1";
 	} else if (response.status === 403) {
 		const data = await response.json();
-		alert(data.error); // "You are not allowed to delete this image"
+		alert(data.error);
 	}
 }
 

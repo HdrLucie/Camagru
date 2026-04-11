@@ -2,6 +2,8 @@
     width:100%;
 	height: 100%;
     border:1px solid #bbb;
+	display: flex;
+	flex-direction: column;
 }
 .titleBox {
     background-color:#fdfdfd;
@@ -16,6 +18,8 @@
 .commentBox {
     padding:10px;
     border-top:1px dotted #bbb;
+	min-height: 0;
+	flex-grow: 1;
 }
 .commentBox .form-group:first-child, .actionBox .form-group:first-child {
     width:80%;
@@ -32,7 +36,7 @@
 .commentList {
     padding:0;
     list-style:none;
-    height:550px;
+    height:100%;
     overflow:auto;
 }
 .commentList li {
@@ -65,12 +69,11 @@
     padding:10px;
 }
 
-
 .username {
-	color: white;
+	/* color: white; */
 }
 
 .comment-item {
-	color: white;
+	/* color: white; */
 }
 /* LIKES */

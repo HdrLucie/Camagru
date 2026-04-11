@@ -10,9 +10,9 @@ body {
 	position: relative;
 	margin: 0px;
 	padding: 0px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	/* display: flex; */
+	/* justify-content: center; */
+	/* align-items: center; */
 	min-height: 100vh;
 	font-family: 'Jost', sans-serif;
 	background: white;
