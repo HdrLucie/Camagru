@@ -277,35 +277,37 @@ func (app *App) getAvatars(writer http.ResponseWriter, request *http.Request) {
 // ! ||--------------------------------------------------------------------------------||
 
 type page struct {
-	pageNb	int;
-	pictures	[]Pictures
+	Last     bool       `json:"last"`
+    Pictures []Pictures `json:"pictures"`
 }
 
 
-
 func (app *App) getPage(writer http.ResponseWriter, request *http.Request) {
-    fmt.Println(Red + "Get page" + Reset);
+    var r	page;
+	fmt.Println(Red + "Get page" + Reset);
 	if request.Method != http.MethodGet {
         http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
         return
     }
-	fmt.Println(request.URL.Path)
 	path := strings.TrimPrefix(request.URL.Path, "/getPictures/")
     page, err := strconv.Atoi(path)
-	fmt.Println(page);	
     if err != nil {
 		fmt.Println("Erreur")
         http.Error(writer, "Invalid ID", http.StatusBadRequest)
         return
     }
-	pictures, err := app.fetchAllPicturesFromDB((page - 1) * 6)
+	pictures, err, count := app.fetchAllPicturesFromDB((page - 1) * 6)
     if err != nil {
         fmt.Println(Red + "Error fetching pictures: " + err.Error() + Reset)
         http.Error(writer, "Error fetching pictures", http.StatusInternalServerError)
         return
     }
-	fmt.Println(pictures)
-    json.NewEncoder(writer).Encode(pictures)
+	id := ((page - 1) * 6) + 5;
+	if (id >= count) {
+		r.Last = true;
+	}
+	r.Pictures = pictures;
+    json.NewEncoder(writer).Encode(r)
 }
 
 func (app *App) getPicture(writer http.ResponseWriter, request *http.Request) {
@@ -324,7 +326,7 @@ func (app *App) getPicture(writer http.ResponseWriter, request *http.Request) {
     }
 	query := "SELECT image_path, id, userId, uploadTime, like_count, comment_count FROM images WHERE id = $1"
 	row := app.dataBase.QueryRow(query, id)
-	err = row.Scan(&picture.Path, &picture.Id, &picture.userId, &picture.uploadTime, &picture.likes, &picture.comments)
+	err = row.Scan(&picture.Path, &picture.Id, &picture.UserId, &picture.UploadTime, &picture.Likes, &picture.Comments)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -339,10 +341,10 @@ func (app *App) getPictureById(id int) (*Pictures, error) {
 	err := app.dataBase.QueryRow(query, id).Scan(
 		&picture.Path,
 		&picture.Id,
-		&picture.userId,
-		&picture.uploadTime,
-		&picture.likes,
-		&picture.comments,
+		&picture.UserId,
+		&picture.UploadTime,
+		&picture.Likes,
+		&picture.Comments,
 			
 	)
 	if err != nil {
@@ -356,40 +358,26 @@ func (app *App) getPictureById(id int) (*Pictures, error) {
 // ! ||                            HELPER FUNCTIONS - DB QUERIES                       ||
 // ! ||--------------------------------------------------------------------------------||
 //
-// func (app *App) getAllPictures(writer http.ResponseWriter, request *http.Request) {
-//     writer.Header().Set("Content-Type", "application/json")
-//     if request.Method != http.MethodGet {
-//         http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
-//         return
-//     }
-//     pictures, err := app.fetchAllPicturesFromDB()
-//     if err != nil {
-//         fmt.Println(Red + "Error fetching pictures: " + err.Error() + Reset)
-//         http.Error(writer, "Error fetching pictures", http.StatusInternalServerError)
-//         return
-//     }
-//     json.NewEncoder(writer).Encode(pictures)
-// }
 
-func (app *App) fetchAllPicturesFromDB(i int) ([]Pictures, error) {
+func (app *App) fetchAllPicturesFromDB(i int) ([]Pictures, error, int) {
     var pictures []Pictures
-
-	// gg tu chopes les 5 dernieres, maintenant va falloir utiliser OFFSET
-	// pour ajuster en fonction de la page
-    query := "SELECT id, image_path, userId, uploadTime FROM images ORDER BY uploadTime DESC LIMIT 6 OFFSET $1";
-    rows, err := app.dataBase.Query(query, i)
+	count := 0;
+	query := "SELECT COUNT(*) FROM images";
+	app.dataBase.QueryRow(query).Scan(&count);
+    query = "SELECT id, image_path, userId, uploadTime, like_count, comment_count FROM images ORDER BY uploadTime DESC LIMIT 6 OFFSET $1";
+	rows, err := app.dataBase.Query(query, i)
     if err != nil {
-        return nil, err
+        return nil, err, 0
     }
     defer rows.Close()
     for rows.Next() {
         var pic Pictures
-        err := rows.Scan(&pic.Id, &pic.Path, &pic.userId, &pic.uploadTime)
+        err := rows.Scan(&pic.Id, &pic.Path, &pic.UserId, &pic.UploadTime, &pic.Likes, &pic.Comments)
 		pic.Path = "/" + pic.Path;
         if err != nil {
-            return nil, err
+            return nil, err, 0
         }
         pictures = append(pictures, pic)
     }
-    return pictures, nil
+    return pictures, nil, count
 }

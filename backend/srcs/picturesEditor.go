@@ -127,7 +127,7 @@ func concatImage(imgPath string, stickerPath string, posX int, posY int) {
 	}
 
 	finImage := image.NewRGBA(img.Bounds())
-	fmt.Println(img.Bounds());
+	fmt.Println("Size :", img.Bounds());
 	draw.Draw(finImage, img.Bounds(), img, image.Point{0, 0}, draw.Src)
 	stickerPos := image.Point{posX, posY}
 	stickerRect := sticker.Bounds();

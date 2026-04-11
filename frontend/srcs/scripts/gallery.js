@@ -25,6 +25,7 @@ async function getPictures() {
             },
         });
         const pictures = await response.json();
+		console.log(pictures);
         return pictures;
     } catch (error) {
         console.error("Erreur:", error);
@@ -33,23 +34,66 @@ async function getPictures() {
 }
 
 async function displayGallery() {
-    const pictures = await getPictures();
+	const data = await getPictures();
     const container = document.getElementById('galleryContainer');
     container.innerHTML = '';
+
+    const pictures = data?.pictures;
+    const isLast = data?.last;
     if (pictures && pictures.length > 0) {
         pictures.forEach(picture => {
-			const div = document.createElement('div');
-			div.className = 'gallery-item';
+            const div = document.createElement('div');
+            div.className = 'gallery-item';
             const img = document.createElement('img');
-			img.className = 'gallery-item'
+            img.className = 'gallery-image';
             img.src = picture.path;
-			img.alt = picture.path;
-			img.id = picture.id;
-			img.style.cursor = 'pointer';
-            img.addEventListener('click', function() {
+            img.alt = picture.path;
+            img.id = picture.id;
+            img.style.cursor = 'pointer';
+            div.addEventListener('click', function() {
                 window.location.href = `/photo/${picture.id}`;
             });
-			div.appendChild(img);
+
+            const galleryItemInfo = document.createElement('div');
+            galleryItemInfo.className = 'gallery-item-info';
+
+            const ul = document.createElement('ul');
+
+            const liLikes = document.createElement('li');
+            liLikes.className = 'gallery-item-likes';
+
+            const spanLikes = document.createElement('span');
+            spanLikes.className = 'visually-hidden';
+            spanLikes.textContent = 'Likes:';
+
+            const iHeart = document.createElement('i');
+            iHeart.className = 'fas fa-heart';
+            iHeart.setAttribute('aria-hidden', 'true');
+
+            liLikes.appendChild(spanLikes);
+            liLikes.appendChild(iHeart);
+            liLikes.append(` ${picture.likes ?? 0}`);
+
+            const liComments = document.createElement('li');
+            liComments.className = 'gallery-item-comments';
+
+            const spanComments = document.createElement('span');
+            spanComments.className = 'visually-hidden';
+            spanComments.textContent = 'Comments:';
+
+            const iComment = document.createElement('i');
+            iComment.className = 'fas fa-comment';
+            iComment.setAttribute('aria-hidden', 'true');
+
+            liComments.appendChild(spanComments);
+            liComments.appendChild(iComment);
+            liComments.append(` ${picture.comments ?? 0}`);
+
+            ul.appendChild(liLikes);
+            ul.appendChild(liComments);
+            galleryItemInfo.appendChild(ul);
+            div.appendChild(img);
+            div.appendChild(galleryItemInfo);
             container.appendChild(div);
         });
     } else {
@@ -67,9 +111,12 @@ function prevPage() {
 	window.location.href = `/gallery/${page - 1}`;
 }
 
-function nextPage() {
+async function nextPage() {
+	const data = await getPictures();
+	const isLast = data?.last;
 	const next = document.getElementById('nextBtn');
 	const page = parseInt(window.location.pathname.split("/").pop());
-	
+	if (isLast == true)
+		return ;
 	window.location.href = `/gallery/${page + 1}`;
 }

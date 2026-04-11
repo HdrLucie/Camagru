@@ -55,10 +55,10 @@ type Stickers struct {
 type Pictures struct {
 	Path		string `json:"path"`
 	Id			int `json:"id"`
-	userId		int `json:"userId"`
-	uploadTime	string `json:"uploadTime"`
-	likes		int `json:"likes"`
-	comments	int `json:"comments"`
+	UserId		int `json:"userId"`
+	UploadTime	string `json:"uploadTime"`
+	Likes		int `json:"likes"`
+	Comments	int `json:"comments"`
 }
 
 type TemplateData struct {

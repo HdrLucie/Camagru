@@ -7,17 +7,8 @@ window.addEventListener('load', function() {
 				alert('Only JPG, PNG or GIF format');
 				return;
 			}
-			const formData = new FormData();
-			formData.append('image', file);
-			formData.append('timestamp', new Date().toISOString());
-
-			const response = await fetch("/resizeImg", {
-				method: "POST",
-				body: formData
-			});
-			const blob = await response.blob();
 			const resizeImg = document.getElementById('uploadedPhoto');
-			resizeImg.src = URL.createObjectURL(blob);
+			resizeImg.src = URL.createObjectURL(file);
 		}
 	});
 });
@@ -39,6 +30,7 @@ async function getUser() {
 		return null;
 	}
 }
+
 
 async function sendImg() {
     const token = localStorage.getItem('token');
