@@ -2,10 +2,8 @@
 	top:0;
 	justify-content: center;
 	width:100%;
-	/* border-right: 1px solid rgba(255, 255, 255, 0.2); */
-    background-color: #C42847;
+    background-color: #eba1b4;
     list-style-type: none;
-    /* font: 500 20px/24px "Montserrat", Arial, sans-serif; */
 	font-size: 10rem;
     position: fixed;
 	display: none;
@@ -55,7 +53,7 @@
 }
 
 .nav__link:hover {
-    color: #de3c4b;
+    color: #e73c7e;
 }
 
 @media (min-width: 880px) {
@@ -80,7 +78,7 @@
 	}
 
 	.nav__item:hover {
-		background-color: #a62841;
+		background-color: #e73c7e;
 
 	}
 

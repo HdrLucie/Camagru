@@ -1,208 +1,38 @@
+<!DOCTYPE html>
+
 <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"> -->
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("welcome").onclick = async function () {
-      const token = localStorage.getItem('token');
-      if (!token){
-        window.location.href = '/connection'
-      } else {
-        window.location.href ='/gallery'
-      }
-    }
-  });
+	document.addEventListener("DOMContentLoaded", function () {
+		document.getElementById("welcome").onclick = async function () {
+			const token = localStorage.getItem('token');
+			if (!token){
+				window.location.href = '/connection'
+			} else {
+				window.location.href ='/gallery'
+			}
+		}
+	});
 </script>
-
-<!DOCTYPE html>
 
 <html lang="en">
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Camagru</title>
-  <link rel="stylesheet" href="../styles/presentationPage.scss" type="css/text" />
-</head>
-
-<div class="container">
-  <h1>
-    <button id="welcome" class="animation">
-      <div class="animation-left"><span>Camagru</span></div>
-      <div class="animation-right"><span>Camagru</span></div>
-    </button>
-  </h1>
-</div>
-
-
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Camagru</title>
+		<link rel="stylesheet" type="text/css" href="/styles/presentation-page.css" />
+	</head>
+	<body>
+	<div class="container">
+		<h1>
+			<button id="welcome" class="btn-camagru">
+				CAMAGRU
+			</button>
+		</h1>
+	</div>
+	</body>
 </html>
 
-<style>
-  @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap");
 
-  ::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-    background: transparent;
-  }
-
-  body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: #060708;
-    background-image: url("../assets/cameras.jpg");
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background-repeat: no-repeat;
-    background-size: 100%;
-  }
-
-  .container {
-    display: flex;
-    position: absolute;
-    top : 5%;
-    flex-direction: column;
-    height: 100vh;
-    width: 100vw;
-  }
-
-  h1 {
-    text-align: center;
-    text-transform: uppercase;
-    font-family: Helvetica, Arial, sans-serif;
-    font-size: 500%;
-    color: rgba(190, 61, 119);
-    margin: 0 auto;
-
-    @media screen and (max-width: 800px) {
-      font-size: 30px;
-    }
-  }
-
-  button,
-  input[type="submit"],
-  input[type="reset"] {
-    background: none;
-    color: inherit;
-    border: none;
-    padding: 0;
-    font: inherit;
-    cursor: pointer;
-    outline: inherit;
-  }
-
-  .animation {
-    position: relative;
-    width: 100%;
-
-    div {
-      overflow: hidden;
-      width: 50%;
-      height: 100%;
-      transform: skewX(-20deg);
-
-      &::before {
-        content: "";
-        position: absolute;
-        width: 0%;
-        height: 4px;
-        background: #fff;
-      }
-    }
-
-    span {
-      padding: 0 10px;
-    }
-  }
-
-  .animation-left {
-
-    &::before {
-      left: 0;
-      animation: widthLineLeft 1.2s 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.10) forwards;
-    }
-
-    span {
-      display: block;
-      animation: slideLeft 1.2s 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.10) forwards;
-      transform: translateX(200px) skewX(20deg);
-    }
-  }
-
-  .animation-right {
-    position: absolute;
-    right: 0;
-    top: 0;
-
-    &:before {
-      bottom: 0;
-      right: 0;
-      animation: widthLineRight 1.2s 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.10) forwards;
-    }
-
-    span {
-      position: absolute;
-      width: 100%;
-      left: -100%;
-      transform: translateX(-200px) skewX(20deg);
-      animation: slideRight 1.2s 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.10) forwards;
-    }
-  }
-
-  @keyframes slideLeft {
-    from {
-      transform: translateX(200px) skewX(20deg);
-    }
-
-    to {
-      transform: translateX(0%) skewX(20deg);
-    }
-  }
-
-  @keyframes slideRight {
-    from {
-      transform: translateX(-200px) skewX(20deg);
-    }
-
-    to {
-      transform: translateX(0%) skewX(20deg);
-    }
-  }
-
-  @keyframes widthLineLeft {
-    0% {
-      width: 0%;
-      left: 0%;
-    }
-
-    50% {
-      width: 100%;
-      left: 0%;
-    }
-
-    100% {
-      width: 0%;
-      left: 100%;
-    }
-  }
-
-  @keyframes widthLineRight {
-    0% {
-      width: 0%;
-      right: 0%;
-    }
-
-    50% {
-      width: 100%;
-      right: 0%;
-    }
-
-    100% {
-      width: 0%;
-      right: 100%;
-    }
-  }
-</style>
