@@ -62,7 +62,7 @@
     .nav {
         padding: 0;
 		height:90px;
-        position: fixed;
+        position: sticky;
         display: block;
         transform: translateX(0);
         opacity: 1;
