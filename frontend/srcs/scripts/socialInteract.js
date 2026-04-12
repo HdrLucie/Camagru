@@ -29,9 +29,9 @@ async function getLikes() {
 
         const heart = document.getElementById('sendLikes');
         if (hasLiked) {
-            heart.classList.add('liked');
+            heart.classList.add('is-toggled');
         } else {
-            heart.classList.remove('liked');
+            heart.classList.remove('is-toggled');
         }
         return likes;
     } catch (error) {
@@ -143,6 +143,15 @@ document.getElementById("deleteButton").onclick = async function () {
 		alert(data.error);
 	}
 }
+
+const btn = document.querySelector('.js-button')
+btn.addEventListener('click', (e) => {
+	e.preventDefault()
+	btn.classList.add('is-active')
+	btn.classList.toggle('is-toggled')
+	btn.blur()
+	setTimeout(() => btn.classList.remove('is-active'), 400)
+})
 
 document.getElementById('sendLikes').addEventListener('click', function() {
 	this.classList.toggle('liked');

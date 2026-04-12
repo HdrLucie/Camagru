@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"strings"
 	"fmt"
 	"encoding/json"
 	"github.com/go-mail/mail"
@@ -55,6 +56,10 @@ func (app *App) manageComment(writer http.ResponseWriter, request *http.Request)
 	if err != nil {
 		http.Error(writer, err.Error(), http.StatusBadRequest)
 		return
+	}
+	str := strings.TrimSpace(comment.Comment)
+	if (str == "") {
+		return ;
 	}
 	c.Comment = comment.Comment;
 	c.Username = comment.Username;

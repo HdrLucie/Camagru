@@ -302,7 +302,7 @@ func (app *App) getPage(writer http.ResponseWriter, request *http.Request) {
         http.Error(writer, "Error fetching pictures", http.StatusInternalServerError)
         return
     }
-	id := ((page - 1) * 6) + 5;
+	id := ((page - 1) * 6) + 6;
 	if (id >= count) {
 		r.Last = true;
 	}

@@ -38,11 +38,10 @@ html {
 #uploadedPhoto {
 	width: auto;
 	height: auto;
-    /* object-fit: cover; */
 }
 
 input::file-selector-button {
-  background: #c0392b;
+  background: #e73c7e;
   color: #fff;
   font-weight: 100;
   padding: 12px 24px;
@@ -59,10 +58,9 @@ input::file-selector-button:hover {
 }
 
 .stickers-sidebar {
-	width: 100%; /* Largeur fixe */
-	overflow-y: auto; /* Scrollable si beaucoup de stickers */
+	width: 100%; 
+	overflow-y: auto; 
 	background-color: black;
-	/* right:5%; */
 	position: relative;
 }
 

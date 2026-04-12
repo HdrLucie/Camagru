@@ -41,7 +41,7 @@ img {
     margin: 0 auto;
     padding: 0 2rem;
 	position: relative;
-	top: 100px;
+	top: 50px;
 }
 
 .gallery {
@@ -106,7 +106,6 @@ img {
 }
 
 .nav-controls {
-  margin-top: 20px;
   display: flex;
   justify-content: space-between;
 }
@@ -114,12 +113,12 @@ img {
 .button-nav {
   padding: 10px 15px;
   border: none;
-  background: #007bff;
+  background: #e73c7e;
   color: white;
   border-radius: 5px;
   cursor: pointer;
 }
 
 .button-nav:hover {
-  background: #0056b3;
+  background: #eba1b4;
 }
