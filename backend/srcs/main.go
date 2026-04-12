@@ -83,6 +83,8 @@ type Likes struct {
 	UId			int		`json:"uId"`
 }
 
+var MailPwd string;
+
 func main() {
 	port := os.Getenv("BIND_ADDR")
 	if port == "" {
@@ -93,6 +95,13 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 	fmt.Println(port)
+
+	pwd, ok := os.LookupEnv("PASSWORD")
+	if !ok || len(pwd) == 0 {
+		log.Fatal("PASSWORD variable not set")
+	}
+	MailPwd = pwd;
+
 	db := DBConnection()
 	app := &App{dataBase: db}
 	router := http.NewServeMux()

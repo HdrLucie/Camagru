@@ -67,7 +67,7 @@ func (app *App) insertLikeIntoDB(Uid int, Pid int, user *User, r LikeRequest) (b
 			m.SetHeader("Subject", "Someone liked your post") 
 			content := fmt.Sprintf("Hi %s, %s liked your post : http://localhost:8080/photo/%d", user.Username, r.Username, r.Photo)
 			m.SetBody("text/html", content) 
-			dialer := mail.NewDialer("smtp.mail.fr", 587, "camagru@mail.fr", "12hdkHUDH![d") 
+			dialer := mail.NewDialer("smtp.mail.fr", 587, "camagru@mail.fr", MailPwd)
 			err = dialer.DialAndSend(m) 
 			if err != nil {
 				panic(err);

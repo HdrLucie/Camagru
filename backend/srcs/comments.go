@@ -35,7 +35,7 @@ func	sendEmail(user *User) {
 	m.SetHeader("Subject", "New comment") 
 	content := fmt.Sprintf("Hi %s, someone commented your post", user.Username)
 	m.SetBody("text/html", content) 
-	dialer := mail.NewDialer("smtp.mail.fr", 587, "camagru@mail.fr", "12hdkHUDH![d") 
+	dialer := mail.NewDialer("smtp.mail.fr", 587, "camagru@mail.fr", MailPwd)
 	err := dialer.DialAndSend(m) 
 	if err != nil {
 		panic(err);
