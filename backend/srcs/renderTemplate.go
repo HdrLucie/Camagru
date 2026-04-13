@@ -8,11 +8,13 @@ import (
 	"context"
 	"strings"
 	"strconv"
-)	
+	"os"
+)
 
 func serveTemplate(templateName string) http.HandlerFunc {
     return func(w http.ResponseWriter, r *http.Request) {
-		templateDir := "../../frontend/srcs/templates"
+		templateDir := frontendPath("templates")
+
         tmpl, err := template.ParseGlob(filepath.Join(templateDir, "*.html"))
         if err != nil {
             http.Error(w, "Could not parse templates", http.StatusInternalServerError)
@@ -29,28 +31,31 @@ func serveTemplate(templateName string) http.HandlerFunc {
     }
 }
 
+func frontendPath(subPath string) string {
+    base := os.Getenv("FRONTEND_PATH")
+    if base == "" {
+        base = "../../frontend/srcs"
+    }
+    return filepath.Join(base, subPath)
+}
+
 func	serveStyleFiles(router *http.ServeMux) {
-	styles := http.FileServer(http.Dir("../../frontend/srcs/stylesheets/"))
+	styles := http.FileServer(http.Dir(frontendPath("stylesheets")))
 	router.Handle("/styles/", http.StripPrefix("/styles", styles))
 }
 
 func serveScriptsFiles(router *http.ServeMux) {
-	scripts := http.FileServer(http.Dir("../../frontend/srcs/scripts/"))
+	scripts := http.FileServer(http.Dir(frontendPath("scripts")))
 	router.Handle("/scripts/", http.StripPrefix("/scripts", scripts))
 }
 
 func serveImgFiles(router *http.ServeMux) {
-	assets := http.FileServer(http.Dir("../../frontend/srcs/assets/img"))
+	assets := http.FileServer(http.Dir(frontendPath("assets/img")))
 	router.Handle("/assets/", http.StripPrefix("/assets", assets))
 }
 
-func serveAvatarFiles(router *http.ServeMux) {
-	avatar := http.FileServer(http.Dir("../../frontend/srcs/assets/avatars/"))
-	router.Handle("/avatars/", http.StripPrefix("/avatars", avatar))
-}
-
 func serveStickersFiles(router *http.ServeMux) {
-	stickers := http.FileServer(http.Dir("../../frontend/srcs/assets/stickers/"))
+	stickers := http.FileServer(http.Dir(frontendPath("assets/stickers")))
 	router.Handle("/stickers/", http.StripPrefix("/stickers", stickers))
 }
 
@@ -109,7 +114,8 @@ func (app *App) viewPhoto(w http.ResponseWriter, r *http.Request) {
         Page:    "photo.html",
         Picture: picture,
     }
-    templateDir := "../../frontend/srcs/templates"
+	templateDir := frontendPath("templates")
+
     tmpl, err := template.ParseGlob(filepath.Join(templateDir, "*.html"))
     if err != nil {
         http.Error(w, "Could not parse templates", http.StatusInternalServerError)
@@ -164,6 +170,5 @@ func renderTemplate(router *http.ServeMux, app *App) {
 	serveImgFiles(router)
 	serveStickersFiles(router)
 	servePicturesFiles(router)
-	serveAvatarFiles(router)
 	app.router(router)
 }

@@ -23,7 +23,5 @@ prune: down
 
 re: prune build
 
-exec-db:
-	docker exec -it postgres bash
-
-# psql -h localhost -p 5432 -U hlucie -d camagru
+db:
+	docker exec -it postgres psql -U hlucie -d camagru

@@ -90,12 +90,10 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
-	err := godotenv.Load("../../.env")
+	err := godotenv.Load(".env")
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Println("Pas de fichier .env, utilisation des variables d'environnement Docker")
 	}
-	fmt.Println(port)
-
 	pwd, ok := os.LookupEnv("PASSWORD")
 	if !ok || len(pwd) == 0 {
 		log.Fatal("PASSWORD variable not set")
@@ -108,10 +106,6 @@ func main() {
 	err = app.InsertSticker()
 	if err != nil {
 		log.Fatal("Error loading stickers directory")
-	}
-	err = app.InsertAvatars();
-	if err != nil {
-		log.Fatal("Error loading avatars directory")
 	}
 	err = app.createUploadsDirectory();
 	if err != nil {

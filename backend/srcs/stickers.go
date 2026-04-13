@@ -7,7 +7,8 @@ import (
 )
 
 func (app *App) extractPathStickersFiles() error {
-	path := "../../frontend/srcs/assets/stickers/"
+	path := frontendPath("assets/stickers") + "/"
+
 	directory, err := os.Open(path)
 	if err != nil {
 		return err
