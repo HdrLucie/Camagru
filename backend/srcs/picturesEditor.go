@@ -5,6 +5,7 @@ import (
 	"image"
 	"image/png"
 	"image/color"
+	"encoding/json"
 	"io"
 	"mime/multipart"
 	"net/http"
@@ -147,7 +148,6 @@ func concatImage(imgPath string, stickerPath string, posX int, posY int) {
 	stickerRect.Max = stickerRect.Max.Add(stickerPos);
 	stickerRect.Min = stickerRect.Min.Add(stickerPos);
 
-	// draw.Draw(finImage, stickerRect, sticker, image.Point{0, 0}, draw.Over)
 	draw.BiLinear.Scale(finImage, stickerRect, sticker, sticker.Bounds(), draw.Over, nil)
 	out, err := os.Create(imgPath) 
 	if err != nil {
@@ -170,9 +170,14 @@ func concatImage(imgPath string, stickerPath string, posX int, posY int) {
 	}
 }
 
-func (app *App) downloadImage(writer http.ResponseWriter, request *http.Request) {
+type S struct {
+	Path	string `json:"path"`
+	PosX	int    `json:"posX"`
+	PosY	int    `json:"posY"`
+	Id		int	`json:"id"`
+}
 
-	fmt.Println(Yellow + "Download image" + Reset)
+func (app *App) downloadImage(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Set("Content-Type", "application/json")
 
 	if request.Method != http.MethodPost {
@@ -190,50 +195,38 @@ func (app *App) downloadImage(writer http.ResponseWriter, request *http.Request)
 		http.Error(writer, "Erreur récupération image: "+err.Error(), http.StatusBadRequest)
 		return
 	}
-	defer file.Close();
+	stickersJSON := request.FormValue("stickers")
+	var stickers []S
+	err = json.Unmarshal([]byte(stickersJSON), &stickers)
+	if err != nil {
+		http.Error(writer, err.Error(), http.StatusBadRequest)
+		return
+	}
+	fmt.Println(stickers);
 	timeStamp := request.FormValue("timestamp")
 	userId := request.FormValue("id")
-	tmpStickerId := request.FormValue("imageId");
-	posX := request.FormValue("posX");
-	posY := request.FormValue("posY");
-	x, err := strconv.Atoi(posX)
-	if err != nil {
-		http.Error(writer, "posX invalide: "+err.Error(), http.StatusBadRequest)
-		return
-	}
-	y, err := strconv.Atoi(posY)
-	if err != nil {
-		http.Error(writer, "posY invalide: "+err.Error(), http.StatusBadRequest)
-		return
-	}
 	tmpId, err := strconv.Atoi(userId)
 	if err != nil {
 		http.Error(writer, "userId invalide: "+err.Error(), http.StatusBadRequest)
 		return
 	}
-	stickerId, err := strconv.Atoi(tmpStickerId)
-	if err != nil {
-		http.Error(writer, "stickerId invalide: "+err.Error(), http.StatusBadRequest)
-		return
-	}
-	if err != nil {
-		http.Error(writer, "ID utilisateur invalide", http.StatusBadRequest)
-		return
-	}
 
 	uploadsDir := "uploads"
-	// if _, err := os.Stat(uploadsDir); os.IsNotExist(err) {
-	// 	err = os.MkdirAll(uploadsDir, 0755)
-	// 	if err != nil {
-	// 		http.Error(writer, "Erreur création dossier: "+err.Error(), http.StatusInternalServerError)
-	// 		return
-	// 	}
-	// }
+	if _, err := os.Stat(uploadsDir); os.IsNotExist(err) {
+		err = os.MkdirAll(uploadsDir, 0755)
+		if err != nil {
+			http.Error(writer, "Erreur création dossier: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
 
 	var imageId int
 	filepath, err := createImage(file, fileHeader, tmpId, uploadsDir);
-	stickerPath := app.getStickerPathById(stickerId);
-	concatImage(filepath, stickerPath, x, y);
+	fmt.Println("createImage result:", filepath, err)
+	for _, sticker := range stickers {
+		path := app.getStickerPathById(sticker.Id)
+		concatImage(filepath, path, sticker.PosX, sticker.PosY);
+	}
 	err = app.dataBase.QueryRow("INSERT INTO images (image_path, userId, uploadTime) VALUES ($1, $2, $3) RETURNING id", 
 	filepath, tmpId, timeStamp).Scan(&imageId)
 	if err != nil {

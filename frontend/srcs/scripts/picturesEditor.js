@@ -11,19 +11,6 @@ async function checkToken() {
 	}
 }
 
-// window.addEventListener('load', function() {
-// 	document.querySelector('input[type="file"]').addEventListener('change', function() {
-// 		if (this.files && this.files[0]) {
-// 			var img = document.querySelector('img');
-// 			img.onload = () => {
-// 				URL.revokeObjectURL(img.src);  // no longer needed, free memory
-// 			}
-//
-// 			img.src = URL.createObjectURL(this.files[0]); // set src to blob url
-// 		}
-// 	});
-// });
-
 async function getPictures() {
 	const token = localStorage.getItem('token');
 	try {
@@ -81,8 +68,8 @@ async function getUser() {
 
 (() => {
 
-	const width = 680; // We will scale the photo width to this
-	let height = 550; // This will be computed based on the input stream
+	const width = 680;
+	let height = 550;
 	let streaming = false;
 	let video = null;
 	let canvas = null;
@@ -155,7 +142,6 @@ async function getUser() {
 			},
 			false
 		);
-		// clearphoto();
 	}
 
 	function clearphoto() {
@@ -174,35 +160,35 @@ async function getUser() {
 			context.drawImage(video, 0, 0, width, height);
 
 			const data = canvas.toDataURL("image/png");
-			// photo.setAttribute("src", data);
 		}
 	}
 
 	async function sendPictures() {
 		var path;
 		const token = localStorage.getItem('token');
-		const sticker = document.getElementsByClassName('placed-sticker');
-		if (!sticker || sticker.length === 0) {
+		const stickers = [];
+		const elements = document.querySelectorAll('.placed-sticker');
+		if (!elements || elements.length === 0) {
 			alert('Veuillez placer un sticker sur votre photo avant d\'envoyer !');
 			return;
 		}
 		const user = await getUser();
 		const imgBlob = await new Promise(resolve => {
-			canvas.toBlob(resolve, 'image/jpeg', 0.8); // Compression JPEG à 80%
+			canvas.toBlob(resolve, 'image/jpeg', 0.8);
 		});
 		const blobUrl = URL.createObjectURL(imgBlob);
 		const formData = new FormData();
 		formData.append('image', imgBlob, 'photo.jpg');
 		formData.append('id', user.id);
-		formData.append('imageId', sticker[0].id);
-		const relativeX = sticker[0].dataset.relativeX;
-		const relativeY = sticker[0].dataset.relativeY;
-		formData.append('stickerPath', sticker[0].src);
-		formData.append('posX', JSON.stringify(Math.floor(relativeX)));
-		formData.append('posY', JSON.stringify(Math.floor(relativeY)));
-		for (const [key, value] of formData.entries()) {
-			console.log(key, value);
-		}
+		elements.forEach(sticker => {
+			stickers.push({
+				path: sticker.src,
+				posX: Math.floor(sticker.dataset.relativeX),
+				posY: Math.floor(sticker.dataset.relativeY),
+				id: parseInt(sticker.id) 
+			});
+		});
+		formData.append('stickers', JSON.stringify(stickers));
 		formData.append('timestamp', new Date().toISOString());
 		const response = await fetch("/sendImage", {
 			method: "POST",
