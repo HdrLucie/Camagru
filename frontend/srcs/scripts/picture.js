@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 	checkToken();
 	displayPicture();
+	isOwner();
 });
 
 function checkToken() {
@@ -9,6 +10,38 @@ function checkToken() {
 		window.location.href = '/';
 	}
 	return token
+}
+
+async function getUser() {
+    const token = localStorage.getItem('token');
+    try {
+        const response = await fetch("/getUser", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+        const userData = await response.json();
+		return userData;
+    } catch (error) {
+        console.error("Erreur:", error);
+        return null;
+    }
+}
+
+async function isOwner() {
+	const user = await getUser();
+	const pId = window.location.pathname.split("/").pop();
+	const data = await getPicture(pId);
+	const picture = data?.Picture;
+	const pUser = picture.userId;
+
+	if (user.id != pUser) {
+		console.log("on rentre dans le if");
+		deleteBtn = document.getElementById('deleteButton');
+		deleteBtn.style.display = 'none';
+	}
 }
 
 async function getPicture(pictureId) {
@@ -31,7 +64,10 @@ async function getPicture(pictureId) {
 
 async function displayPicture() {
 	const pictureId = window.location.pathname.split("/").pop();
-	const picture = await getPicture(pictureId);
+	const data = await getPicture(pictureId);
+	const picture = data?.Picture;
+	const user = data?.Usr;
+
 	const container = document.getElementById('photo');
 	container.innerHTML = '';
 	if (picture.path != '') {
@@ -46,4 +82,8 @@ async function displayPicture() {
         message.textContent = 'No image available';
         container.appendChild(message);
     }
+	const login = document.getElementById('login');
+	login.textContent = user.username;
+	login.style.color = "#e73c7e";
+	login.className = "user-data"
 }

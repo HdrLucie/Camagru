@@ -310,8 +310,12 @@ func (app *App) getPage(writer http.ResponseWriter, request *http.Request) {
     json.NewEncoder(writer).Encode(r)
 }
 
-func (app *App) getPicture(writer http.ResponseWriter, request *http.Request) {
+type getPictureResponse struct {
+	Picture	Pictures
+	Usr		User
+}
 
+func (app *App) getPicture(writer http.ResponseWriter, request *http.Request) {
 	var picture Pictures;
     if request.Method != http.MethodGet {
         http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
@@ -330,8 +334,12 @@ func (app *App) getPicture(writer http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 	}
+	user, _ := app.getUserById(picture.UserId);
 	writer.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(writer).Encode(picture);
+	var response getPictureResponse;
+	response.Picture = picture;
+	response.Usr = *user;
+	json.NewEncoder(writer).Encode(response);
 }
 
 func (app *App) getPictureById(id int) (*Pictures, error) {

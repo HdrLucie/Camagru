@@ -20,6 +20,7 @@
 		{{ template "navbar" . }}
 		<div class="container">
 			<div class="left-container">
+				<p style="display:inline">Posted by <span id="login"></span></p>
 				<div class="photo" id="photo"></div>
 				<div class="datas-photo">
 					<button class="Button js-button" id="sendLikes">
@@ -29,8 +30,6 @@
 					<button class="delete" id="deleteButton">
 						Delete 
 					</button>
-				<!-- <button id="sendLikes" class="liked likeBtn">Like</button> -->
-				<!-- <button id="deleteButton">Delete</button> -->
 				</div>
 			</div>
 			<div class="right-container">
@@ -55,7 +54,6 @@
 	</body>
 	<script src="/scripts/menu.js"></script>
 	<script src="/scripts/logout.js"></script>
-	<script src="/scripts/gallery.js"></script>
 	<script src="/scripts/socialInteract.js"></script>
 	<script src="/scripts/picture.js"></script>
 

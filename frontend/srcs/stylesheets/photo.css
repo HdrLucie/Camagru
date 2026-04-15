@@ -42,6 +42,12 @@ html {
 	width: 100%;
 }
 
+.user-data {
+	text-decoration: underline;
+	font-size: 1rem;
+	color: #e73c7e;
+}
+
 .datas-photo {
 	background-color: transparent;
 	justify-content: space-between;
@@ -150,4 +156,11 @@ html {
 	max-width: 200px;
 	border: none;
 	border-radius: 10px;
+}
+
+@media (max-width: 760px) {
+	.container {
+		flex-direction: column;
+		
+	}
 }

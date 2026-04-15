@@ -71,6 +71,7 @@ async function displayComments() {
 		const username = document.createElement("span");
 		username.classList.add("username");
 		username.textContent = comment.Username;
+		username.className="user-data";
 
 		const content = document.createElement("p");
 		content.textContent = comment.Comment;

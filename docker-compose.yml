@@ -35,3 +35,4 @@ services:
         condition: service_healthy
     volumes:
       - ./backend/srcs/uploads:/app/uploads
+      - ./frontend/srcs:/app/frontend/srcs
