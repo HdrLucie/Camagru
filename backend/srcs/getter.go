@@ -277,8 +277,9 @@ func (app *App) getAvatars(writer http.ResponseWriter, request *http.Request) {
 // ! ||--------------------------------------------------------------------------------||
 
 type page struct {
-	Last     bool       `json:"last"`
-    Pictures []Pictures `json:"pictures"`
+	Last		bool       `json:"last"`
+    Pictures	[]Pictures `json:"pictures"`
+	Usr			User
 }
 
 

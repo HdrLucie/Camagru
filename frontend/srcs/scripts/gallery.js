@@ -14,6 +14,25 @@ function redirectionPage(path) {
     window.location.href = path;
 }
 
+async function getPhotoUserData(pictureId) {
+	const token = localStorage.getItem('token');
+	try {
+		const response = await fetch(`/getPicture/${pictureId}`, {
+			method: "GET",
+			headers: {
+				"Authorization": `Bearer ${token}`,
+				"Content-Type": "application/json",
+			},
+		});
+		const picture = await response.json();
+		console.log(picture);
+		return picture.Usr;
+	} catch (error) {
+		console.error("Erreur:", error);
+		return null;
+	}
+}
+
 async function getPictures() {
 	var page = window.location.pathname.split("/").pop();
 	if (!page)
@@ -35,6 +54,51 @@ async function getPictures() {
     }
 }
 
+// async function getComments(pId) {
+// 	const pId = window.location.pathname.split("/").pop();
+// 	const token = localStorage.getItem('token');
+//     try {
+//         const response = await fetch(`/getComments/${pId}`, {
+//             method: "GET",
+//             headers: {
+//                 "Authorization": `Bearer ${token}`,
+//                 "Content-Type": "application/json",
+//             },
+//         });
+//         const comments = await response.json();
+// 		return comments;
+//     } catch (error) {
+//         return null;
+//     }
+//
+// }
+//
+// async function displayComments() {
+// 	comments = await getComments();
+//     if (!comments) return;
+// 	listComments = document.getElementById("commentList");
+//
+// 	comments.forEach(comment=>{
+//
+// 		const li = document.createElement("li");
+// 		li.classList.add("comment-item");
+//
+// 		const username = document.createElement("span");
+// 		username.classList.add("username");
+// 		username.textContent = comment.Username;
+// 		username.className="user-data";
+//
+// 		const content = document.createElement("p");
+// 		content.textContent = comment.Comment;
+//
+// 		li.appendChild(username);
+// 		li.appendChild(content);
+// 		listComments.appendChild(li);
+// 	});
+// }
+
+
+
 async function displayGallery() {
 	const data = await getPictures();
     const container = document.getElementById('galleryContainer');
@@ -42,62 +106,32 @@ async function displayGallery() {
 
     const pictures = data?.pictures;
     const isLast = data?.last;
-    if (pictures && pictures.length > 0) {
-        pictures.forEach(picture => {
-            const div = document.createElement('div');
-            div.className = 'gallery-item';
-            const img = document.createElement('img');
-            img.className = 'gallery-image';
-            img.src = picture.path;
-            img.alt = picture.path;
-            img.id = picture.id;
-            img.style.cursor = 'pointer';
-            div.addEventListener('click', function() {
-                window.location.href = `/photo/${picture.id}`;
-            });
-
-            const galleryItemInfo = document.createElement('div');
-            galleryItemInfo.className = 'gallery-item-info';
-
-            const ul = document.createElement('ul');
-
-            const liLikes = document.createElement('li');
-            liLikes.className = 'gallery-item-likes';
-
-            const spanLikes = document.createElement('span');
-            spanLikes.className = 'visually-hidden';
-            spanLikes.textContent = 'Likes:';
-
-            const iHeart = document.createElement('i');
-            iHeart.className = 'fas fa-heart';
-            iHeart.setAttribute('aria-hidden', 'true');
-
-            liLikes.appendChild(spanLikes);
-            liLikes.appendChild(iHeart);
-            liLikes.append(` ${picture.likes ?? 0}`);
-
-            const liComments = document.createElement('li');
-            liComments.className = 'gallery-item-comments';
-
-            const spanComments = document.createElement('span');
-            spanComments.className = 'visually-hidden';
-            spanComments.textContent = 'Comments:';
-
-            const iComment = document.createElement('i');
-            iComment.className = 'fas fa-comment';
-            iComment.setAttribute('aria-hidden', 'true');
-
-            liComments.appendChild(spanComments);
-            liComments.appendChild(iComment);
-            liComments.append(` ${picture.comments ?? 0}`);
-
-            ul.appendChild(liLikes);
-            ul.appendChild(liComments);
-            galleryItemInfo.appendChild(ul);
-            div.appendChild(img);
-            div.appendChild(galleryItemInfo);
-            container.appendChild(div);
-        });
+	    if (pictures && pictures.length > 0) {
+        for (const picture of pictures) {
+            const user = await getPhotoUserData(picture.id);
+            const username = user?.username ?? 'Username';
+            container.innerHTML += `
+                <div class="feed">
+                    <section class="username">
+                        <div class="id">
+                            <p>${username}</p>
+                        </div>
+                    </section>
+                    <section class="post" style="cursor: pointer;" onclick="window.location.href='/photo/${picture.id}'">
+                        <img src="${picture.path}" alt="${picture.path}">
+                    </section>
+                    <section class="btn-group">
+                        <button type="button" class="btn-love"><i class="far fa-heart fa-lg"></i></button>
+                        <button type="button" class="btn-comment"><i class="far fa-comment fa-lg"></i></button>
+                    </section>
+                    <section class="caption">
+                        <p class="like">${picture.likes ?? 0} likes</p>
+                        <p><b class="id">${username}</b><span> ${picture.description ?? ''}</span></p>
+                        <p class="time">${picture.time ?? ''}</p>
+                    </section>
+                </div>
+            `;
+        }
     } else {
         const message = document.createElement('p');
         message.textContent = 'No image available';
