@@ -47,10 +47,10 @@ async function getStickerNameById(stickerId) {
 
 async function createStickerOnImage(stickerId, x, y) {
     const existingSticker = document.querySelector('.placed-sticker');
-    if (existingSticker) {
-        existingSticker.remove();
-    }
-
+    // if (existingSticker) {
+    //     existingSticker.remove();
+    // }
+    //
     const name = await getStickerNameById(stickerId);
     const stickerElement = document.createElement('img');
     stickerElement.src = "/stickers/" + name;

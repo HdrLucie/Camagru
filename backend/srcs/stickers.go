@@ -37,7 +37,6 @@ func (app *App) manageStickersInsertError(imagePath string) (bool, error) {
             SELECT 1 FROM stickers 
             WHERE image_path = $1
         )`
-    
     err := app.dataBase.QueryRow(query, imagePath).Scan(&exists)
     if err != nil {
         return false, fmt.Errorf("erreur lors de la vérification du sticker: %v", err)
