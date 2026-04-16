@@ -34,15 +34,15 @@ async function getUser() {
 
 async function sendImg() {
     const token = localStorage.getItem('token');
-
+	const stickers = [];
     const fileInput = document.getElementById('uploadPhoto');
     if (!fileInput.files || fileInput.files.length === 0) {
         alert('Veuillez sélectionner une photo avant d\'envoyer !');
         return;
     }
 
-    const sticker = document.getElementsByClassName('placed-sticker');
-    if (!sticker || sticker.length === 0) {
+    const elements = document.querySelectorAll('.placed-sticker');
+    if (!elements || elements.length === 0) {
         alert('Veuillez placer un sticker sur votre photo avant d\'envoyer !');
         return;
     }
@@ -52,19 +52,22 @@ async function sendImg() {
     const formData = new FormData();
     formData.append('image', fileInput.files[0]);
     formData.append('id', user.id);
-    formData.append('imageId', sticker[0].id);
-    const relativeX = sticker[0].dataset.relativeX;
-    const relativeY = sticker[0].dataset.relativeY;
-    formData.append('stickerPath', sticker[0].src);
-    formData.append('posX', JSON.stringify(Math.floor(relativeX)));
-    formData.append('posY', JSON.stringify(Math.floor(relativeY)));
-    formData.append('timestamp', new Date().toISOString());
-
-    const response = await fetch("/sendImage", {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${token}`
-        },
-        body: formData
-    });
+	elements.forEach(sticker => {
+		stickers.push({
+			path: sticker.src,
+			posX: Math.floor(sticker.dataset.relativeX),
+			posY: Math.floor(sticker.dataset.relativeY),
+			id: parseInt(sticker.id) 
+		});
+	});
+	formData.append('stickers', JSON.stringify(stickers));
+	formData.append('timestamp', new Date().toISOString());
+	const response = await fetch("/sendImage", {
+		method: "POST",
+		headers: {
+			"Authorization": `Bearer ${token}`
+		},
+		body: formData
+	});
+	window.location.href = `/gallery/1`;
 }
