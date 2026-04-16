@@ -161,6 +161,8 @@ func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/getComments/", app.authMiddleware(app.getComments));
 	router.HandleFunc("/deleteImg", app.authMiddleware(app.deleteImg));
 	router.HandleFunc("/getLikes/", app.authMiddleware(app.getLikes));
+	router.HandleFunc("/getComment/", app.authMiddleware(app.getComments));
+
 	router.HandleFunc("/resizeImg", app.resizeImg);
 }
 

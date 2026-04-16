@@ -174,7 +174,7 @@ func (app *App) getComments(writer http.ResponseWriter, request *http.Request) {
 	query := `SELECT comment, post_id, user_id FROM comments WHERE post_id = $1`;
 	rows, _ := app.dataBase.Query(query, pId);
 	defer rows.Close()
-	var response []cResponse
+	response := []cResponse{}
     for rows.Next() {
         var c Comments
 		var r cResponse
