@@ -161,7 +161,6 @@ async function getComments(pId) {
     }
 }
 
-
 document.getElementById('galleryContainer').addEventListener('click', async function(e) {
 	const btn = e.target.closest('.btn-delete');
 	if (!btn)
@@ -188,8 +187,6 @@ document.getElementById('galleryContainer').addEventListener('click', async func
 		alert(data.error);
 	}
 });
-
-
 
 document.getElementById('galleryContainer').addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -247,7 +244,7 @@ async function displayGallery() {
 				<div class="feed">
 				<section class="username">
 				<div class="id">
-				<p>${username}</p>
+				<p><b>${username}</b></p>
 				</div>
 				</section>
 				<section class="post" style="cursor: pointer;" onclick="window.location.href='/photo/${picture.id}'">
@@ -271,6 +268,7 @@ async function displayGallery() {
 				
 				</section>
 				</div>
+				
 				`;
 			    if (currentUser.id === picture.userId) {
 					const btn = document.querySelector(`.btn-delete[data-id="${picture.id}"]`);

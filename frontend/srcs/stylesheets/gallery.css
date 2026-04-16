@@ -45,9 +45,6 @@ img {
 }
 
 .feed .username {
-    /* padding: 10px 30px 0px 30px; */
-    /* display: flex; */
-    /* flex-flow: row; */
 	align-content: center;
 }
 
@@ -66,17 +63,17 @@ img {
 
 .feed .username .id {
     margin: 10px 15px;
+	font-size: large;
+	text-decoration: underline;
 }
 
 .feed .post {
     width: 100%;
-    height: 300px;
     margin-bottom: 10px;
 }
 
 .feed .post img {
     width: 100%;
-    height: inherit;
 }
 
 .feed .btn-group {
@@ -113,75 +110,6 @@ img {
     font-size: 10px;
     color: #999;
 }
-
-/* .container { */
-/* 	max-width: 93.5rem; */
-/*     margin: 0 auto; */
-/*     padding: 0 2rem; */
-/* 	position: relative; */
-/* 	top: 50px; */
-/* } */
-/**/
-/* .gallery { */
-/*     display: flex; */
-/*     flex-wrap: wrap; */
-/* 	height: 100%; */
-/*     margin: -1rem -1rem; */
-/*     padding-bottom: 3rem; */
-/* } */
-/**/
-/* .gallery-item { */
-/*     position: relative; */
-/*     flex: 1 0 22rem; */
-/*     margin: 1rem; */
-/*     color: #fff; */
-/*     cursor: pointer; */
-/* } */
-/**/
-/* .gallery-item:hover .gallery-item-info, */
-/* .gallery-item:focus .gallery-item-info { */
-/*     display: flex; */
-/*     justify-content: center; */
-/*     align-items: center; */
-/*     position: absolute; */
-/*     top: 0; */
-/*     width: 100%; */
-/*     height: 100%; */
-/*     background-color: rgba(0, 0, 0, 0.3); */
-/* } */
-/**/
-/* .gallery-item-info { */
-/*     display: none; */
-/* } */
-/**/
-/* .gallery-item-info li { */
-/*     display: inline-block; */
-/*     font-size: 1.7rem; */
-/*     font-weight: 600; */
-/* } */
-/**/
-/* .gallery-item-likes { */
-/*     margin-right: 2.2rem; */
-/* } */
-/**/
-/* .gallery-item-type { */
-/*     position: absolute; */
-/*     top: 1rem; */
-/*     right: 1rem; */
-/*     font-size: 2.5rem; */
-/*     text-shadow: 0.2rem 0.2rem 0.2rem rgba(0, 0, 0, 0.1); */
-/* } */
-/**/
-/* .fa-clone, */
-/* .fa-comment { */
-/*     transform: rotateY(180deg); */
-/* } */
-/**/
-/* .gallery-image { */
-/*     width: 100%; */
-/*     height: 100%; */
-/*     object-fit: cover; */
-/* } */
 
 .nav-controls {
   display: flex;
