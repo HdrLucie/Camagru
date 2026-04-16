@@ -144,12 +144,14 @@ async function getUser() {
 		);
 	}
 
-	function clearphoto() {
+	function clearPhoto() {
+		console.log("clear photo");
 		const context = canvas.getContext("2d");
-		context.fillStyle = "#AAA";
+		context.fillStyle = "#aaaaaa";
 		context.fillRect(0, 0, canvas.width, canvas.height);
 
 		const data = canvas.toDataURL("image/png");
+		photo.setAttribute("src", data);
 	}
 
 	function takepicture() {
@@ -160,6 +162,13 @@ async function getUser() {
 			context.drawImage(video, 0, 0, width, height);
 
 			const data = canvas.toDataURL("image/png");
+			const photo = document.getElementById("photo");
+			photo.style.display = "inline-block"
+			const output = document.getElementById('output');
+			output.style.display = 'inline-block';
+			const cam = document.getElementById('camera');
+			cam.style.display='none';
+			photo.src = data;
 		}
 	}
 
@@ -204,4 +213,18 @@ async function getUser() {
 	window.addEventListener("load", startup, false);
 })();
 
+	function clearPhoto() {
+		console.log("clear photo");
+		const context = canvas.getContext("2d");
+		context.fillStyle = "#aaaaaa";
+		context.fillRect(0, 0, canvas.width, canvas.height);
+
+		const photo = document.getElementById("photo");
+		photo.style.display = "none"
+		const output = document.getElementById('output');
+		output.style.display = 'none';
+		const cam = document.getElementById('camera');
+		cam.style.display='inline-block';
+
+	}
 

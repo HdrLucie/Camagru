@@ -33,18 +33,10 @@ html {
 
 
 #video {
-	/* height: 550px; */
 	position: relative;
 	display: block;
 	width: 680px;
 	object-fit:cover;
-}
-
-#photo {
-	border: 1px solid black;
-	box-shadow: 2px 2px 3px black;
-	width: 520px;
-	height: 440px;
 }
 
 #canvas {
@@ -67,12 +59,12 @@ html {
 }
 
 .output {
-	width: 340px;
-	display: inline-block;
+	width: 680px;
+	display: none;
 	vertical-align: top;
 }
 
-#startbutton {
+.startbutton {
 	display: block;
 	position: relative;
 	margin-left: auto;
@@ -118,17 +110,16 @@ html {
 }
 
 .camera-section {
-	display: flex;
+	width: 680px;
 	justify-content: center;
-	flex: 1;  /* Prend tout l'espace disponible */
-	min-width: 0; /* Évite le débordement */
+	position: relative;
+	min-width: 0;
 }
 
 .stickers-sidebar {
-	width: 100%; /* Largeur fixe */
+	width: 100%;
 	overflow-y: auto; /* Scrollable si beaucoup de stickers */
 	background-color: #F7F9F7;
-	/* right:5%; */
 	position: relative;
 }
 

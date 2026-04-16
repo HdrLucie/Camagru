@@ -56,10 +56,11 @@ async function createStickerOnImage(stickerId, x, y) {
     stickerElement.src = "/stickers/" + name;
     stickerElement.className = 'placed-sticker';
 
-    const tmp = document.getElementById('camera') || document.getElementById('uploadedImageContainer');
+    const tmp = document.getElementById('camera-section') || document.getElementById('uploadedImageContainer');
     stickerElement.id = stickerId;
     stickerElement.style.left = x + 'px';
     stickerElement.style.top = y + 'px';
+	// stickerElement.style.zIndex = '10';
 	// stickerElement.style.transform = 'translate(-50%, -50%)';
     stickerElement.dataset.relativeX = x;
     stickerElement.dataset.relativeY = y;
@@ -113,6 +114,7 @@ document.addEventListener('mousemove', (event) => {
 	if (floatingSticker) {
 			floatingSticker.style.left = event.clientX + 'px';
 			floatingSticker.style.top = event.clientY + 'px';
+		console.log("cursor: " + event.clientX + ", " + event.clientY);
 	}
 });
 
@@ -127,9 +129,11 @@ function cancelSelection() {
 document.addEventListener('mouseup', (event) => {
 	if (!isDragging || !selectedStickerId) return;
 
-	const dropZone = document.getElementById('video') || document.getElementById('uploadedPhoto');
+	const dropZone = document.getElementById('camera-section') || document.getElementById('uploadedPhoto');
 	if (dropZone && dropZone.contains(event.target)) {
 		const rect = dropZone.getBoundingClientRect();
+		console.log("rect.left = " + rect.left);
+		console.log("rect.top = " + rect.top);
 		const x = event.clientX - rect.left;
 		const y = event.clientY - rect.top;
 		const id = selectedStickerId;
@@ -141,7 +145,7 @@ document.addEventListener('mouseup', (event) => {
 document.addEventListener('click', (event) => {
 	if (selectedStickerId === null) return;
 
-	const dropZone = document.getElementById('video') || document.getElementById('uploadedPhoto');
+	const dropZone = document.getElementById('camera-section') || document.getElementById('uploadedPhoto');
 	if (dropZone && dropZone.contains(event.target)) {
 		const rect = dropZone.getBoundingClientRect();
 		const x = event.clientX - rect.left;
