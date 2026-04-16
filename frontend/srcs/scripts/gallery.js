@@ -4,15 +4,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     container.addEventListener('click', (e) => {
         const btn = e.target.closest('.btn-love');
-		if (btn.classList.contains('liked')) {
-			btn.classList.remove('liked');
-		} else {
-			btn.classList.add('liked');
-		}
         if (btn) {
             const photoId = btn.dataset.id;
-            sendLikes(photoId);
-        }
+			const counter = document.querySelector(
+				`.like[data-id="${photoId}"]`
+			);
+			if (!counter) return;
+			let count = parseInt(counter.textContent);
+			if (btn.classList.contains('liked')) {
+				btn.classList.remove('liked');
+				count--;
+			} else {
+				btn.classList.add('liked');
+				count++;
+			}
+			counter.textContent = `${count} likes`;
+			sendLikes(photoId);
+		}
+
     });
 });
 
@@ -44,7 +53,7 @@ async function getPhotoUserData(pictureId) {
 	} catch (error) {
 		console.error("Erreur:", error);
 		return null;
-	}
+}
 }
 
 async function getPictures() {
@@ -160,7 +169,7 @@ async function displayGallery() {
                         <button type="button" class="btn-comment"><i class="far fa-comment fa-lg"></i></button>
                     </section>
                     <section class="caption">
-                        <p class="like">${picture.likes ?? 0} likes</p>
+                        <p class="like" data-id="${picture.id}">${picture.likes ?? 0} likes</p>
                         <p><b class="id">${username}</b><span> ${picture.description ?? ''}</span></p>
                         <p class="time">${picture.time ?? ''}</p>
                     </section>
