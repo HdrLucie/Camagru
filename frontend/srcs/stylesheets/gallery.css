@@ -105,6 +105,10 @@ img {
     text-decoration: none;
 }
 
+.liked {
+	color : red;
+}
+
 .feed .caption .time {
     font-size: 10px;
     color: #999;

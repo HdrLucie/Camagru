@@ -1,5 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
     displayGallery();
+    const container = document.getElementById('galleryContainer');
+
+    container.addEventListener('click', (e) => {
+        const btn = e.target.closest('.btn-love');
+		if (btn.classList.contains('liked')) {
+			btn.classList.remove('liked');
+		} else {
+			btn.classList.add('liked');
+		}
+        if (btn) {
+            const photoId = btn.dataset.id;
+            sendLikes(photoId);
+        }
+    });
 });
 
 document.getElementById("burger").onclick = function () {
@@ -54,50 +68,71 @@ async function getPictures() {
     }
 }
 
-// async function getComments(pId) {
-// 	const pId = window.location.pathname.split("/").pop();
-// 	const token = localStorage.getItem('token');
-//     try {
-//         const response = await fetch(`/getComments/${pId}`, {
-//             method: "GET",
-//             headers: {
-//                 "Authorization": `Bearer ${token}`,
-//                 "Content-Type": "application/json",
-//             },
-//         });
-//         const comments = await response.json();
-// 		return comments;
-//     } catch (error) {
-//         return null;
-//     }
-//
-// }
-//
-// async function displayComments() {
-// 	comments = await getComments();
-//     if (!comments) return;
-// 	listComments = document.getElementById("commentList");
-//
-// 	comments.forEach(comment=>{
-//
-// 		const li = document.createElement("li");
-// 		li.classList.add("comment-item");
-//
-// 		const username = document.createElement("span");
-// 		username.classList.add("username");
-// 		username.textContent = comment.Username;
-// 		username.className="user-data";
-//
-// 		const content = document.createElement("p");
-// 		content.textContent = comment.Comment;
-//
-// 		li.appendChild(username);
-// 		li.appendChild(content);
-// 		listComments.appendChild(li);
-// 	});
-// }
+async function sendLikes(photoId) {
+	const user = await getUser();
+	try {
+		const response = await fetch("/sendLikes", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				"Username": user.username,
+				"Id": user.id,
+				"Photo": Number(photoId),
+			})
+		});
+		const data = await response.json();
+	} catch (error) {
+		console.error("Error:", error);
+	}
+}
 
+async function getUser() {
+    const token = localStorage.getItem('token');
+    try {
+        const response = await fetch("/getUser", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+        const userData = await response.json();
+		return userData;
+    } catch (error) {
+        console.error("Erreur:", error);
+        return null;
+    }
+}
 
+async function getLikes(pId) {
+    const token = localStorage.getItem('token');
+    try {
+        const response = await fetch(`/getLikes/${pId}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+        const likes = await response.json();
+
+        const user = await getUser();
+        const hasLiked = likes.some(like => like.uId === user.id);
+        const heart = document.querySelector(
+            `.btn-love[data-id="${pId}"]`
+        );
+        if (hasLiked) {
+            heart.classList.add('liked');
+        } else {
+            heart.classList.remove('liked');
+        }
+        return likes;
+    } catch (error) {
+        return null;
+    }
+}
 
 async function displayGallery() {
 	const data = await getPictures();
@@ -121,7 +156,7 @@ async function displayGallery() {
                         <img src="${picture.path}" alt="${picture.path}">
                     </section>
                     <section class="btn-group">
-                        <button type="button" class="btn-love"><i class="far fa-heart fa-lg"></i></button>
+                        <button type="button" data-id="${picture.id}" id="likeBtn" class="btn-love"><i class="far fa-heart fa-lg"></i></button>
                         <button type="button" class="btn-comment"><i class="far fa-comment fa-lg"></i></button>
                     </section>
                     <section class="caption">
@@ -131,12 +166,13 @@ async function displayGallery() {
                     </section>
                 </div>
             `;
-        }
+		}
     } else {
         const message = document.createElement('p');
         message.textContent = 'No image available';
         container.appendChild(message);
     }
+	pictures.forEach(p => getLikes(p.id));
 }
 
 function prevPage() {
