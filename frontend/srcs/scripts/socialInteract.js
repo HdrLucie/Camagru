@@ -1,5 +1,11 @@
+import { check_token } from './check-token.js';
+
 document.addEventListener('DOMContentLoaded', async () => {
-	checkToken();
+	const r = check_token();
+	if (r == false) {
+		window.location.href = '/';
+	}
+
 	await displayComments();
 	await getLikes();
 });

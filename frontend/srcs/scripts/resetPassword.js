@@ -1,3 +1,12 @@
+import { check_token } from './check-token.js';
+
+document.addEventListener('DOMContentLoaded', async () => {
+	const r = await check_token();
+	if (r == false) {
+		window.location.href = '/';
+	}
+});
+
 window.addEventListener('load', function () {
 	
     function getEmail(str, char) {

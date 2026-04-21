@@ -1,4 +1,10 @@
-document.addEventListener('DOMContentLoaded', () => {
+import { check_token } from './check-token.js';
+
+document.addEventListener('DOMContentLoaded', async () => {
+	const r = await check_token();
+	if (r == false) {
+		window.location.href = '/';
+	}
     displayStickers();
 });
 
@@ -47,10 +53,6 @@ async function getStickerNameById(stickerId) {
 
 async function createStickerOnImage(stickerId, x, y) {
     const existingSticker = document.querySelector('.placed-sticker');
-    // if (existingSticker) {
-    //     existingSticker.remove();
-    // }
-    //
     const name = await getStickerNameById(stickerId);
     const stickerElement = document.createElement('img');
     stickerElement.src = "/stickers/" + name;
@@ -60,11 +62,8 @@ async function createStickerOnImage(stickerId, x, y) {
     stickerElement.id = stickerId;
     stickerElement.style.left = x + 'px';
     stickerElement.style.top = y + 'px';
-	// stickerElement.style.zIndex = '10';
-	// stickerElement.style.transform = 'translate(-50%, -50%)';
     stickerElement.dataset.relativeX = x;
     stickerElement.dataset.relativeY = y;
-	console.log(x, y);
     tmp.appendChild(stickerElement);
 }
 
@@ -114,7 +113,6 @@ document.addEventListener('mousemove', (event) => {
 	if (floatingSticker) {
 			floatingSticker.style.left = event.clientX + 'px';
 			floatingSticker.style.top = event.clientY + 'px';
-		console.log("cursor: " + event.clientX + ", " + event.clientY);
 	}
 });
 
@@ -132,8 +130,6 @@ document.addEventListener('mouseup', (event) => {
 	const dropZone = document.getElementById('camera-section') || document.getElementById('uploadedPhoto');
 	if (dropZone && dropZone.contains(event.target)) {
 		const rect = dropZone.getBoundingClientRect();
-		console.log("rect.left = " + rect.left);
-		console.log("rect.top = " + rect.top);
 		const x = event.clientX - rect.left;
 		const y = event.clientY - rect.top;
 		const id = selectedStickerId;

@@ -1,15 +1,11 @@
-document.addEventListener('DOMContentLoaded', () => {
-	checkToken();
-	//loadUserData();
-});
+import { check_token } from './check-token.js';
 
-async function checkToken() {
-	const token = localStorage.getItem('token');
-	if (!token) {
-		// alert('No token found. Please login.');
+document.addEventListener('DOMContentLoaded', async () => {
+	const r = await check_token();
+	if (r === false) {
 		window.location.href = '/';
 	}
-}
+});
 
 async function getPictures() {
 	const token = localStorage.getItem('token');
@@ -145,7 +141,6 @@ async function getUser() {
 	}
 
 	function clearPhoto() {
-		console.log("clear photo");
 		const context = canvas.getContext("2d");
 		context.fillStyle = "#aaaaaa";
 		context.fillRect(0, 0, canvas.width, canvas.height);
@@ -214,7 +209,6 @@ async function getUser() {
 })();
 
 	function clearPhoto() {
-		console.log("clear photo");
 		const context = canvas.getContext("2d");
 		context.fillStyle = "#aaaaaa";
 		context.fillRect(0, 0, canvas.width, canvas.height);

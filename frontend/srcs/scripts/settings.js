@@ -1,15 +1,12 @@
-document.addEventListener('DOMContentLoaded', () => {
-	checkToken();
+import { check_token } from './check-token.js';
+
+document.addEventListener('DOMContentLoaded', async () => {
+	const r = await check_token();
+	if (r == false) {
+		window.location.href = '/';
+	}
     loadUserData();
 });
-
-async function checkToken() {
-    const token = localStorage.getItem('token');
-    if (!token) {
-        // alert('No token found. Please login.');
-        window.location.href = '/';
-    }
-}
 
 async function getUser() {
     const token = localStorage.getItem('token');
@@ -36,7 +33,6 @@ function redirectionPage(path) {
 async function loadUserData() {
     const userData = await getUser();
     if (!userData) return;
-	console.log(userData);
 	const avatarDiv = document.getElementById('avatarId');
 	if (avatarDiv) {
         const img = document.createElement('img');

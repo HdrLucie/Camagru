@@ -1,6 +1,14 @@
 // TO DO LIST Fonction pour changer capturer les changements.
 // Fonction pour récupérer le nouvel avatar.
 // Fonction pour sauvegarder les nouvelles informations/refresh de la page avec les nouvelles info. 
+import { check_token } from './check-token.js';
+
+document.addEventListener('DOMContentLoaded', () => {
+	const r = check_token();
+	if (r == false) {
+		window.location.href = '/';
+	}
+});
 
 let notifyState = initialNotifyState();
 
@@ -63,7 +71,7 @@ async function getUser() {
     }
 }
 
-async function getModifications() {
+document.getElementById('sendBtn').addEventListener('click', async () => {
 	var tmpUser = document.getElementById("Username")
 	var tmpEmail = document.getElementById("Email")
 	var notifyState = checkNotifyState();
@@ -79,10 +87,9 @@ async function getModifications() {
             console.error("Impossible de récupérer l'utilisateur");
             return;
         }
-
         email = user.email;
     }
-		// try {
+	try {
 		const response = await fetch("/setUserDatas", {
 			method: "POST",
 			headers: {
@@ -95,19 +102,12 @@ async function getModifications() {
 				"notifyState": !notifyState,
 			})
 		});
-	// 	if (!response.ok) {
-	// 		throw new Error(`HTTP error! status: ${response.status}`);
-	// 	}
-	//
-	// 	const data = await response.json();
-	// 	if (response.status === 201) {
-	// 		window.location.href = data.redirectPath
-	// 	} else if (response.status === 409) {
-	// 		alert("Username or email already in use.")
-	// 	} else {
-	// 		alert(`Error creating user: ${data.message}`);
-	// 	}
-	// } catch (error) {
-	// 	console.error("Error: ", error);
-	// }
-}
+		if (response.status === 200) {
+			window.location.href = "/profile"
+		} else if (response.status === 409) {
+			alert("Username or email already in use.")
+		}
+	} catch (error) {
+		console.error("Error: ", error);
+	}
+});

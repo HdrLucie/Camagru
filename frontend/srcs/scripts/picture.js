@@ -1,5 +1,10 @@
-document.addEventListener('DOMContentLoaded', () => {
-	checkToken();
+import { check_token } from './check-token.js';
+
+document.addEventListener('DOMContentLoaded', async () => {
+	const r = await check_token();
+	if (r == false) {
+		window.location.href = '/';
+	}
 	displayPicture();
 	isOwner();
 });
@@ -38,7 +43,6 @@ async function isOwner() {
 	const pUser = picture.userId;
 
 	if (user.id != pUser) {
-		console.log("on rentre dans le if");
 		deleteBtn = document.getElementById('deleteButton');
 		deleteBtn.style.display = 'none';
 	}

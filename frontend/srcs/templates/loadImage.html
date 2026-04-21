@@ -20,15 +20,15 @@
 				<img id="uploadedPhoto" src="#" alt="Uploaded image" ondragover="handleDragOver(event);" ondrop="handleDrop(event);" />
 			</div>
 			<input id="uploadPhoto" type='file' />
-			<button onclick="sendImg()">Send your image</button>
+			<button id="sendImg">Send your image</button>
 			<aside class="stickers-sidebar">
 				<div class="stickers-grid" id="stickersContainer"></div>
 			</aside>
 		</div>
 	</body>
-	<script src="/scripts/loadImage.js"></script>
-	<script src="/scripts/stickers.js"></script>
+	<script type="module" src="/scripts/loadImage.js"></script>
+	<script type="module" src="/scripts/stickers.js"></script>
 	<script src="/scripts/menu.js"></script>
-	<script src="/scripts/logout.js"></script>
+	<script type="module" src="/scripts/logout.js"></script>
 
 </html>

@@ -1,3 +1,12 @@
+import { check_token } from './check-token.js';
+
+document.addEventListener('DOMContentLoaded', async () => {
+	const r = await check_token();
+	if (r == false) {
+		window.location.href = '/';
+	}
+});
+
 window.addEventListener('load', function() {
 	document.querySelector('input[type="file"]').addEventListener('change', async function() {
 		if (this.files && this.files[0]) {
@@ -31,8 +40,7 @@ async function getUser() {
 	}
 }
 
-
-async function sendImg() {
+document.getElementById('sendImg').addEventListener('click', async () => {
     const token = localStorage.getItem('token');
 	const stickers = [];
     const fileInput = document.getElementById('uploadPhoto');
@@ -70,4 +78,4 @@ async function sendImg() {
 		body: formData
 	});
 	window.location.href = `/gallery/1`;
-}
+});

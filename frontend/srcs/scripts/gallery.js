@@ -1,7 +1,13 @@
-document.addEventListener('DOMContentLoaded', () => {
-    displayGallery();
-    const container = document.getElementById('galleryContainer');
+import { check_token } from './check-token.js';
 
+document.addEventListener('DOMContentLoaded', async () => {
+	const r = await check_token();
+	if (r == true) {
+		displayGallery();
+	} else {
+		displaySimpleGallery();
+	}
+    const container = document.getElementById('galleryContainer');
     container.addEventListener('click', (e) => {
         const btn = e.target.closest('.btn-love');
         if (btn) {
@@ -48,7 +54,6 @@ async function getPhotoUserData(pictureId) {
 			},
 		});
 		const picture = await response.json();
-		console.log(picture);
 		return picture.Usr;
 	} catch (error) {
 		console.error("Erreur:", error);
@@ -60,7 +65,6 @@ async function getPictures() {
 	var page = window.location.pathname.split("/").pop();
 	if (!page)
 		window.location.href = window.location.pathname + "1";
-    const token = localStorage.getItem('token');
     try {
         const response = await fetch(`/getPictures/${page}`, {
             method: "GET",
@@ -69,7 +73,6 @@ async function getPictures() {
             },
         });
         const pictures = await response.json();
-		console.log(pictures);
         return pictures;
     } catch (error) {
         console.error("Erreur:", error);
@@ -153,7 +156,6 @@ async function getComments(pId) {
                 "Content-Type": "application/json",
             },
         });
-		console.log(response);
         return await response.json();
     } catch (error) {
         console.error("Erreur:", error);
@@ -223,6 +225,44 @@ document.getElementById('galleryContainer').addEventListener('submit', async fun
         console.error("Error: ", error);
     }
 });
+
+async function displaySimpleGallery() {
+	const data = await getPictures();
+    const container = document.getElementById('galleryContainer');
+    container.innerHTML = '';
+    const pictures = data?.pictures;
+    const isLast = data?.last;
+	if (pictures && pictures.length > 0) {
+		for (const picture of pictures) {
+			container.innerHTML += `
+				<div class="feed">
+				<section class="username">
+				<div class="id">
+				</div>
+				</section>
+				<section class="post" style="cursor: pointer;" onclick="window.location.href='/photo/${picture.id}'">
+				<img src="${picture.path}" alt="${picture.path}">
+				</section>
+				<section class="btn-group">
+			
+				</section>
+				<section class="caption">
+				<p class="like" data-id="${picture.id}">${picture.likes ?? 0} likes</p>
+				<form class="com-form" data-id="${picture.id}">
+				<div class="commentList" data-id="${picture.id}"></div>
+				</form>
+				
+				</section>
+				</div>
+				
+				`;
+		}
+    } else {
+        const message = document.createElement('p');
+        message.textContent = 'No image available';
+        container.appendChild(message);
+    }
+}
 
 async function displayGallery() {
 	const data = await getPictures();

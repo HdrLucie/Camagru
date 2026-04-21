@@ -72,6 +72,19 @@ func (app *App) verifyJWT(JWT string) (*User, error) {
 	return user, error
 }
 
+func (app *App) check_token(writer http.ResponseWriter, request *http.Request) {
+	JWT := extractJWTFromRequest(request)
+	if JWT == "" {
+		http.Error(writer, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+	_, err := app.verifyJWT(JWT)
+	if err != nil {
+		http.Error(writer, "Invalid token", http.StatusUnauthorized)
+		return
+	}
+}
+
 func (app *App) authMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 		JWT := extractJWTFromRequest(request)
@@ -139,7 +152,7 @@ func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/forgetPassword", serveTemplate("forgetPassword.html"))
 	router.HandleFunc("/verify", serveTemplate("verify.html"))
 	router.HandleFunc("/resetPassword", serveTemplate("resetPassword.html"))
-	router.HandleFunc("/profile", serveTemplate("profile.html"))
+	router.HandleFunc("/settings", serveTemplate("profile.html"))
 	router.HandleFunc("/photo/", app.viewPhoto)
 	router.HandleFunc("/signUp", app.signUp)
 	router.HandleFunc("/login", app.login)
@@ -164,6 +177,7 @@ func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/getComment/", app.authMiddleware(app.getComments));
 
 	router.HandleFunc("/resizeImg", app.resizeImg);
+	router.HandleFunc("/getToken", app.check_token);
 }
 
 func renderTemplate(router *http.ServeMux, app *App) {

@@ -11,8 +11,7 @@ if (resetButton) {
 		event.preventDefault();
 		window.location.href = "/forgetPassword";
 	};
-} else {
-	console.log("Button not found!");
+} 
 }
 
 document.getElementById("signUp").onclick = async function () {
