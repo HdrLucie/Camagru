@@ -13,13 +13,9 @@ if (resetButton) {
 } 
 
 document.getElementById("signUp").onclick = async function () {
-	var tmpUser = document.getElementById("Username")
-	var tmpEmail = document.getElementById("Email")
-	var tmpPassword = document.getElementById("Password")
-
-	var login = tmpUser.value
-	var email = tmpEmail.value
-	var password = tmpPassword.value
+	var login = document.getElementById("Username").value;
+	var email = document.getElementById("Email").value;
+	var password = document.getElementById("Password").value;
 
 	if (login == "" || email == "" || password == "") {
 		alert("Wrong username, email or password")
@@ -58,6 +54,8 @@ document.getElementById("signUp").onclick = async function () {
 	}
 }
 
+
+// Login function
 document.getElementById("login").onclick = async function () {
 	var user = document.getElementById("UsernameLogin")
 	var mdp = document.getElementById("PasswordLogin")
@@ -76,9 +74,9 @@ document.getElementById("login").onclick = async function () {
 			})
 		});
 		const data = await response.json();
-		const token = data.token;
-		localStorage.setItem('token', token);
 		if (response.status === 200) {
+			const token = data.token;
+			localStorage.setItem('token', token);
 			window.location.href = data.redirectPath
 		} else if (response.status === 401) {
 			alert("Unable to log in. Please verify your credentials and try again.")
@@ -88,7 +86,6 @@ document.getElementById("login").onclick = async function () {
 			alert(`Error connection: ${data.message}`);
 		}
 	} catch (error) {
-		console.error("Error:", error);
 		alert("Wrong username or password");
 	}
 }

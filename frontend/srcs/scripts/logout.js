@@ -20,7 +20,8 @@ document.getElementById("logout").onclick = async function () {
             data = JSON.parse(responseText);
         }
 		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
+			localStorage.clear()
+			window.location.href = '/'
 		}
 		if (response.status === 200) {
 			localStorage.clear()
