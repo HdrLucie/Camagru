@@ -18,9 +18,21 @@ window.addEventListener('load', function() {
 			}
 			const resizeImg = document.getElementById('uploadedPhoto');
 			resizeImg.src = URL.createObjectURL(file);
+			document.querySelector('.image-upload-wrap').style.display = 'none';
+			document.querySelector('.file-upload-content').style.display = 'block';
 		}
 	});
 });
+
+document.getElementById('removeBtn').addEventListener('click', removeUpload);
+
+function removeUpload() {
+    document.querySelector('.image-upload-wrap').style.display = 'block';
+    document.querySelector('.file-upload-content').style.display = 'none';
+    document.getElementById('uploadedPhoto').src = '#';
+    document.querySelectorAll('.placed-sticker').forEach(s => s.remove());
+
+}
 
 async function getUser() {
 	const token = localStorage.getItem('token');

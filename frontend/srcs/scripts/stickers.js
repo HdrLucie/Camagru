@@ -58,7 +58,7 @@ async function createStickerOnImage(stickerId, x, y) {
     stickerElement.src = "/stickers/" + name;
     stickerElement.className = 'placed-sticker';
 
-    const tmp = document.getElementById('camera-section') || document.getElementById('uploadedImageContainer');
+    const tmp = document.getElementById('camera-section') || document.getElementById('file-upload-content');
     stickerElement.id = stickerId;
     stickerElement.style.left = x + 'px';
     stickerElement.style.top = y + 'px';
@@ -127,7 +127,7 @@ function cancelSelection() {
 document.addEventListener('mouseup', (event) => {
 	if (!isDragging || !selectedStickerId) return;
 
-	const dropZone = document.getElementById('camera-section') || document.getElementById('uploadedPhoto');
+	const dropZone = document.getElementById('camera-section') || document.getElementById('file-upload-content');
 	if (dropZone && dropZone.contains(event.target)) {
 		const rect = dropZone.getBoundingClientRect();
 		const x = event.clientX - rect.left;
@@ -141,7 +141,7 @@ document.addEventListener('mouseup', (event) => {
 document.addEventListener('click', (event) => {
 	if (selectedStickerId === null) return;
 
-	const dropZone = document.getElementById('camera-section') || document.getElementById('uploadedPhoto');
+	const dropZone = document.getElementById('camera-section') || document.getElementById('file-upload-content');
 	if (dropZone && dropZone.contains(event.target)) {
 		const rect = dropZone.getBoundingClientRect();
 		const x = event.clientX - rect.left;

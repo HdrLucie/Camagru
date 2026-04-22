@@ -317,7 +317,6 @@ type getPictureResponse struct {
 
 func (app *App) getPicture(writer http.ResponseWriter, request *http.Request) {
 	var picture Pictures;
-	fmt.Println("HERE")
     if request.Method != http.MethodGet {
         http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
         return
