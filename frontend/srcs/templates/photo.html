@@ -19,42 +19,11 @@
 	<body>
 		{{ template "navbar" . }}
 		<div class="container">
-			<div class="left-container">
-				<p style="display:inline">Posted by <span id="login"></span></p>
 				<div class="photo" id="photo"></div>
-				<div class="datas-photo">
-					<button class="Button js-button" id="sendLikes">
-						<i class="Button-icon Button-icon--toggled fa fa-heart"></i>
-						<i class="Button-icon Button-icon fa fa-heart-o"></i>
-					</button>
-					<button class="delete" id="deleteButton">
-						Delete 
-					</button>
-				</div>
-			</div>
-			<div class="right-container">
-				<div class="detailBox">
-					<div class="commentBox">
-						<ul class="commentList" id="commentList">
-						</ul>
-					</div>
-					<div class="actionBox">
-						<form class="form-inline" id="com-form" role="form">
-							<div class="form-group">
-								<input id="comment" class="form-control" type="text" placeholder="Your comments"/>
-							</div>
-							<div class="form-group">
-								<button type="submit" class="btn btn-default" id="sendComments">Add</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
 		</div>
 	</body>
-	<script type="module" src="/scripts/menu.js"></script>
+	<script src="/scripts/menu.js"></script>
 	<script type="module" src="/scripts/logout.js"></script>
-	<script type="module" src="/scripts/socialInteract.js"></script>
 	<script type="module" src="/scripts/picture.js"></script>
 
 </html>

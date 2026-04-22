@@ -116,7 +116,7 @@ func (app *App) viewPhoto(w http.ResponseWriter, r *http.Request) {
     }
     picture, err := app.getPictureById(photoID)
     if err != nil {
-        http.Error(w, "Photo not found", http.StatusNotFound)
+        http.Error(w, "HERE Photo not found", http.StatusNotFound)
         fmt.Println("Error getting picture:", err)
         return
     }

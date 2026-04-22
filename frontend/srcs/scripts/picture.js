@@ -6,16 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 		window.location.href = '/';
 	}
 	displayPicture();
-	isOwner();
 });
-
-function checkToken() {
-	const token = localStorage.getItem('token');
-	if (!token) {
-		window.location.href = '/';
-	}
-	return token
-}
 
 async function getUser() {
     const token = localStorage.getItem('token');
@@ -35,19 +26,6 @@ async function getUser() {
     }
 }
 
-async function isOwner() {
-	const user = await getUser();
-	const pId = window.location.pathname.split("/").pop();
-	const data = await getPicture(pId);
-	const picture = data?.Picture;
-	const pUser = picture.userId;
-
-	if (user.id != pUser) {
-		deleteBtn = document.getElementById('deleteButton');
-		deleteBtn.style.display = 'none';
-	}
-}
-
 async function getPicture(pictureId) {
 	const token = localStorage.getItem('token');
 	try {
@@ -62,6 +40,7 @@ async function getPicture(pictureId) {
 		return picture;
 	} catch (error) {
 		console.error("Erreur:", error);
+		windo.location.href="/gallery/1"
 		return null;
 	}
 }
@@ -86,8 +65,4 @@ async function displayPicture() {
         message.textContent = 'No image available';
         container.appendChild(message);
     }
-	const login = document.getElementById('login');
-	login.textContent = user.username;
-	login.style.color = "#e73c7e";
-	login.className = "user-data"
 }

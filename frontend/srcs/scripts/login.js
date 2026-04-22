@@ -1,4 +1,3 @@
-
 function checkPassword(password) {
 	let regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,25}$/;
 	let result = regex.test(password);
@@ -12,7 +11,6 @@ if (resetButton) {
 		window.location.href = "/forgetPassword";
 	};
 } 
-}
 
 document.getElementById("signUp").onclick = async function () {
 	var tmpUser = document.getElementById("Username")
@@ -56,7 +54,7 @@ document.getElementById("signUp").onclick = async function () {
 			alert(`Error creating user: ${data.message}`);
 		}
 	} catch (error) {
-		console.error("Error: ", error);
+		alert("Username or email already in use.")
 	}
 }
 

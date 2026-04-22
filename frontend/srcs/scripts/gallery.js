@@ -73,9 +73,10 @@ async function getPictures() {
             },
         });
         const pictures = await response.json();
+		console.log(pictures);
         return pictures;
     } catch (error) {
-        console.error("Erreur:", error);
+		window.location.href = "/";
         return null;
     }
 }
