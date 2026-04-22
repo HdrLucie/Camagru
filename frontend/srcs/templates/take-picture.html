@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Camagru</title>
+		<script src="https://kit.fontawesome.com/76ec232e00.js" crossorigin="anonymous"></script>
+		<link rel="stylesheet" type="text/css" href="/styles/sticky-bar.css" />
+		<link rel="stylesheet" type="text/css" href="/styles/picture.css" />
+		<link rel="stylesheet" type="text/css" href="style/profile-menu.css">
+	</head>
+
+	<body>
+		{{ template "navbar" . }} 
+		<div class="main-container">
+			<main class="camera-section" id="camera-section">
+				<div class="camera" id="camera" ondragover="handleDragOver(event);" ondrop="handleDrop(event);">
+					<video id="video"></video>
+					<button id="startbutton" class="startbutton">
+						<i class="fa-solid fa-camera"></i>
+					</button>
+					<canvas id="canvas"></canvas>
+				</div>
+				<div class ="output" id="output">
+					<img id="photo" class="output">
+					<button class="startbutton" onclick="clearPhoto()">
+						<i class="fa-solid fa-trash"></i>
+					</button>
+				</div>
+			</main>
+			<button id="sendButton">Send your image</button>
+			<aside class="stickers-sidebar">
+				<div class="stickers-grid" id="stickersContainer"></div>
+			</aside>
+		</div>
+	</body>
+	<script type="module" src="/scripts/logout.js"></script>
+	<script type="module" src="/scripts/picturesEditor.js"></script>
+	<script src="/scripts/menu.js"></script>
+	<script type="module" src="/scripts/stickers.js"></script>
+</html>

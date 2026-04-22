@@ -32,7 +32,7 @@ func (app *App) sendResetLink(writer http.ResponseWriter, request *http.Request)
 	content := fmt.Sprintf("Hi %s, It looks like you requested to reset your password. No worries — just click the link below to set up a new one: <a href=\"http://localhost:8080/resetPassword?email=%s\">here</a> to reset your password\n", user.Username, user.Email)
 	m.SetBody("text/html", content)
 
-	dialer := mail.NewDialer("smtp.mail.fr", 587, "camagru@mail.fr", "12hdkHUDH![d")
+	dialer := mail.NewDialer("smtp.mail.fr", 587, "camagru@mail.fr", MailPwd)
 	err = dialer.DialAndSend(m)
 	if err != nil {
 		panic(err)

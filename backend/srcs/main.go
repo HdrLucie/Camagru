@@ -29,6 +29,9 @@ type App struct {
 	users		[]User
 	stickers	[]Stickers
 	pictures	[]Pictures
+	avatars		[]Avatars
+	comments	[]Comments
+	likes		[]Likes
 }
 
 type User struct {
@@ -40,6 +43,7 @@ type User struct {
 	AuthToken	string`json:"authToken"`
 	AuthStatus	bool`json:"authStatus"`
 	Avatar		string `json:"avatar"`
+	Notify		bool`json:"notify"`
 }
 
 type Stickers struct {
@@ -49,25 +53,53 @@ type Stickers struct {
 }
 
 type Pictures struct {
-	Path	string `json:"path"`
-	Id		int `json:"id"`
-	userId	int `json:"userId"`
-	uploadTime string `json:"uploadTime"`
+	Path		string `json:"path"`
+	Id			int `json:"id"`
+	UserId		int `json:"userId"`
+	UploadTime	string `json:"uploadTime"`
+	Likes		int `json:"likes"`
+	Comments	int `json:"comments"`
 }
+
 type TemplateData struct {
 	Page string
 }
+
+type Avatars struct {
+	Id		int `json:"id"`
+	Name	string `json:"name"`
+	Path	string `json:"path"`
+}
+
+type Comments struct {
+	Username	string	`json:"Username"`
+	Comment		string	`json:"Comment"`
+	PId			int		`json:"pId"`
+}
+
+type Likes struct {
+	Username	string	`json:"Username"`
+	PId			int		`json:"pId"`
+	UId			int		`json:"uId"`
+}
+
+var MailPwd string;
 
 func main() {
 	port := os.Getenv("BIND_ADDR")
 	if port == "" {
 		port = "8080"
 	}
-	err := godotenv.Load("../../.env")
+	err := godotenv.Load(".env")
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Println("Pas de fichier .env, utilisation des variables d'environnement Docker")
 	}
-	fmt.Println(port)
+	pwd, ok := os.LookupEnv("PASSWORD")
+	if !ok || len(pwd) == 0 {
+		log.Fatal("PASSWORD variable not set")
+	}
+	MailPwd = pwd;
+
 	db := DBConnection()
 	app := &App{dataBase: db}
 	router := http.NewServeMux()
@@ -78,8 +110,8 @@ func main() {
 	err = app.createUploadsDirectory();
 	if err != nil {
 		log.Fatal("Error creating uploads directory");
-	}
-	renderTemplate(router, app)
+	}	
+	renderTemplate(router, app);
 
 	fmt.Println("Server started at http://localhost:" + port)
 	http.ListenAndServe(":"+port, router)

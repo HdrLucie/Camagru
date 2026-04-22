@@ -1,17 +1,11 @@
-// Fonction pour vérifier si le token est présent
-// window.onload = checkToken;
-
-// function checkToken() {
-// 	console.log("Function check token")
-// 	const token = localStorage.getItem('token');
-// 	if (!token) {
-// 		window.location.href = '/';
-// 	}
-// }
+import { check_token } from './check-token.js';
 
 document.getElementById("logout").onclick = async function () {
+	const r = await check_token();
+	if (r == false) {
+		return ;
+	}
 	const token = localStorage.getItem('token')
-	console.log("Logout function\n" + token)
 	try {
 		const response = await fetch("/logout", {
 			method: "POST",

@@ -2,8 +2,8 @@
 	width: 1000px;
 	height: 650px;
 	max-height: 100%;
-	background-color: #000000;
-	color: white;
+	background-color: #F7F9F7;
+	color: black;
 	display: none;
 	opacity: 0;
 	visibility: hidden;
@@ -14,6 +14,7 @@
 
 .content-div.active { 
 	display: grid;
+	background-color: #F7F9F7;
 	/*grid-template-columns: auto auto auto auto;*/
 	width: 100%;
 	max-width: 1000px;
@@ -36,8 +37,8 @@
 		width: 1000px;
 		height: 50px;
 		max-width: 100%;
-		color: white;
-		background-color: black;
+		color: black;
+		background-color: #F7F9F7;
 		font-size: 1em;
 		cursor: pointer;
 		border-bottom: 3px solid rgba(255, 255, 255, 0.1);

@@ -1,6 +1,6 @@
 module camagru.go
 
-go 1.24.1
+go 1.25.0
 
 require (
 	github.com/go-mail/mail v2.3.1+incompatible
@@ -11,6 +11,7 @@ require (
 )
 
 require (
+	golang.org/x/image v0.38.0 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/mail.v2 v2.3.1 // indirect
 )

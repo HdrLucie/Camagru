@@ -31,7 +31,7 @@ func sendMail(user User) {
 	content := fmt.Sprintf("Welcome to Camagru %s, click here : <a href=\"http://localhost:8080/verify?token=%s\"> to verify your account\n", user.Username, user.AuthToken)
 	m.SetBody("text/html", content)
 
-	dialer := mail.NewDialer("smtp.mail.fr", 587, "camagru@mail.fr", "12hdkHUDH![d")
+	dialer := mail.NewDialer("smtp.mail.fr", 587, "camagru@mail.fr", MailPwd)
 	err := dialer.DialAndSend(m)
 	if err != nil {
 		panic(err)

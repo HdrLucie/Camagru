@@ -1,0 +1,166 @@
+@import url('https://fonts.googleapis.com/css?family=Arvo');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap");
+
+body,
+html {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    background: white;
+    /*font-size: 13px;*/
+    font-family: 'Arvo', monospace;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    background: transparent;
+}
+
+.container {
+	display:flex;
+	width:100%;
+	padding: 1rem;
+	gap: 3rem;
+	flex-direction: row;
+}
+
+.left-container {
+}
+
+.photo {
+	width: 100%;
+}
+
+.user-data {
+	text-decoration: underline;
+	font-size: 1rem;
+	color: #e73c7e;
+}
+
+.datas-photo {
+	background-color: transparent;
+	justify-content: space-between;
+	flex-direction: row-reverse;
+	margin-top: 0.5em;
+	display: flex;
+}
+
+.right-container {
+
+}
+
+.Button {
+	border-radius: 50%;
+	width: 50px;
+	height: 50px;
+	border: none;
+	background-color: transparent;
+	font-size: 50px;
+	color: #A2122F;
+	cursor: pointer;
+	position: relative;
+	transition-property: color, transform;
+	transition-duration: 150ms;
+	transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000);
+}
+
+.Button:hover,
+.Button:focus {
+	color: #FD6E8A;
+}
+
+.Button.is-toggled {
+	color: #A2122F;
+}
+
+.Button-icon {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.Button-icon--toggled {
+	opacity: 0;
+	color: #FD6E8A;
+	transition: opacity 150ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+}
+
+.Button.is-toggled .Button-icon--toggled {
+	opacity: 1;
+}
+
+.Button:focus {
+	outline: none;
+	transform: scale(0.92);
+}
+
+.Button::before,
+.Button::after {
+	content: '';
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	border-radius: 50%;
+	background-image:
+	linear-gradient(to top   , rgba(255,255,255,0) 0%, currentColor 90%, rgba(255,255,255,0) 100%),
+	linear-gradient(to right , rgba(255,255,255,0) 0%, currentColor 90%, rgba(255,255,255,0) 100%), 
+	linear-gradient(to bottom, rgba(255,255,255,0) 0%, currentColor 90%, rgba(255,255,255,0) 100%), 
+	linear-gradient(to left  , rgba(255,255,255,0) 0%, currentColor 90%, rgba(255,255,255,0) 100%);
+	background-repeat:
+	no-repeat,
+	no-repeat,
+	no-repeat,
+	no-repeat;
+	background-position: 
+	center top,
+	right center,
+	center bottom,
+	left center;
+	background-size:
+	1px 20px,
+	20px 1px,
+	1px 20px,
+	20px 1px;
+	opacity: 0;
+}
+
+.Button::after {
+	transform: rotate(45deg);
+}
+
+.Button.is-active::before {
+	animation: explode1 400ms cubic-bezier(0.215, 0.610, 0.355, 1.000);
+}
+
+.Button.is-active::after {
+	animation: explode2 400ms cubic-bezier(0.215, 0.610, 0.355, 1.000);
+}
+
+.delete {
+	background-color: #2f3542;
+	color: #fff;
+	max-width: 200px;
+	border: none;
+	border-radius: 10px;
+}
+
+@media (max-width: 760px) {
+	.container {
+		flex-direction: column;
+		
+	}
+}

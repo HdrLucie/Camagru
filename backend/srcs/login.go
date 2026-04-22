@@ -44,7 +44,7 @@ func	createToken(user *User) (string, error) {
 
 func (app *App)	checkPassword(user *User, pass string, writer http.ResponseWriter) (string, int) {
 	if CheckPasswordHash(pass, user.Password) == true {
-		redirectPath := "/gallery"
+		redirectPath := "/gallery/1"
 		return redirectPath, http.StatusOK
 	} else {
 		redirectPath := "/"

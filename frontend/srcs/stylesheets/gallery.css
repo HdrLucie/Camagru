@@ -2,27 +2,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap");
 
-body,
-html {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    width: 100%;
-    height: 100%;
-    margin: 0px;
-    padding: 0px;
-    background: #111;
-    /*font-size: 13px;*/
-    font-family: 'Arvo', monospace;
+:root {
+    font-size: 10px;
 }
 
-* {
-    margin: 0;
-    padding: 0;
+*,
+*::before,
+*::after {
     box-sizing: border-box;
-    width: 100%;
 }
+
+body {
+    font-family: "Open Sans", Arial, sans-serif;
+    min-height: 100vh;
+    background-color: #fafafa;
+    color: #262626;
+    padding-bottom: 3rem;
+	margin: 0;
+}
+
+img {
+    display: block;
+}
+
 
 ::-webkit-scrollbar {
     width: 0;
@@ -34,17 +36,95 @@ html {
 /*               Grid section              */
 /*/////////////////////////////////////////*/
 
-.gallery-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 20px;
-    padding: 20px;
-    position: absolute;
-    top: 10%;
-    z-index: 1;
+.feed {
+    width: 30%;
+    height: auto;
+    background-color: #FFFFFF;
+    margin: 80px auto;
+    padding-bottom: 10px;
 }
 
-.gallery-container img {
-    max-width: 100%;
-    height: auto;
+.feed .username {
+	align-content: center;
+}
+
+.feed .username .image, .feed .username .image img {
+    width:35px;
+    height: 35px;
+    border-radius: 50%;
+}
+
+.feed .username a {
+    color: #000000;
+    font-weight: 400;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.feed .username .id {
+    margin: 10px 15px;
+	font-size: large;
+	text-decoration: underline;
+}
+
+.feed .post {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.feed .post img {
+    width: 100%;
+}
+
+.feed .btn-group {
+    padding: 0px 10px;
+}
+
+.feed .btn-group button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.feed .btn-group .btn-bookmark {
+    float: right;
+}
+
+.feed .caption {
+    font-size: 13px;
+    padding: 0px 20px;
+} 
+
+.feed .caption .like {font-weight: bold;}
+
+.feed .caption .id {
+    color: #000000;
+    text-decoration: none;
+}
+
+.liked {
+	color : red;
+}
+
+.feed .caption .time {
+    font-size: 10px;
+    color: #999;
+}
+
+.nav-controls {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button-nav {
+  padding: 10px 15px;
+  border: none;
+  background: #e73c7e;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button-nav:hover {
+  background: #eba1b4;
 }

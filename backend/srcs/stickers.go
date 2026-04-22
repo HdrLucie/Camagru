@@ -6,8 +6,9 @@ import (
 	"os"
 )
 
-func (app *App) extractPathFiles() error {
-	path := "../../frontend/srcs/assets/stickers/"
+func (app *App) extractPathStickersFiles() error {
+	path := frontendPath("assets/stickers") + "/"
+
 	directory, err := os.Open(path)
 	if err != nil {
 		return err
@@ -36,7 +37,6 @@ func (app *App) manageStickersInsertError(imagePath string) (bool, error) {
             SELECT 1 FROM stickers 
             WHERE image_path = $1
         )`
-    
     err := app.dataBase.QueryRow(query, imagePath).Scan(&exists)
     if err != nil {
         return false, fmt.Errorf("erreur lors de la vérification du sticker: %v", err)
@@ -46,7 +46,7 @@ func (app *App) manageStickersInsertError(imagePath string) (bool, error) {
 
 func (app *App) InsertSticker() error {
 	var exists bool
-	err := app.extractPathFiles()
+	err := app.extractPathStickersFiles()
 	if err != nil {
 		return err
 	}

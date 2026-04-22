@@ -9,7 +9,7 @@
 .menu-item,
 .menu-open-button {
 	background: #EEEEEE;
-	color: #FFFFFF;
+	color: black;
 	text-align: center;
 	-webkit-transform: translate3d(0, 0, 0);
 	transform: translate3d(0, 0, 0);
@@ -33,7 +33,7 @@
       width: 33.333333%;
       float: left;
       text-align: center;
-      color: #fff;
+      color: black;
       &:hover{
         color: #333;
         .fa{

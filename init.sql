@@ -5,8 +5,9 @@ CREATE TABLE users (
     password VARCHAR(255) UNIQUE NOT NULL,
     JWT VARCHAR(255) NULL,
     authToken VARCHAR(255) NULL,
-    authStatus BOOLEAN,
-	avatar	TEXT
+    authStatus BOOLEAN DEFAULT FALSE,
+	avatar	TEXT,
+	notify BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE stickers (
@@ -18,8 +19,27 @@ CREATE TABLE stickers (
 CREATE TABLE images (
 	image_path TEXT,
 	id SERIAL PRIMARY KEY,
-	userId bigint,
+	userId INT,
 	uploadTime timestamp with time zone,
 	like_count INTEGER DEFAULT 0,
 	comment_count INTEGER DEFAULT 0
+);
+
+CREATE TABLE avatars (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    image_path TEXT
+);
+
+CREATE TABLE comments (
+	comment TEXT,
+	post_id INT,
+	user_id INT,
+	post_time timestamp with time zone
+);
+
+CREATE TABLE likes (
+	user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    post_id INT NOT NULL REFERENCES images(id) ON DELETE CASCADE,
+    PRIMARY KEY (user_id, post_id)
 );

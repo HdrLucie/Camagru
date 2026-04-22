@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Camagru</title>
+		<script src="https://kit.fontawesome.com/76ec232e00.js" crossorigin="anonymous"></script>
+		<link rel="stylesheet" type="text/css" href="/styles/sticky-bar.css" />
+		<link rel="stylesheet" type="text/css" href="/styles/loadImage.css" />
+		<link rel="stylesheet" type="text/css" href="/styles/picture.css" />
+
+	</head>
+
+	<body>
+		{{ template "navbar" . }}
+		<div class="main-container">
+			<div class="file-upload">
+				<div class="image-upload-wrap">
+					<input class="file-upload-input" type='file' accept="image/*" id="uploadPhoto"/>
+					<div class="drag-text">
+						<h3>Drag and drop a file or select add Image</h3>
+					</div>
+				</div>
+				<div class="file-upload-content" id="file-upload-content">
+					<img class="file-upload-image" id="uploadedPhoto" ondragover="handleDragOver(event);" ondrop="handleDrop(event);" src="#" alt="your image" />
+					<div class="image-title-wrap">
+						<button type="button" id="removeBtn" class="remove-image">Remove <span class="image-title">Uploaded Image</span></button>
+					</div>
+				</div>
+			</div>
+			<button id="sendImg">Send your image</button>
+			<aside class="stickers-sidebar">
+				<div class="stickers-grid" id="stickersContainer"></div>
+			</aside>
+		</div>
+	</body>
+	<script type="module" src="/scripts/loadImage.js"></script>
+	<script type="module" src="/scripts/stickers.js"></script>
+	<script src="/scripts/menu.js"></script>
+	<script type="module" src="/scripts/logout.js"></script>
+
+</html>

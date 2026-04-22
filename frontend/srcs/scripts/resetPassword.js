@@ -1,8 +1,15 @@
+import { check_token } from './check-token.js';
+
+document.addEventListener('DOMContentLoaded', async () => {
+	const r = await check_token();
+	if (r == false) {
+		window.location.href = '/';
+	}
+});
+
 window.addEventListener('load', function () {
-	console.log('La page entière est complètement chargée');
 	
     function getEmail(str, char) {
-        console.log("GetEmail")
         const parts = str.split(char);
         if (parts.length > 1) {
             return parts.slice(1).join(char);
@@ -11,7 +18,6 @@ window.addEventListener('load', function () {
     }
 
 	document.getElementById("resetPassword").onclick = async function () {
-		console.log("\n\nRESET PASSWORD\n\n")
 		var firstPswd = document.getElementById("firstPassword")
 		var secondPswd = document.getElementById("secondPassword")
         var pathName = window.location.search
@@ -20,7 +26,6 @@ window.addEventListener('load', function () {
 		var pswd1 = firstPswd.value
 		var pswd2 = secondPswd.value
 
-        console.log(pswd1 + pswd2 + email)
 		if (pswd1 == "" || pswd2 == "" || pswd1 != pswd2) {
 			alert("Please make sure both passwords are identical.")
             return 

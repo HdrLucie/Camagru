@@ -4,18 +4,19 @@ import (
 	"fmt"
 	"image"
 	"image/png"
-	"image/draw"
 	"image/color"
+	"encoding/json"
 	"io"
 	"mime/multipart"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strconv"
+	"math"
 	"time"
 	"image/jpeg"
 	"strings"
-
+	"golang.org/x/image/draw"
 )
 
 // Il faut créer un dossier qui contiendra toutes mes images, s'il n'existe pas.
@@ -52,6 +53,51 @@ func openAndDecode(filepath string) (image.Image, error) {
 	return img, nil;
 }
 
+func (app *App) resizeImg(writer http.ResponseWriter, request *http.Request) {
+	fmt.Println(Red + "Resize" + Reset);
+
+	if request.Method != http.MethodPost {
+		fmt.Println(Red + "Error : Method" + Reset)
+		http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	err := request.ParseMultipartForm(10 << 20)
+	if err != nil {
+		http.Error(writer, "Erreur parsing formulaire: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+	file, _, err := request.FormFile("image")
+	if err != nil {
+		http.Error(writer, "Erreur récupération image: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+	defer file.Close();
+	img, _, err := image.Decode(file)
+    if err != nil {
+        http.Error(writer, "Erreur décodage image: "+err.Error(), http.StatusBadRequest)
+        return
+    }
+	fmt.Println("Before resize :" , img.Bounds().Dx() , img.Bounds().Dy());
+    width := int(float64(img.Bounds().Dx()))
+    height := int(float64(img.Bounds().Dy()))
+	var newWidth, newHeight int
+	if width > 500 || height > 700 {
+		ratioW := 500.0 / float64(width)
+		ratioH := 700.0 / float64(height)
+		r := math.Min(ratioW, ratioH)
+		newWidth = int(float64(width) * r)
+		newHeight = int(float64(height) * r)
+		resized := image.NewRGBA(image.Rect(0, 0, newWidth, newHeight))
+		draw.BiLinear.Scale(resized, resized.Bounds(), img, img.Bounds(), draw.Over, nil)	
+		fmt.Println("After resize :" , resized.Bounds().Dx() , resized.Bounds().Dy());
+		writer.Header().Set("Content-Type", "image/jpeg")
+		jpeg.Encode(writer, resized, &jpeg.Options{Quality: 85})
+	}
+	writer.Header().Set("Content-Type", "image/jpeg")
+	jpeg.Encode(writer, img, &jpeg.Options{Quality: 85})
+
+}
+
 func createImage(file multipart.File, fileHeader *multipart.FileHeader, tmpId int, uploadsDir string) (string, error) {
 	timestamp := time.Now().Unix()
 	filename := fmt.Sprintf("user_%d_%d_%s", tmpId, timestamp, fileHeader.Filename)
@@ -75,29 +121,40 @@ func concatImage(imgPath string, stickerPath string, posX int, posY int) {
 	if err != nil {
 		panic(err)
 	}
-	
+
 	sticker, err := openAndDecode(stickerPath)
 	if err != nil {
 		panic(err)
 	}
 
 	finImage := image.NewRGBA(img.Bounds())
-	fmt.Println(posX, posY)	
+	fmt.Println("Size :", img.Bounds());
 	draw.Draw(finImage, img.Bounds(), img, image.Point{0, 0}, draw.Src)
-	stickerPos := image.Point{posX * 7, posY * 5}
-	stickerRect := image.Rectangle{
-		Min: stickerPos,
-		Max: stickerPos.Add(sticker.Bounds().Size()),
-	}
-	
-	draw.Draw(finImage, stickerRect, sticker, image.Point{0, 0}, draw.Over)
+	stickerPos := image.Point{posX, posY}
+	stickerRect := sticker.Bounds();
 
+	w := float64(stickerRect.Dx());
+	h := float64(stickerRect.Dy());
+
+	if w > h {
+		h = h / w * 128;
+		w = 128;
+	} else {
+		w = w / h * 128;
+		h = 128;
+	}
+	stickerRect.Max.X = int(w);
+	stickerRect.Max.Y = int(h);
+	stickerRect.Max = stickerRect.Max.Add(stickerPos);
+	stickerRect.Min = stickerRect.Min.Add(stickerPos);
+
+	draw.BiLinear.Scale(finImage, stickerRect, sticker, sticker.Bounds(), draw.Over, nil)
 	out, err := os.Create(imgPath) 
 	if err != nil {
 		panic(err)
 	}
 	defer out.Close()
-	
+
 	ext := strings.ToLower(filepath.Ext(imgPath))
 	switch ext {
 	case ".jpg", ".jpeg":
@@ -107,15 +164,20 @@ func concatImage(imgPath string, stickerPath string, posX int, posY int) {
 	default:
 		err = png.Encode(out, finImage)
 	}
-	
+
 	if err != nil {
 		panic(err)
 	}
 }
 
-func (app *App) downloadImage(writer http.ResponseWriter, request *http.Request) {
+type S struct {
+	Path	string `json:"path"`
+	PosX	int    `json:"posX"`
+	PosY	int    `json:"posY"`
+	Id		int	`json:"id"`
+}
 
-	fmt.Println(Yellow + "Download image" + Reset)
+func (app *App) downloadImage(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Set("Content-Type", "application/json")
 
 	if request.Method != http.MethodPost {
@@ -123,52 +185,56 @@ func (app *App) downloadImage(writer http.ResponseWriter, request *http.Request)
 		http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-    err := request.ParseMultipartForm(10 << 20)
-    if err != nil {
-        http.Error(writer, "Erreur parsing formulaire: "+err.Error(), http.StatusBadRequest)
-        return
-    }
-    file, fileHeader, err := request.FormFile("image")
-    if err != nil {
-        http.Error(writer, "Erreur récupération image: "+err.Error(), http.StatusBadRequest)
-        return
-    }
-    defer file.Close();
+	err := request.ParseMultipartForm(10 << 20)
+	if err != nil {
+		http.Error(writer, "Erreur parsing formulaire: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+	file, fileHeader, err := request.FormFile("image")
+	if err != nil {
+		http.Error(writer, "Erreur récupération image: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+	stickersJSON := request.FormValue("stickers")
+	var stickers []S
+	err = json.Unmarshal([]byte(stickersJSON), &stickers)
+	if err != nil {
+		http.Error(writer, err.Error(), http.StatusBadRequest)
+		return
+	}
+	fmt.Println(stickers);
 	timeStamp := request.FormValue("timestamp")
 	userId := request.FormValue("id")
-	tmpStickerId := request.FormValue("imageId");
-	posX := request.FormValue("posX");
-	posY := request.FormValue("posY");
-	x, err := strconv.Atoi(posX);
-	y, err := strconv.Atoi(posY);
 	tmpId, err := strconv.Atoi(userId)
-	stickerId, err := strconv.Atoi(tmpStickerId);
 	if err != nil {
-		http.Error(writer, "ID utilisateur invalide", http.StatusBadRequest)
+		http.Error(writer, "userId invalide: "+err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	uploadsDir := "uploads"
-	// if _, err := os.Stat(uploadsDir); os.IsNotExist(err) {
-	// 	err = os.MkdirAll(uploadsDir, 0755)
-	// 	if err != nil {
-	// 		http.Error(writer, "Erreur création dossier: "+err.Error(), http.StatusInternalServerError)
-	// 		return
-	// 	}
-	// }
-		
+	if _, err := os.Stat(uploadsDir); os.IsNotExist(err) {
+		err = os.MkdirAll(uploadsDir, 0755)
+		if err != nil {
+			http.Error(writer, "Erreur création dossier: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+
 	var imageId int
 	filepath, err := createImage(file, fileHeader, tmpId, uploadsDir);
-	stickerPath := app.getStickerPathById(stickerId);
-	concatImage(filepath, stickerPath, x, y);
+	fmt.Println("createImage result:", filepath, err)
+	for _, sticker := range stickers {
+		path := app.getStickerPathById(sticker.Id)
+		concatImage(filepath, path, sticker.PosX, sticker.PosY);
+	}
 	err = app.dataBase.QueryRow("INSERT INTO images (image_path, userId, uploadTime) VALUES ($1, $2, $3) RETURNING id", 
-		filepath, tmpId, timeStamp).Scan(&imageId)
+	filepath, tmpId, timeStamp).Scan(&imageId)
 	if err != nil {
 		fmt.Println(Red + "Error : insert image in DB" + Reset)
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	
+
 	writer.Header().Set("Content-Type", "application/json")
 	fmt.Fprintf(writer, `{"success": true, "message": "Image sauvegardée", "imageId": %d, "path": "%s"}`, imageId, filepath)
 

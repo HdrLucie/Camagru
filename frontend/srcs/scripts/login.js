@@ -1,5 +1,3 @@
-console.log('La page entière est complètement chargée');
-
 function checkPassword(password) {
 	let regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,25}$/;
 	let result = regex.test(password);
@@ -8,18 +6,13 @@ function checkPassword(password) {
 
 const resetButton = document.getElementById("forgetPassword");
 if (resetButton) {
-	console.log("Button found!");
 	resetButton.onclick = function (event) {
 		event.preventDefault();
-		console.log("Reset password function");
 		window.location.href = "/forgetPassword";
 	};
-} else {
-	console.log("Button not found!");
-}
+} 
 
 document.getElementById("signUp").onclick = async function () {
-	console.log("\n\nSIGN UP FUNCTION\n\n")
 	var tmpUser = document.getElementById("Username")
 	var tmpEmail = document.getElementById("Email")
 	var tmpPassword = document.getElementById("Password")
@@ -28,7 +21,6 @@ document.getElementById("signUp").onclick = async function () {
 	var email = tmpEmail.value
 	var password = tmpPassword.value
 
-	console.log("Login : " + login + " Email : " + email + " Mdp : " + password)
 	if (login == "" || email == "" || password == "") {
 		alert("Wrong username, email or password")
 	}
@@ -55,7 +47,6 @@ document.getElementById("signUp").onclick = async function () {
 
 		const data = await response.json();
 		if (response.status === 201) {
-			console.log("\nAccount created successfully! Please check your email to verify your account.")
 			window.location.href = data.redirectPath
 		} else if (response.status === 409) {
 			alert("Username or email already in use.")
@@ -63,7 +54,7 @@ document.getElementById("signUp").onclick = async function () {
 			alert(`Error creating user: ${data.message}`);
 		}
 	} catch (error) {
-		console.error("Error: ", error);
+		alert("Username or email already in use.")
 	}
 }
 
@@ -87,7 +78,6 @@ document.getElementById("login").onclick = async function () {
 		const data = await response.json();
 		const token = data.token;
 		localStorage.setItem('token', token);
-		console.log('Token:', token);
 		if (response.status === 200) {
 			window.location.href = data.redirectPath
 		} else if (response.status === 401) {
