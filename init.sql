@@ -6,7 +6,6 @@ CREATE TABLE users (
     JWT VARCHAR(255) NULL,
     authToken VARCHAR(255) NULL,
     authStatus BOOLEAN DEFAULT FALSE,
-	avatar	TEXT,
 	notify BOOLEAN DEFAULT TRUE
 );
 
@@ -23,12 +22,6 @@ CREATE TABLE images (
 	uploadTime timestamp with time zone,
 	like_count INTEGER DEFAULT 0,
 	comment_count INTEGER DEFAULT 0
-);
-
-CREATE TABLE avatars (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255),
-    image_path TEXT
 );
 
 CREATE TABLE comments (

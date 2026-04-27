@@ -116,7 +116,7 @@ func (app *App) viewPhoto(w http.ResponseWriter, r *http.Request) {
     }
     picture, err := app.getPictureById(photoID)
     if err != nil {
-        http.Error(w, "HERE Photo not found", http.StatusNotFound)
+        http.Error(w, "Photo not found", http.StatusNotFound)
         fmt.Println("Error getting picture:", err)
         return
     }
@@ -153,7 +153,6 @@ func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/verify", serveTemplate("verify.html"))
 	router.HandleFunc("/resetPassword", serveTemplate("resetPassword.html"))
 	router.HandleFunc("/settings", serveTemplate("profile.html"))
-	router.HandleFunc("/photo/", app.viewPhoto)
 	router.HandleFunc("/signUp", app.signUp)
 	router.HandleFunc("/login", app.login)
 	router.HandleFunc("/sendImage", app.authMiddleware(app.downloadImage))
@@ -167,14 +166,13 @@ func (app *App) router(router *http.ServeMux) {
 	router.HandleFunc("/getStickers", app.authMiddleware(app.getStickers))
 	router.HandleFunc("/getSticker/", app.authMiddleware(app.getStickerById))
 	router.HandleFunc("/getPictures/", app.getPage)
-	router.HandleFunc("/getAvatars", app.authMiddleware(app.getAvatars))
 	router.HandleFunc("/sendLikes", app.sendLikes)
 	router.HandleFunc("/getPicture/", app.authMiddleware(app.getPicture))
 	router.HandleFunc("/sendComments", app.authMiddleware(app.manageComment))
 	router.HandleFunc("/getComments/", app.authMiddleware(app.getComments));
 	router.HandleFunc("/deleteImg", app.authMiddleware(app.deleteImg));
 	router.HandleFunc("/getLikes/", app.authMiddleware(app.getLikes));
-	router.HandleFunc("/getComment/", app.authMiddleware(app.getComments));
+	// router.HandleFunc("/getComment/", app.authMiddleware(app.getComments));
 
 	router.HandleFunc("/resizeImg", app.resizeImg);
 	router.HandleFunc("/getToken", app.check_token);

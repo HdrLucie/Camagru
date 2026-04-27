@@ -33,13 +33,6 @@ function redirectionPage(path) {
 async function loadUserData() {
     const userData = await getUser();
     if (!userData) return;
-	const avatarDiv = document.getElementById('avatarId');
-	if (avatarDiv) {
-        const img = document.createElement('img');
-        img.src = "/stickers/" + userData.avatar;
-		img.alt = userData.avatar;
-        avatarDiv.appendChild(img);
-	}
 	document.querySelectorAll('[user-data]:not(img)').forEach(element => {
         const field = element.getAttribute('user-data');
         element.textContent = userData[field];

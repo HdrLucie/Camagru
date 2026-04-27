@@ -41,9 +41,9 @@ func (app *App) getUserByJWT(JWT string) (*User, error) {
 	if (getterMsg == 1) {
 		fmt.Println(Yellow + "Get user by JWT" + Reset)
 	}
-	query := "SELECT id, email, username, password, JWT, authToken, authStatus, avatar, notify FROM Users WHERE JWT = $1"
+	query := "SELECT id, email, username, password, JWT, authToken, authStatus, notify FROM Users WHERE JWT = $1"
 	row := app.dataBase.QueryRow(query, JWT)
-	err := row.Scan(&user.Id, &user.Email, &user.Username, &user.Password, &user.JWT, &user.AuthToken, &user.AuthStatus, &user.Avatar, &user.Notify)
+	err := row.Scan(&user.Id, &user.Email, &user.Username, &user.Password, &user.JWT, &user.AuthToken, &user.AuthStatus, &user.Notify)
 	if err != nil {
 		return nil, err
 	}
@@ -52,10 +52,10 @@ func (app *App) getUserByJWT(JWT string) (*User, error) {
 
 func (app *App) getUserById(id int) (*User, error) {
     var user User
-    query := "SELECT id, email, username, password, authToken, authStatus, avatar, notify FROM Users WHERE id = $1"
+    query := "SELECT id, email, username, password, authToken, authStatus, notify FROM Users WHERE id = $1"
     err := app.dataBase.QueryRow(query, id).Scan(
         &user.Id, &user.Email, &user.Username, &user.Password,
-        &user.AuthToken, &user.AuthStatus, &user.Avatar, &user.Notify,
+        &user.AuthToken, &user.AuthStatus, &user.Notify,
     )
     if err != nil {
         return nil, err
@@ -265,11 +265,6 @@ func (app *App)	getStickerPathById(id int) string {
 		}
 	}
 	return "";
-}
-
-func (app *App) getAvatars(writer http.ResponseWriter, request *http.Request) {
-	writer.Header().Set("Content-Type", "application/json")
-    json.NewEncoder(writer).Encode(app.avatars)
 }
 
 // ! ||--------------------------------------------------------------------------------||

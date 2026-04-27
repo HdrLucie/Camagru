@@ -241,7 +241,7 @@ async function displaySimpleGallery() {
 				<div class="id">
 				</div>
 				</section>
-				<section class="post" style="cursor: pointer;" onclick="window.location.href='/photo/${picture.id}'">
+				<section class="post">
 				<img src="${picture.path}" alt="${picture.path}">
 				</section>
 				<section class="btn-group">
@@ -288,7 +288,7 @@ async function displayGallery() {
 				<p><b>${username}</b></p>
 				</div>
 				</section>
-				<section class="post" style="cursor: pointer;" onclick="window.location.href='/photo/${picture.id}'">
+				<section class="post">
 				<img src="${picture.path}" alt="${picture.path}">
 				</section>
 				<section class="btn-group">

@@ -1,6 +1,3 @@
-// TO DO LIST Fonction pour changer capturer les changements.
-// Fonction pour récupérer le nouvel avatar.
-// Fonction pour sauvegarder les nouvelles informations/refresh de la page avec les nouvelles info. 
 import { check_token } from './check-token.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -8,15 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
 	if (r == false) {
 		window.location.href = '/';
 	}
+	initialNotifyState();
 });
 
 let notifyState = initialNotifyState();
-
-
-document.addEventListener('DOMContentLoaded', () => {
-	checkToken();
-	initialNotifyState();
-});
 
 function initialNotifyState() {
 	const user = getUser();
@@ -78,7 +70,6 @@ document.getElementById('sendBtn').addEventListener('click', async () => {
 	var token = checkToken();
 	var login = tmpUser.value
 	let email = tmpEmail.value;
-	var avatar = document.getElementById("Avatar");
     if (!emailIsValid(email)) {
         alert("Wrong email");
 

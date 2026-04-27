@@ -29,7 +29,6 @@ type App struct {
 	users		[]User
 	stickers	[]Stickers
 	pictures	[]Pictures
-	avatars		[]Avatars
 	comments	[]Comments
 	likes		[]Likes
 }
@@ -42,7 +41,6 @@ type User struct {
 	JWT			string `json:"token"`
 	AuthToken	string`json:"authToken"`
 	AuthStatus	bool`json:"authStatus"`
-	Avatar		string `json:"avatar"`
 	Notify		bool`json:"notify"`
 }
 
@@ -63,12 +61,6 @@ type Pictures struct {
 
 type TemplateData struct {
 	Page string
-}
-
-type Avatars struct {
-	Id		int `json:"id"`
-	Name	string `json:"name"`
-	Path	string `json:"path"`
 }
 
 type Comments struct {
