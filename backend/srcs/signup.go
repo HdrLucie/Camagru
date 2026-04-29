@@ -107,12 +107,22 @@ func (app *App)	signUp(writer http.ResponseWriter, request *http.Request) {
 	}
 	encryptPassword := encryptPassword(user.Password)
 	user.Password = encryptPassword
-	if (isIdentifierAvailable(app, user) == true ) {
-		http.Error(writer, "Error : Username or email already in use", http.StatusConflict)
-		return	
+	if isIdentifierAvailable(app, user) == true {
+		writer.WriteHeader(http.StatusOK)
+		json.NewEncoder(writer).Encode(map[string]interface{}{
+			"success": false,
+			"reason":  "conflict",
+			"message": "Username or email already in use",
+		})
+		return
 	}
 	if !isValidEmail(user.Email) {
-		http.Error(writer, "Invalid email format", http.StatusBadRequest)
+		writer.WriteHeader(http.StatusOK)
+		json.NewEncoder(writer).Encode(map[string]interface{}{
+			"success": false,
+			"reason":  "invalid_email",
+			"message": "Invalid email format",
+		})
 		return
 	}
 	token = generateAuthToken()

@@ -61,6 +61,7 @@ func addTokenToDb(app *App, user *User, token string) error {
 	err := app.dataBase.QueryRow("SELECT EXISTS(SELECT 1 FROM users WHERE username = $1)", user.Username).Scan(&exists)
 	if err != nil {
 		fmt.Println("Erreur lors de la vérification de l'existence de l'utilisateur:", err)
+		fmt.Println("HERE")	
 		return err
 	}
 	if !exists {
@@ -137,11 +138,28 @@ func (app *App)	login(writer http.ResponseWriter, request *http.Request) {
 	}
 	user, err = app.getUserByUsername(data.Username)
 	if err != nil {
-		http.Error(writer, err.Error(), http.StatusUnauthorized)
+		fmt.Println("Login.go - function -> login : error while connection")
+		writer.WriteHeader(http.StatusOK)
+		json.NewEncoder(writer).Encode(map[string]interface{}{
+			"success": false,
+			"reason":  "Unauthorized",
+			"message": "Unable to login.",
+		})
 		return
 	}
 	token, redirectPath, statusCode := app.manageLoginError(data.Password, user, writer)
+	if statusCode == 401 || statusCode == 500 {
+		fmt.Println("Login.go - function -> login (manageLoginError) : error while connection")
+		writer.WriteHeader(http.StatusOK)
+		json.NewEncoder(writer).Encode(map[string]interface{}{
+			"success": false,
+			"reason":  "Unauthorized",
+			"message": "Unable to login.",
+		})
+		return
+	}
 	addTokenToDb(app, user, token)
+	fmt.Println(statusCode, redirectPath)
 	writer.WriteHeader(statusCode)
     json.NewEncoder(writer).Encode(map[string]string{
         "token": token,

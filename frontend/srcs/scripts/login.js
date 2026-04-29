@@ -37,17 +37,15 @@ document.getElementById("signUp").onclick = async function () {
 				"password": password
 			})
 		});
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-
 		const data = await response.json();
-		if (response.status === 201) {
-			window.location.href = data.redirectPath
-		} else if (response.status === 409) {
-			alert("Username or email already in use.")
+		if (data.success === false) {
+			if (data.reason === "conflict") {
+				alert("Username or email already in use.");
+			} else {
+				alert(data.message);
+			}
 		} else {
-			alert(`Error creating user: ${data.message}`);
+			window.location.href = data.redirectPath;
 		}
 	} catch (error) {
 		alert("Username or email already in use.")
@@ -74,18 +72,20 @@ document.getElementById("login").onclick = async function () {
 			})
 		});
 		const data = await response.json();
-		if (response.status === 200) {
-			const token = data.token;
-			localStorage.setItem('token', token);
-			window.location.href = data.redirectPath
-		} else if (response.status === 401) {
-			alert("Unable to log in. Please verify your credentials and try again.")
-		} else if (response.status === 403) {
-			alert("Account verification required. Please check your email to complete the verification process.")
+		if (data.success === false) {
+			if (data.reason === "Unauthorized") {
+				alert("Unable to log in. Please verify your credentials and try again.");
+				window.location.href("/connection");
+			} else if (data.reason === "Forbidden") {
+				alert("Account verification required. Please check your email to complete the verification process.");
+			} else {
+				alert(`Error connection : ${data.message}`)
+			}
 		} else {
-			alert(`Error connection: ${data.message}`);
+			console.log(data.redirectPath);
+			localStorage.setItem('token', data.token);
+			window.location.href = data.redirectPath;
 		}
 	} catch (error) {
-		alert("Wrong username or password");
 	}
 }

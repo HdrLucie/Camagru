@@ -92,6 +92,7 @@ func (app *App) verifyAccount(writer http.ResponseWriter, request *http.Request)
 	}
 	err = json.NewEncoder(writer).Encode(response)
 	if err != nil {
+		fmt.Println("Authentitification.go")
 		fmt.Println(Red + "Error : Encode Json object" + Reset)
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 		return
