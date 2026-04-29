@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 	}
 });
 
-window.addEventListener('load', async function() {
+window.addEventListener('load', function() {
 	document.querySelector('input[type="file"]').addEventListener('change', async function() {
 		if (this.files && this.files[0]) {
 			const file = this.files[0];
@@ -17,14 +17,8 @@ window.addEventListener('load', async function() {
 				return;
 			}
 			const resizeImg = document.getElementById('uploadedPhoto');
-			const formData = new FormData();
-			formData.append("image", file);
-			const response = await fetch("/resizeImg", {
-				method: "POST",
-				body: formData
-			});
-			const blob = await response.blob();
-			resizeImg.src = URL.createObjectURL(blob);
+			
+			resizeImg.src = URL.createObjectURL(file);
 			document.querySelector('.image-upload-wrap').style.display = 'none';
 			document.querySelector('.file-upload-content').style.display = 'block';
 		}

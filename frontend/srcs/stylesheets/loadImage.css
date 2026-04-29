@@ -83,7 +83,7 @@ input::file-selector-button:hover {
 	width: 100%;
 	margin: 0 auto;
 	padding: 20px;
-	height: 600px;
+	height: auto;
 }
 
 .file-upload-btn {
@@ -116,6 +116,8 @@ input::file-selector-button:hover {
 .file-upload-content {
 	display: none;
 	position: relative;
+	width: 100%;
+	height: auto;
 	text-align: center;
 	width:fit-content;
 	height: fit-content;
@@ -146,6 +148,7 @@ input::file-selector-button:hover {
 
 .image-title-wrap {
 	padding: 0 15px 15px 15px;
+	text-align: center;
 	color: #222;
 }
 
@@ -161,8 +164,9 @@ input::file-selector-button:hover {
 }
 
 .file-upload-image {
-	/* max-height: 800px; */
-	/* max-width: 800px; */
+	max-height: 100%;
+	height: auto;
+	display:block; 
 	margin: auto;
 	padding: 20px;
 }

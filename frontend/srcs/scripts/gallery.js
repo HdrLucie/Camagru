@@ -73,7 +73,6 @@ async function getPictures() {
             },
         });
         const pictures = await response.json();
-		console.log(pictures);
         return pictures;
     } catch (error) {
 		window.location.href = "/";
@@ -302,7 +301,7 @@ async function displayGallery() {
 				<form class="com-form" data-id="${picture.id}">
 				<div class="commentList" data-id="${picture.id}"></div>
 				<div class="comment-input">
-				<input type="text" class="comment-input-field" placeholder="Ajouter un commentaire..." required />
+				<input type="text" class="comment-input-field" placeholder="Say something..." required />
 				<button type="submit">Envoyer</button>
 				</div>
 				</form>
