@@ -31,6 +31,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 });
 
+let isLastPage = false;
+
 document.getElementById("burger").onclick = function () {
     let burger = document.querySelector(".js-burger");
     let nav = document.querySelector(".js-nav");
@@ -231,7 +233,7 @@ async function displaySimpleGallery() {
     const container = document.getElementById('galleryContainer');
     container.innerHTML = '';
     const pictures = data?.pictures;
-    const isLast = data?.last;
+    isLastPage = data?.last ?? false;
 	if (pictures && pictures.length > 0) {
 		for (const picture of pictures) {
 			container.innerHTML += `
@@ -270,7 +272,7 @@ async function displayGallery() {
     container.innerHTML = '';
 	const currentUser = await getUser();
     const pictures = data?.pictures;
-    const isLast = data?.last;
+    isLastPage = data?.last ?? false;
 	if (pictures && pictures.length > 0) {
 		for (const picture of pictures) {
 			const [user, comments] = await Promise.all([
@@ -323,6 +325,11 @@ async function displayGallery() {
 	if (pictures && pictures.length > 0) 
 		pictures.forEach(p => getLikes(p.id));
 }
+
+document.addEventListener('DOMContentLoaded', async () => {
+    document.getElementById('prevBtn').addEventListener('click', prevPage);
+    document.getElementById('nextBtn').addEventListener('click', nextPage);
+});
 
 function prevPage() {
 	const next = document.getElementById('prevBtn');

@@ -280,6 +280,7 @@ type page struct {
 
 func (app *App) getPage(writer http.ResponseWriter, request *http.Request) {
     var r	page;
+	fmt.Println("GET PAGE")
 	if request.Method != http.MethodGet {
         http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
         return

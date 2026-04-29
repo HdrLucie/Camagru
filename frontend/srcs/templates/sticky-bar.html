@@ -1,28 +1,37 @@
 {{define "navbar"}}
 
     <ul class="nav js-nav">
-		<div class="menu-navbar">
-		<li class="nav__item">
-        <button href="#" class="nav__link" onclick="redirectionPage('/gallery/1')">Gallery</button>
-      </li>
-      <li class="nav__item">
-        <button class="nav__link" onclick="redirectionPage('/takePicture')">Take a picture</button>
-      </li>
-      <li class="nav__item">
-		  <button href="#" class="nav__link" onclick="redirectionPage('/loadImage')">Load an image</button>
-      </li>
-      <li class="nav__item">
-        <button href="#" class="nav__link" onclick="redirectionPage('/settings')">Settings</button>
-      </li>
-      <li class="nav__item">
-        <button id="logout" class="nav__link">Logout</button>
-      </li>
-		</div>
+        <div class="menu-navbar menu-connected">
+            <li class="nav__item">
+                <button class="nav__link" data-path="/gallery/1">Gallery</button>
+            </li>
+            <li class="nav__item">
+                <button class="nav__link" data-path="/takePicture">Take a picture</button>
+            </li>
+            <li class="nav__item">
+                <button class="nav__link" data-path="/loadImage">Load an image</button>
+            </li>
+            <li class="nav__item">
+                <button class="nav__link" data-path="/settings">Settings</button>
+            </li>
+            <li class="nav__item">
+                <button id="logout" class="nav__link">Logout</button>
+            </li>
+        </div>
+
+        <!-- Affiché uniquement si non connecté -->
+        <div class="menu-navbar menu-guest">
+            <li class="nav__item">
+                <button class="nav__link" data-path="/connection">Login</button>
+            </li>
+        </div>
     </ul>
+
     <button id="burger" class="burger js-burger">
-      <svg viewBox="0 0 24 24">
-        <path fill="currentColor" d="M3 18H21V16H3V18ZM3 13H21V11H3V13ZM3 6V8H21V6H3Z" />
-      </svg>
+        <svg viewBox="0 0 24 24">
+            <path fill="currentColor" d="M3 18H21V16H3V18ZM3 13H21V11H3V13ZM3 6V8H21V6H3Z" />
+        </svg>
     </button>
 
-  {{end}}
+{{end}}
+
