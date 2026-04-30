@@ -30,7 +30,6 @@ async function verifyAccount() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         if (response.status === 201) {
-            alert("Profile confirmed");
             localStorage.clear()
             window.location.href = data.redirectPath
         } else {
