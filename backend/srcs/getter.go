@@ -280,7 +280,6 @@ type page struct {
 
 func (app *App) getPage(writer http.ResponseWriter, request *http.Request) {
     var r	page;
-	fmt.Println("GET PAGE")
 	if request.Method != http.MethodGet {
         http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
         return
@@ -288,7 +287,6 @@ func (app *App) getPage(writer http.ResponseWriter, request *http.Request) {
 	path := strings.TrimPrefix(request.URL.Path, "/getPictures/")
     page, err := strconv.Atoi(path)
     if err != nil {
-		fmt.Println("Erreur 1")
         http.Error(writer, "Invalid ID", http.StatusBadRequest)
         return
     }
@@ -320,7 +318,6 @@ func (app *App) getPicture(writer http.ResponseWriter, request *http.Request) {
     path := strings.TrimPrefix(request.URL.Path, "/getPicture/")
     id, err := strconv.Atoi(path)
     if err != nil {
-		fmt.Println("Erreur 2")
         http.Error(writer, "Invalid ID", http.StatusBadRequest)
         return
     }

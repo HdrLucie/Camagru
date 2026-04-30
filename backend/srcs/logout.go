@@ -30,8 +30,5 @@ func (app *App) logout(writer http.ResponseWriter, request *http.Request) {
 	}
 	writer.WriteHeader(http.StatusOK)
 	writer.Write(jsonResponse)
-	if (usersList == 1) {
-		app.printUsers()
-	}
 	return
 }

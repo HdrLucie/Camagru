@@ -1,4 +1,5 @@
 import { check_token } from './check-token.js';
+import { getUser } from './get-user.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
 	const r = await check_token();
@@ -33,14 +34,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 let isLastPage = false;
 
-document.getElementById("burger").onclick = function () {
-    let burger = document.querySelector(".js-burger");
-    let nav = document.querySelector(".js-nav");
-
-    nav.classList.toggle("_active");
-    burger.classList.toggle("_active");
-}
-
 function redirectionPage(path) {
     window.location.href = path;
 }
@@ -55,6 +48,9 @@ async function getPhotoUserData(pictureId) {
 				"Content-Type": "application/json",
 			},
 		});
+		if (!response.ok) {
+			throw new Error(`Response status: ${response.status}`);
+		}
 		const picture = await response.json();
 		return picture.Usr;
 	} catch (error) {
@@ -74,6 +70,9 @@ async function getPictures() {
                 "Content-Type": "application/json",
             },
         });
+		if (!response.ok) {
+			throw new Error(`Response status: ${response.status}`);
+		}
         const pictures = await response.json();
         return pictures;
     } catch (error) {
@@ -96,28 +95,13 @@ async function sendLikes(photoId) {
 				"Photo": Number(photoId),
 			})
 		});
+		if (!response.ok) {
+			throw new Error(`Response status: ${response.status}`);
+		}
 		const data = await response.json();
 	} catch (error) {
 		console.error("Error:", error);
 	}
-}
-
-async function getUser() {
-    const token = localStorage.getItem('token');
-    try {
-        const response = await fetch("/getUser", {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-        });
-        const userData = await response.json();
-		return userData;
-    } catch (error) {
-        console.error("Erreur:", error);
-        return null;
-    }
 }
 
 async function getLikes(pId) {
@@ -130,8 +114,10 @@ async function getLikes(pId) {
                 "Content-Type": "application/json",
             },
         });
+		if (!response.ok) {
+			throw new Error(`Response status: ${response.status}`);
+		}
         const likes = await response.json();
-
         const user = await getUser();
         const hasLiked = likes.some(like => like.uId === user.id);
         const heart = document.querySelector(
@@ -158,6 +144,9 @@ async function getComments(pId) {
                 "Content-Type": "application/json",
             },
         });
+		if (!response.ok) {
+			throw new Error(`Response status: ${response.status}`);
+		}
         return await response.json();
     } catch (error) {
         console.error("Erreur:", error);
@@ -216,6 +205,9 @@ document.getElementById('galleryContainer').addEventListener('submit', async fun
                 "Comment": input.value,
             })
         });
+		if (!response.ok) {
+			throw new Error(`Response status: ${response.status}`);
+		}
         const data = await response.json();
 		const commentList = document.querySelector(`.commentList[data-id="${pId}"]`);
 		commentList.innerHTML += `
@@ -304,7 +296,7 @@ async function displayGallery() {
 				<div class="commentList" data-id="${picture.id}"></div>
 				<div class="comment-input">
 				<input type="text" class="comment-input-field" placeholder="Say something..." required />
-				<button type="submit">Envoyer</button>
+				<button style="background-color:white; border:none" type="submit"><i class="fa-solid fa-paper-plane"></i>    Send</button>
 				</div>
 				</form>
 				

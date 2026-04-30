@@ -95,6 +95,12 @@ img {
     padding: 0px 20px;
 } 
 
+.comment-input-field {
+	width:82%;
+	border-radius: 5px;
+	border-color: gray;
+}
+
 .feed .caption .like {font-weight: bold;}
 
 .feed .caption .id {

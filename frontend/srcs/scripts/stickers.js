@@ -22,6 +22,9 @@ async function getStickers() {
                 "Content-Type": "application/json",
             },
         });
+		if (!response.ok) {
+			throw new Error(`Response status: ${response.status}`);
+		}
         const stickers = await response.json();
         return stickers;
     } catch (error) {

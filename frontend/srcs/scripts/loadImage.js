@@ -1,4 +1,5 @@
 import { check_token } from './check-token.js';
+import { getUser } from './get-user.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
 	const r = await check_token();
@@ -33,24 +34,6 @@ function removeUpload() {
     document.getElementById('uploadedPhoto').src = '#';
     document.querySelectorAll('.placed-sticker').forEach(s => s.remove());
 
-}
-
-async function getUser() {
-	const token = localStorage.getItem('token');
-	try {
-		const response = await fetch("/getUser", {
-			method: "GET",
-			headers: {
-				"Authorization": `Bearer ${token}`,
-				"Content-Type": "application/json",
-			},
-		});
-		const userData = await response.json();
-		return userData;
-	} catch (error) {
-		console.error("Erreur:", error);
-		return null;
-	}
 }
 
 document.getElementById('sendImg').addEventListener('click', async () => {
@@ -90,5 +73,8 @@ document.getElementById('sendImg').addEventListener('click', async () => {
 		},
 		body: formData
 	});
+	if (!response.ok) {
+		throw new Error(`Response status: ${response.status}`);
+	}
 	window.location.href = `/gallery/1`;
 });

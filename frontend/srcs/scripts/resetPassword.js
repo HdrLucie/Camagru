@@ -1,10 +1,5 @@
-import { check_token } from './check-token.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
-	const r = await check_token();
-	if (r == false) {
-		window.location.href = '/';
-	}
 });
 
 window.addEventListener('load', function () {
@@ -41,19 +36,13 @@ window.addEventListener('load', function () {
 					"password": pswd1,
 				})
 			});
-			// if (!response.ok) {
-			// 	throw new Error(`HTTP error! status: ${response.status}`);
-			// }
-
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
 			const data = await response.json();
 			if (response.status === 200) {
 				alert(`Password successfully changed`);
 				window.location.href = data.redirectPath
-			}
-			else if (response.status === 404) {
-				alert("Error : User not found")
-			} else if (response.status === 400) {
-				alert("Error : Impossible to change password");
 			}
 		} catch (error) {
 			console.error("Error: ", error);

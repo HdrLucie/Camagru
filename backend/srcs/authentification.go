@@ -81,9 +81,6 @@ func (app *App) verifyAccount(writer http.ResponseWriter, request *http.Request)
 			fmt.Println("Error details:", err)
 		}
 	}
-	if (usersList == 1) {
-		app.printUsers()
-	}
 	writer.WriteHeader(http.StatusCreated)
 	response := map[string]string{
 		"message": "Authentification successfully confirmed!",

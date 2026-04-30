@@ -1,4 +1,5 @@
 import { check_token } from './check-token.js';
+import { getUser } from './get-user.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
 	const r = check_token();
@@ -28,11 +29,12 @@ async function getLikes() {
                 "Content-Type": "application/json",
             },
         });
+		if (!response.ok) {
+			throw new Error(`Response status: ${response.status}`);
+		}
         const likes = await response.json();
-
         const user = await getUser();
         const hasLiked = likes.some(like => like.uId === user.id);
-
         const heart = document.getElementById('sendLikes');
         if (hasLiked) {
             heart.classList.add('is-toggled');
@@ -56,6 +58,9 @@ async function getComments() {
                 "Content-Type": "application/json",
             },
         });
+		if (!response.ok) {
+			throw new Error(`Response status: ${response.status}`);
+		}
         const comments = await response.json();
 		return comments;
     } catch (error) {
@@ -70,40 +75,18 @@ async function displayComments() {
 	listComments = document.getElementById("commentList");
 
 	comments.forEach(comment=>{
-
 		const li = document.createElement("li");
 		li.classList.add("comment-item");
-
 		const username = document.createElement("span");
 		username.classList.add("username");
 		username.textContent = comment.Username;
 		username.className="user-data";
-
 		const content = document.createElement("p");
 		content.textContent = comment.Comment;
-
 		li.appendChild(username);
 		li.appendChild(content);
 		listComments.appendChild(li);
 	});
-}
-
-async function getUser() {
-    const token = localStorage.getItem('token');
-    try {
-        const response = await fetch("/getUser", {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-        });
-        const userData = await response.json();
-		return userData;
-    } catch (error) {
-        console.error("Erreur:", error);
-        return null;
-    }
 }
 
 document.getElementById("sendLikes").onclick = async function () {

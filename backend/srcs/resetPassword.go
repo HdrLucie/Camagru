@@ -40,7 +40,6 @@ func (app *App) sendResetLink(writer http.ResponseWriter, request *http.Request)
 }
 
 func (app *App) resetPassword(writer http.ResponseWriter, request *http.Request) {
-
 	u := app.deserializeUserData(writer, request)
 	user, err := app.getUserByEmail(u.Email)
 	if err != nil {
@@ -49,7 +48,6 @@ func (app *App) resetPassword(writer http.ResponseWriter, request *http.Request)
         json.NewEncoder(writer).Encode(response)
 		return 
 	}
-	app.printUsers()
 	err = app.setPassword(user.Id, u.Password)
 	if err != nil {
 		writer.WriteHeader(http.StatusBadRequest)
@@ -62,5 +60,4 @@ func (app *App) resetPassword(writer http.ResponseWriter, request *http.Request)
 			"redirectPath": "/connection",
 		})
 	}
-	app.printUsers()	
 }

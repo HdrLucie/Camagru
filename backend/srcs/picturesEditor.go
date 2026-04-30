@@ -77,7 +77,6 @@ func (app *App) resizeImg(writer http.ResponseWriter, request *http.Request) {
         http.Error(writer, "Erreur décodage image: "+err.Error(), http.StatusBadRequest)
         return
     }
-	fmt.Println("Before resize :" , img.Bounds().Dx() , img.Bounds().Dy());
     width := int(float64(img.Bounds().Dx()))
     height := int(float64(img.Bounds().Dy()))
 	var newWidth, newHeight int
@@ -128,7 +127,6 @@ func concatImage(imgPath string, stickerPath string, posX int, posY int) {
 	}
 
 	finImage := image.NewRGBA(img.Bounds())
-	fmt.Println("Size :", img.Bounds());
 	draw.Draw(finImage, img.Bounds(), img, image.Point{0, 0}, draw.Src)
 	stickerPos := image.Point{posX, posY}
 	stickerRect := sticker.Bounds();
@@ -202,7 +200,6 @@ func (app *App) downloadImage(writer http.ResponseWriter, request *http.Request)
 		http.Error(writer, err.Error(), http.StatusBadRequest)
 		return
 	}
-	fmt.Println(stickers);
 	timeStamp := request.FormValue("timestamp")
 	userId := request.FormValue("id")
 	tmpId, err := strconv.Atoi(userId)
@@ -210,7 +207,6 @@ func (app *App) downloadImage(writer http.ResponseWriter, request *http.Request)
 		http.Error(writer, "userId invalide: "+err.Error(), http.StatusBadRequest)
 		return
 	}
-
 	uploadsDir := "uploads"
 	if _, err := os.Stat(uploadsDir); os.IsNotExist(err) {
 		err = os.MkdirAll(uploadsDir, 0755)
@@ -219,10 +215,8 @@ func (app *App) downloadImage(writer http.ResponseWriter, request *http.Request)
 			return
 		}
 	}
-
 	var imageId int
 	filepath, err := createImage(file, fileHeader, tmpId, uploadsDir);
-	fmt.Println("createImage result:", filepath, err)
 	for _, sticker := range stickers {
 		path := app.getStickerPathById(sticker.Id)
 		concatImage(filepath, path, sticker.PosX, sticker.PosY);
@@ -234,9 +228,6 @@ func (app *App) downloadImage(writer http.ResponseWriter, request *http.Request)
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
 	writer.Header().Set("Content-Type", "application/json")
 	fmt.Fprintf(writer, `{"success": true, "message": "Image sauvegardée", "imageId": %d, "path": "%s"}`, imageId, filepath)
-
-	fmt.Println(Green + "Image sauvegardée: " + filepath + Reset)
 }

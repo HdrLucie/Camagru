@@ -14,6 +14,9 @@ document.getElementById("logout").onclick = async function () {
 				"Authorization": `Bearer ${token}`,
 			},
 		});
+		if (!response.ok) {
+			throw new Error(`Response status: ${response.status}`);
+		}
         const responseText = await response.text();
         let data;
         if (responseText) {

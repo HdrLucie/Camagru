@@ -150,7 +150,4 @@ func (app *App)	signUp(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 	sendMail(user)
-	if (usersList == 1) {
-		app.printUsers()
-	}
 }

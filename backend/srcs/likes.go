@@ -60,7 +60,6 @@ func (app *App) insertLikeIntoDB(Uid int, Pid int, user *User, r LikeRequest) (b
 			return liked, err
 		}
 		if (user.Notify == true) {
-			fmt.Println(Red + "Email" + Reset)
 			m := mail.NewMessage();
 			m.SetHeader("From", "camagru@mail.fr")
 			m.SetHeader("To", user.Email)

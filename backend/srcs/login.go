@@ -61,7 +61,6 @@ func addTokenToDb(app *App, user *User, token string) error {
 	err := app.dataBase.QueryRow("SELECT EXISTS(SELECT 1 FROM users WHERE username = $1)", user.Username).Scan(&exists)
 	if err != nil {
 		fmt.Println("Erreur lors de la vérification de l'existence de l'utilisateur:", err)
-		fmt.Println("HERE")	
 		return err
 	}
 	if !exists {
@@ -122,9 +121,6 @@ func (app *App)	login(writer http.ResponseWriter, request *http.Request) {
 	if (funcMsg == 1) {
 		fmt.Println(Yellow + "login function" + Reset)
 	}
-	if (usersList == 1) {
-		app.printUsers()
-	}
 	writer.Header().Set("Content-Type", "application/json")
 	if request.Method != http.MethodPost {
 		fmt.Println(Red + "Error : Method" + Reset)
@@ -159,7 +155,6 @@ func (app *App)	login(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 	addTokenToDb(app, user, token)
-	fmt.Println(statusCode, redirectPath)
 	writer.WriteHeader(statusCode)
     json.NewEncoder(writer).Encode(map[string]string{
         "token": token,

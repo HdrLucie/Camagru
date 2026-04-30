@@ -1,7 +1,8 @@
 import { check_token } from './check-token.js';
+import { getUser } from './get-user.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-	const r = check_token();
+document.addEventListener('DOMContentLoaded', async () => {
+	const r = await check_token();
 	if (r == false) {
 		window.location.href = '/';
 	}
@@ -45,24 +46,6 @@ function emailIsValid (email) {
 	return /\S+@\S+\.\S+/.test(email)
 }
 
-async function getUser() {
-    const token = localStorage.getItem('token');
-    try {
-        const response = await fetch("/getUser", {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-        });
-        const userData = await response.json();
-		return userData;
-    } catch (error) {
-        console.error("Erreur:", error);
-        return null;
-    }
-}
-
 document.getElementById('sendBtn').addEventListener('click', async () => {
 	var tmpUser = document.getElementById("Username")
 	var tmpEmail = document.getElementById("Email")
@@ -93,8 +76,11 @@ document.getElementById('sendBtn').addEventListener('click', async () => {
 				"notifyState": !notifyState,
 			})
 		});
+		if (!response.ok) {
+			throw new Error(`Response status: ${response.status}`);
+		}
 		if (response.status === 200) {
-			window.location.href = "/profile"
+			window.location.href = "/settings"
 		} else if (response.status === 409) {
 			alert("Username or email already in use.")
 		}

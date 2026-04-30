@@ -10,6 +10,9 @@ export async function check_token() {
 				"Authorization": `Bearer ${token}`,
 			},
 		});
+		if (!response.ok) {
+			throw new Error(`Response status: ${response.status}`);
+		}
 		if (response.status === 401) {
 			localStorage.removeItem('token');
 			return false;

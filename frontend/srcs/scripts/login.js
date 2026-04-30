@@ -37,6 +37,9 @@ document.getElementById("signUp").onclick = async function () {
 				"password": password
 			})
 		});
+		if (!response.ok) {
+			throw new Error(`Response status: ${response.status}`);
+		}
 		const data = await response.json();
 		if (data.success === false) {
 			if (data.reason === "conflict") {
@@ -71,6 +74,9 @@ document.getElementById("login").onclick = async function () {
 				"Password": password
 			})
 		});
+		if (!response.ok) {
+			throw new Error(`Response status: ${response.status}`);
+		}
 		const data = await response.json();
 		if (data.success === false) {
 			if (data.reason === "Unauthorized") {

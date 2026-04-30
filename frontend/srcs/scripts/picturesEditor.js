@@ -1,4 +1,5 @@
 import { check_token } from './check-token.js';
+import { getUser } from './get-user.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
 	const r = await check_token();
@@ -41,24 +42,6 @@ async function displayGallery() {
 		const message = document.createElement('p');
 		message.textContent = 'No sticker available';
 		container.appendChild(message);
-	}
-}
-
-async function getUser() {
-	const token = localStorage.getItem('token');
-	try {
-		const response = await fetch("/getUser", {
-			method: "GET",
-			headers: {
-				"Authorization": `Bearer ${token}`,
-				"Content-Type": "application/json",
-			},
-		});
-		const userData = await response.json();
-		return userData;
-	} catch (error) {
-		console.error("Erreur:", error);
-		return null;
 	}
 }
 

@@ -1,4 +1,5 @@
 import { check_token } from './check-token.js';
+import { getUser } from './get-user.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
 	const r = await check_token();
@@ -8,26 +9,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadUserData();
 });
 
-async function getUser() {
-    const token = localStorage.getItem('token');
-    try {
-        const response = await fetch("/getUser", {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-        });
-        const userData = await response.json();
-		return userData;
-    } catch (error) {
-        console.error("Erreur:", error);
-        return null;
-    }
-}
-
 function redirectionPage(path) {
     window.location.href = path;
+}
+
+const resetButton = document.getElementById("forgetPassword");
+if (resetButton) {
+	resetButton.onclick = function (event) {
+		event.preventDefault();
+		window.location.href = "/forgetPassword";
+	};
 }
 
 async function loadUserData() {
@@ -49,4 +40,3 @@ async function loadUserData() {
 		document.getElementById('checkedBox').checked = true;
 	}
 }
-
