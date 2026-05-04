@@ -22,25 +22,6 @@
 	background-size: 500% 100%;
 }
 
-.left-column {
-	display: grid;
-	grid-template-rows: repeat(4, 1fr);
-	gap: 20px;
-	height: 100%;
-	max-height: 490px;
-	padding: 20px;
-}
-
-.right-column {
-	height: 100%;
-	max-height: 490px;
-	padding: 20px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	text-align: center;
-}
-
 @media (max-width: 768px) {
 	.grid-container {
 		grid-template-columns: 1fr;
@@ -59,10 +40,11 @@
 /* DATA USER */
 
 .data-user {
-	width: 100%;
 	height: 100%;
 	background-color: transparent;
 	padding: 1em;
+	display: flex;
+	flex-direction: column;
 }
 
 .sub-data-user{
@@ -188,3 +170,26 @@
 #button-1 .btn-bg {
   transition: 0.3s ease all;
 }
+
+.btn-settings {
+	width: 60%;
+	height: 40px;
+	margin: 10px auto;
+	justify-content: center;
+	display: block;
+	background: #eba1b4;
+	color: white;
+	font-size: 1em;
+	font-weight: bold;
+	margin-top: 30px;
+	outline: none;
+	border: none;
+	border-radius: 5px;
+	transition: 0.2s ease-in;
+	cursor: pointer;
+}
+
+.btn-settings:hover {
+	background: #e73c7e;
+}
+

@@ -96,7 +96,7 @@ img {
 } 
 
 .comment-input-field {
-	width:82%;
+	width:75%;
 	border-radius: 5px;
 	border-color: gray;
 }
@@ -133,4 +133,14 @@ img {
 
 .button-nav:hover {
   background: #eba1b4;
+}
+
+@media (max-width: 760px) {
+	.feed {
+		width: 90%;
+		height: auto;
+		background-color: #FFFFFF;
+		margin: 80px auto;
+		padding-bottom: 10px;
+	}
 }
