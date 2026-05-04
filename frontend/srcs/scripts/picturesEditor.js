@@ -47,13 +47,24 @@ async function displayGallery() {
 
 (() => {
 
-	const width = 680;
+	let width = 680;
 	let height = 550;
+	width, height = cameraSize();
 	let streaming = false;
 	let video = null;
 	let canvas = null;
 	let startbutton = null;
 	let sendButton = null;
+	
+	function cameraSize() {
+		console.log(window.innerWidth);
+		if (window.innerWidth <= 760) {
+			width = 430;
+			height = 350;
+			return width, height
+		}
+		return width, height
+	}
 
 	function showViewLiveResultButton() {
 		if (window.self !== window.top) {

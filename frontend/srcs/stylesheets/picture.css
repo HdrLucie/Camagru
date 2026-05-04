@@ -45,7 +45,6 @@ html {
 
 .camera {
 	width: 680px;
-	/* height: 550px; */
 	display: inline-block;
 	position: relative;
 	overflow: hidden;
@@ -149,14 +148,35 @@ html {
     background-repeat: no-repeat;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
 	.container {
 		flex-direction: column;
 	}
+	#video {
+		position: relative;
+		display: block;
+		width: 430px;
+		object-fit:cover;
+	}
+	.camera-section {
+		width:430px;
+		position: relative;
+		min-width: 0;
+	}
+
+	.camera {
+		width: 430px;
+	}
 
 	.stickers-sidebar {
 		width: 100%;
-		height: 200px; /* Hauteur fixe en mobile */
+		height: 200px;
+	}
+
+	.main-container {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		padding: 20px;
 	}
 }
