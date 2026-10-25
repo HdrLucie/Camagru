@@ -16,13 +16,15 @@ func (app *App) sendResetLink(writer http.ResponseWriter, request *http.Request)
 	writer.Header().Set("Content-Type", "application/json")
 	if request.Method != http.MethodPost {
 		fmt.Println(Red + "Error : Method" + Reset)
-		http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
+		writer.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(writer).Encode(map[string]string{"message": "Method not allowed"})
 		return
 	}
 	err := json.NewDecoder(request.Body).Decode(&user)
 	if err != nil {
 		fmt.Println(Red + "Error : Decode Json object" + Reset)
-		http.Error(writer, err.Error(), http.StatusBadRequest)
+		writer.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(writer).Encode(map[string]string{"message": "Invalid request"})
 		return
 	}
 	m := mail.NewMessage()
@@ -35,8 +37,14 @@ func (app *App) sendResetLink(writer http.ResponseWriter, request *http.Request)
 	dialer := mail.NewDialer("smtp.mail.fr", 587, "camagru@mail.fr", MailPwd)
 	err = dialer.DialAndSend(m)
 	if err != nil {
-		panic(err)
+		fmt.Println(Red + "Error : send mail: " + err.Error() + Reset)
+		writer.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(writer).Encode(map[string]string{"message": "Could not send the email"})
+		return
 	}
+
+	writer.WriteHeader(http.StatusOK)
+	json.NewEncoder(writer).Encode(map[string]string{"message": "Reset link sent"})
 }
 
 func (app *App) resetPassword(writer http.ResponseWriter, request *http.Request) {
