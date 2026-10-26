@@ -18,7 +18,6 @@ html {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
-	width: 100%;
 }
 
 ::-webkit-scrollbar {
@@ -31,12 +30,44 @@ html {
 /*                 Photo               */
 /***************************************/
 
+/* Section caméra + galerie : 680 (caméra) + 20 (gap) + 180 (galerie) */
+.camera-section {
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	gap: 20px;
+	width: 880px;
+	max-width: 100%;
+	position: relative;
+	min-width: 0;
+}
+
+.thumbnails-sidebar {
+	flex: 0 0 180px;
+	width: 180px;
+	max-height: 550px;
+	overflow-y: auto;
+}
+
+.thumbnails-grid {
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 8px;
+}
+
+.thumbnail {
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+	border-radius: 6px;
+}
 
 #video {
 	position: relative;
 	display: block;
 	width: 680px;
-	object-fit:cover;
+	object-fit: cover;
 }
 
 #canvas {
@@ -44,6 +75,7 @@ html {
 }
 
 .camera {
+	flex: 0 0 680px;
 	width: 680px;
 	display: inline-block;
 	position: relative;
@@ -51,13 +83,14 @@ html {
 }
 
 .placed-sticker {
-    position: absolute !important;
-    pointer-events: none !important;
+	position: absolute !important;
+	pointer-events: none !important;
 	max-width: 128px;
 	max-height: 128px;
 }
 
 .output {
+	flex: 0 0 680px;
 	width: 680px;
 	display: none;
 	vertical-align: top;
@@ -108,21 +141,9 @@ html {
 	padding: 20px;
 }
 
-.camera-section {
-	width: 680px;
-	justify-content: center;
-	position: relative;
-	min-width: 0;
-}
-
-.stickers-sidebar {
-	width: 100%;
-	overflow-y: auto; /* Scrollable si beaucoup de stickers */
-	background-color: #F7F9F7;
-	position: relative;
-}
 
 .content-title {
+	width: 100%;
 	grid-column: 1 / 3;
 	text-align: center;
 	font-size: xx-large;
@@ -135,37 +156,66 @@ html {
 	background-size: 500% 100%;
 }
 
+.stickers-sidebar {
+	width: 100%;
+	overflow-y: auto;
+	background-color: #F7F9F7;
+	position: relative;
+	max-height: 180px;
+}
+
 .stickers-grid {
-	height: 150px;
-	width:100%;
+	width: 100%;
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
 	gap: 2em;
 	padding: 1em;
-	object-fit:contain;	
-	background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
 }
+
+.stickers-grid img {
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	object-fit: contain;
+	display: block;
+	cursor: pointer;
+}
+/***************************************/
+/*              Responsive             */
+/***************************************/
 
 @media (max-width: 768px) {
 	.container {
 		flex-direction: column;
 	}
+
 	#video {
 		position: relative;
 		display: block;
 		width: 430px;
-		object-fit:cover;
+		object-fit: cover;
 	}
+
 	.camera-section {
-		width:430px;
+		flex-direction: column;
+		width: 430px;
 		position: relative;
 		min-width: 0;
 	}
 
-	.camera {
+	.camera,
+	.output {
+		flex: none;
 		width: 430px;
+	}
+
+	.thumbnails-sidebar {
+		flex: none;
+		width: 100%;
+		max-height: none;
+	}
+
+	.thumbnails-grid {
+		grid-template-columns: repeat(4, 1fr);
 	}
 
 	.stickers-sidebar {

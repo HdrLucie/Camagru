@@ -25,6 +25,39 @@ window.addEventListener('load', function() {
 		}
 	});
 });
+async function loadThumbnails() {
+	const container = document.getElementById("thumbnailsContainer");
+	const token = localStorage.getItem('token');
+
+	try {
+		const response = await fetch("/getMyPictures", {
+			headers: { "Authorization": `Bearer ${token}` },
+		});
+		if (!response.ok) {
+			throw new Error(`Response status: ${response.status}`);
+		}
+		const pictures = await response.json();
+
+		container.replaceChildren();
+		if (!pictures || pictures.length === 0) {
+			const message = document.createElement("p");
+			message.textContent = "Aucune photo envoyée";
+			container.appendChild(message);
+			return;
+		}
+
+		for (const picture of pictures) {
+			const img = document.createElement("img");
+			img.className = "thumbnail";
+			img.src = picture.path;
+			img.alt = "Photo envoyée";
+			img.loading = "lazy";
+			container.appendChild(img);
+		}
+	} catch (error) {
+		console.error("Erreur:", error);
+	}
+}
 
 document.getElementById('removeBtn').addEventListener('click', removeUpload);
 

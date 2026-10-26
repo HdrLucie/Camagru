@@ -355,10 +355,57 @@ func (app *App) getPictureById(id int) (*Pictures, error) {
     return &picture, nil
 }
 
+func (app *App) getMyPictures(writer http.ResponseWriter, request *http.Request) {
+	writer.Header().Set("Content-Type", "application/json")
+	if request.Method != http.MethodGet {
+		writer.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(writer).Encode(map[string]string{"message": "Method not allowed"})
+		return
+	}
+
+	user, err := app.getUserByJWT(extractJWTFromRequest(request))
+	if err != nil {
+		writer.WriteHeader(http.StatusUnauthorized)
+		json.NewEncoder(writer).Encode(map[string]string{"message": "Unauthorized"})
+		return
+	}
+
+	pictures, err := app.fetchPicturesByUserId(user.Id)
+	if err != nil {
+		fmt.Println(Red + "Error fetching user pictures: " + err.Error() + Reset)
+		writer.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(writer).Encode(map[string]string{"message": "Error fetching pictures"})
+		return
+	}
+
+	json.NewEncoder(writer).Encode(pictures)
+}
+
 // ! ||--------------------------------------------------------------------------------||
 // ! ||                            HELPER FUNCTIONS - DB QUERIES                       ||
 // ! ||--------------------------------------------------------------------------------||
 //
+
+
+func (app *App) fetchPicturesByUserId(userId int) ([]Pictures, error) {
+	pictures := []Pictures{}
+	query := "SELECT id, image_path, userId, uploadTime, like_count, comment_count FROM images WHERE userId = $1 ORDER BY uploadTime DESC"
+	rows, err := app.dataBase.Query(query, userId)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var pic Pictures
+		err := rows.Scan(&pic.Id, &pic.Path, &pic.UserId, &pic.UploadTime, &pic.Likes, &pic.Comments)
+		if err != nil {
+			return nil, err
+		}
+		pic.Path = "/" + pic.Path
+		pictures = append(pictures, pic)
+	}
+	return pictures, rows.Err()
+}
 
 func (app *App) fetchAllPicturesFromDB(i int) ([]Pictures, error, int) {
     var pictures []Pictures
