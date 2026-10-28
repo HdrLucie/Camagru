@@ -64,6 +64,22 @@ func (app *App) insertLikeIntoDB(Uid int, Pid int, r LikeRequest) (bool, error) 
 	return liked, nil
 }
 
+func sendM(liked bool, user *User, r LikeRequest) {
+	if (liked == false || user.Notify == true) {
+		m := mail.NewMessage();
+		m.SetHeader("From", "camagru@mail.fr")
+		m.SetHeader("To", user.Email)
+		m.SetHeader("Subject", "Someone liked your post") 
+		content := fmt.Sprintf("Hi %s, %s liked your post : http://localhost:8080/photo/%d", user.Username, r.Username, r.Photo)
+		m.SetBody("text/html", content) 
+		dialer := mail.NewDialer("smtp.mail.fr", 587, "camagru@mail.fr", MailPwd)
+		err := dialer.DialAndSend(m) 
+		if err != nil {
+				fmt.Println("Limits mails over");
+		}
+	}
+}
+
 func (app *App) sendLikes(writer http.ResponseWriter, request *http.Request) {
 	var r LikeRequest
 
@@ -103,19 +119,6 @@ func (app *App) sendLikes(writer http.ResponseWriter, request *http.Request) {
 	resp := LikeResponse{
 		Liked: liked,
 	}
+	go sendM(liked, user, r);
 	json.NewEncoder(writer).Encode(resp)
-	if (liked == false || user.Notify == true) {
-		m := mail.NewMessage();
-		m.SetHeader("From", "camagru@mail.fr")
-		m.SetHeader("To", user.Email)
-		m.SetHeader("Subject", "Someone liked your post") 
-		content := fmt.Sprintf("Hi %s, %s liked your post : http://localhost:8080/photo/%d", user.Username, r.Username, r.Photo)
-		m.SetBody("text/html", content) 
-		dialer := mail.NewDialer("smtp.mail.fr", 587, "camagru@mail.fr", MailPwd)
-		err = dialer.DialAndSend(m) 
-		if err != nil {
-				fmt.Println("Limits mails over");
-		}
-	}
-
 }
