@@ -30,7 +30,7 @@ func (app *App)	checkLikeValidity(Uid int, Pid int) (bool, error) {
 	return true, nil
 }
 
-func (app *App) insertLikeIntoDB(Uid int, Pid int, user *User, r LikeRequest) (bool, error) {
+func (app *App) insertLikeIntoDB(Uid int, Pid int, r LikeRequest) (bool, error) {
 	liked, err := app.checkLikeValidity(Uid, Pid);
 	if err != nil {
 		fmt.Println(Green + "Validity" + Reset);
@@ -59,26 +59,13 @@ func (app *App) insertLikeIntoDB(Uid int, Pid int, user *User, r LikeRequest) (b
 			fmt.Println(Red + "Error : set count likes" + Reset)
 			return liked, err
 		}
-		if (user.Notify == true) {
-			m := mail.NewMessage();
-			m.SetHeader("From", "camagru@mail.fr")
-			m.SetHeader("To", user.Email)
-			m.SetHeader("Subject", "Someone liked your post") 
-			content := fmt.Sprintf("Hi %s, %s liked your post : http://localhost:8080/photo/%d", user.Username, r.Username, r.Photo)
-			m.SetBody("text/html", content) 
-			dialer := mail.NewDialer("smtp.mail.fr", 587, "camagru@mail.fr", MailPwd)
-			err = dialer.DialAndSend(m) 
-			if err != nil {
-				panic(err);
-			}
-		}
 		return liked, nil
 	}
 	return liked, nil
 }
 
 func (app *App) sendLikes(writer http.ResponseWriter, request *http.Request) {
-	var r LikeRequest;
+	var r LikeRequest
 
 	writer.Header().Set("Content-Type", "application/json")
 	if request.Method != http.MethodPost {
@@ -93,25 +80,42 @@ func (app *App) sendLikes(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 	defer request.Body.Close()
-	user, err := app.getUserByPhotoId(r.Photo);
-	if err != nil {
+
+	user, err := app.getUserByPhotoId(r.Photo)
+	if err != nil || user == nil {
 		fmt.Println(Red + "Error : Get user by photo id" + Reset)
+		http.Error(writer, "Photo not found", http.StatusNotFound)
+		return
 	}
-	liked, err := app.insertLikeIntoDB(r.Id, r.Photo, user, r);
 
+	liked, err := app.insertLikeIntoDB(r.Id, r.Photo, r)
 	if err != nil {
-		fmt.Println(Red + "Error with like management" + Reset);
-		return 
-	}
-	var p Likes;
-	p.Username = r.Username;
-	p.PId = r.Photo;
-	p.UId = r.Id;
-	app.likes = append(app.likes, p);
-	resp := LikeResponse{
-		Liked:     liked,
+		fmt.Println(Red + "Error with like management" + Reset)
+		http.Error(writer, "Internal error", http.StatusInternalServerError)
+		return
 	}
 
-	writer.Header().Set("Content-Type", "application/json")
+	var p Likes
+	p.Username = r.Username
+	p.PId = r.Photo
+	p.UId = r.Id
+	app.likes = append(app.likes, p)
+	resp := LikeResponse{
+		Liked: liked,
+	}
 	json.NewEncoder(writer).Encode(resp)
+	if (liked == false || user.Notify == true) {
+		m := mail.NewMessage();
+		m.SetHeader("From", "camagru@mail.fr")
+		m.SetHeader("To", user.Email)
+		m.SetHeader("Subject", "Someone liked your post") 
+		content := fmt.Sprintf("Hi %s, %s liked your post : http://localhost:8080/photo/%d", user.Username, r.Username, r.Photo)
+		m.SetBody("text/html", content) 
+		dialer := mail.NewDialer("smtp.mail.fr", 587, "camagru@mail.fr", MailPwd)
+		err = dialer.DialAndSend(m) 
+		if err != nil {
+				fmt.Println("Limits mails over");
+		}
+	}
+
 }

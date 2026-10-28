@@ -5,7 +5,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 	const r = await check_token();
 	if (r == false) {
 		window.location.href = '/';
+		return ;
 	}
+	loadThumbnails();
 });
 
 window.addEventListener('load', function() {
@@ -26,9 +28,9 @@ window.addEventListener('load', function() {
 	});
 });
 async function loadThumbnails() {
-	const container = document.getElementById("thumbnailsContainer");
+	const container = document.getElementById("thumbnails");
 	const token = localStorage.getItem('token');
-
+	console.log("here");
 	try {
 		const response = await fetch("/getMyPictures", {
 			headers: { "Authorization": `Bearer ${token}` },
@@ -50,7 +52,7 @@ async function loadThumbnails() {
 			const img = document.createElement("img");
 			img.className = "thumbnail";
 			img.src = picture.path;
-			img.alt = "Photo envoyée";
+			img.alt = "Photo";
 			img.loading = "lazy";
 			container.appendChild(img);
 		}

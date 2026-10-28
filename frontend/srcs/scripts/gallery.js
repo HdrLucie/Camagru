@@ -82,6 +82,7 @@ async function getPictures() {
 }
 
 async function sendLikes(photoId) {
+	console.log("Entrée dans la fonction.");
 	const user = await getUser();
 	try {
 		const response = await fetch("/sendLikes", {
@@ -100,8 +101,9 @@ async function sendLikes(photoId) {
 		}
 		const data = await response.json();
 	} catch (error) {
-		console.error("Error:", error);
+		// console.error("Error:", error);
 	}
+	console.log("Fin de fonction");
 }
 
 async function getLikes(pId) {
