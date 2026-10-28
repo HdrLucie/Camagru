@@ -46,7 +46,7 @@ function emailIsValid (email) {
 	return /\S+@\S+\.\S+/.test(email)
 }
 
-document.getElementById('sendBtn').addEventListener('click', async () => {
+setTimeout(() => document.getElementById('sendBtn').addEventListener('click', async () => {
 	var tmpUser = document.getElementById("Username")
 	var tmpEmail = document.getElementById("Email")
 	var notifyState = checkNotifyState();
@@ -63,6 +63,9 @@ document.getElementById('sendBtn').addEventListener('click', async () => {
         }
         email = user.email;
     }
+	const sendBtn = document.getElementById('sendBtn');
+	sendBtn.disabled = true;
+	setTimeout(() => sendBtn.disabled = false, 3000);
 	try {
 		const response = await fetch("/setUserDatas", {
 			method: "POST",
@@ -87,4 +90,4 @@ document.getElementById('sendBtn').addEventListener('click', async () => {
 	} catch (error) {
 		console.error("Error: ", error);
 	}
-});
+}), 1000);

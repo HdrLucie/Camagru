@@ -88,6 +88,10 @@ document.getElementById('sendImg').addEventListener('click', async () => {
 
     const user = await getUser();
 
+	const sendBtn = document.getElementById('sendImg');
+	sendBtn.disabled = true;
+	setTimeout(() => sendBtn.disabled = false, 3000)
+
     const formData = new FormData();
     formData.append('image', fileInput.files[0]);
     formData.append('id', user.id);

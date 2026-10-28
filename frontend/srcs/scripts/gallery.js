@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     container.addEventListener('click', (e) => {
         const btn = e.target.closest('.btn-love');
         if (btn) {
+			btn.disabled = true;
             const photoId = btn.dataset.id;
 			const counter = document.querySelector(
 				`.like[data-id="${photoId}"]`
@@ -27,6 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 			}
 			counter.textContent = `${count} likes`;
 			sendLikes(photoId);
+			setTimeout(() => btn.disabled = false, 1000)
 		}
 
     });
@@ -82,7 +84,6 @@ async function getPictures() {
 }
 
 async function sendLikes(photoId) {
-	console.log("Entrée dans la fonction.");
 	const user = await getUser();
 	try {
 		const response = await fetch("/sendLikes", {
@@ -101,9 +102,8 @@ async function sendLikes(photoId) {
 		}
 		const data = await response.json();
 	} catch (error) {
-		// console.error("Error:", error);
+		console.log("Error:", error);
 	}
-	console.log("Fin de fonction");
 }
 
 async function getLikes(pId) {
@@ -160,6 +160,7 @@ document.getElementById('galleryContainer').addEventListener('click', async func
 	const btn = e.target.closest('.btn-delete');
 	if (!btn)
 		return;
+	btn.disabled = true;
 	const pId = btn.dataset.id;
 	const user = await getUser();
 	const token = localStorage.getItem('token');
@@ -187,6 +188,8 @@ document.getElementById('galleryContainer').addEventListener('submit', async fun
     e.preventDefault();
     const form = e.target.closest('.com-form');
     if (!form) return;
+	const submitButton = form.querySelector('button');
+	submitButton.disabled = true;
 
     const pId = form.dataset.id;
     const input = form.querySelector('.comment-input-field');
@@ -220,6 +223,7 @@ document.getElementById('galleryContainer').addEventListener('submit', async fun
     } catch (error) {
         console.error("Error: ", error);
     }
+	setTimeout(() => submitButton.disabled = false, 3000)
 });
 
 async function displaySimpleGallery() {
