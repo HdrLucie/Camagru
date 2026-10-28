@@ -1,6 +1,7 @@
 package main
 
 import (
+	"html"
 	"net/http"
 	"strings"
 	"fmt"
@@ -61,6 +62,8 @@ func (app *App) manageComment(writer http.ResponseWriter, request *http.Request)
 	if (str == "") {
 		return ;
 	}
+	str = html.EscapeString(str)
+	comment.Comment = str;
 	c.Comment = comment.Comment;
 	c.Username = comment.Username;
 	c.PId = comment.PId;
