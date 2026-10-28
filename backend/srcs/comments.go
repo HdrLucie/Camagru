@@ -38,7 +38,7 @@ func	sendEmail(user *User) {
 	dialer := mail.NewDialer("smtp.mail.fr", 587, "camagru@mail.fr", MailPwd)
 	err := dialer.DialAndSend(m) 
 	if err != nil {
-		panic(err);
+		fmt.Println("Failed to send comment email:", err);
 	}
 }
 
@@ -72,7 +72,7 @@ func (app *App) manageComment(writer http.ResponseWriter, request *http.Request)
 	app.insertCommentIntoDB(comment);
 	user, err := app.getUserByPhotoId(comment.PId);
 	if (user.Notify == true) {
-		sendEmail(user);
+		go sendEmail(user);
 	}
 	writer.Header().Set("Content-Type", "application/json");
 	json.NewEncoder(writer).Encode(r);
