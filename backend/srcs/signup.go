@@ -149,5 +149,5 @@ func (app *App)	signUp(writer http.ResponseWriter, request *http.Request) {
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	sendMail(user)
+	go sendMail(user)
 }
