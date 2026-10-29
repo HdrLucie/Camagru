@@ -9,10 +9,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadUserData();
 });
 
-function redirectionPage(path) {
-    window.location.href = path;
-}
-
 const resetButton = document.getElementById("forgetPassword");
 if (resetButton) {
 	resetButton.onclick = function (event) {

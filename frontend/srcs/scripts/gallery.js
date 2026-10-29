@@ -36,10 +36,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 let isLastPage = false;
 
-function redirectionPage(path) {
-    window.location.href = path;
-}
-
 async function getPhotoUserData(pictureId) {
 	const token = localStorage.getItem('token');
 	try {
@@ -100,7 +96,6 @@ async function sendLikes(photoId) {
 		if (!response.ok) {
 			throw new Error(`Response status: ${response.status}`);
 		}
-		const data = await response.json();
 	} catch (error) {
 		console.log("Error:", error);
 	}
@@ -330,7 +325,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function prevPage() {
-	const next = document.getElementById('prevBtn');
 	const page = parseInt(window.location.pathname.split("/").pop());
 	
 	if (page == 1) return;
@@ -340,7 +334,6 @@ function prevPage() {
 async function nextPage() {
 	const data = await getPictures();
 	const isLast = data?.last;
-	const next = document.getElementById('nextBtn');
 	const page = parseInt(window.location.pathname.split("/").pop());
 	if (isLast == true)
 		return ;

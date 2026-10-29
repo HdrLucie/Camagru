@@ -95,7 +95,6 @@ document.getElementById("login").onclick = async function () {
 				alert(`Error connection : ${data.message}`)
 			}
 		} else {
-			console.log(data.redirectPath);
 			localStorage.setItem('token', data.token);
 			window.location.href = data.redirectPath;
 		}

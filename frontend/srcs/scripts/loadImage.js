@@ -30,7 +30,6 @@ window.addEventListener('load', function() {
 async function loadThumbnails() {
 	const container = document.getElementById("thumbnails");
 	const token = localStorage.getItem('token');
-	console.log("here");
 	try {
 		const response = await fetch("/getMyPictures", {
 			headers: { "Authorization": `Bearer ${token}` },

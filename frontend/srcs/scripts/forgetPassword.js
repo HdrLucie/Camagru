@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         try {
-			console.log("send reset link");
             const response = await fetch("/sendResetLink", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
