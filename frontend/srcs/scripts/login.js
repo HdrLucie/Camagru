@@ -18,13 +18,16 @@ document.getElementById("signUp").onclick = async function () {
 	var password = document.getElementById("Password").value;
 
 	if (login == "" || email == "" || password == "") {
-		alert("Wrong username, email or password")
+		alert("Empty username, email or password")
+		return;
 	}
 	var result = checkPassword(password);
 	if (result == false) {
 		alert("Password must contain between 8 and 25 characters, an uppercase letter, a lowercase letter, a number and a non-alphanumeric character (!@#$%&*...).")
 		return
 	}
+	const signUpBtn = document.getElementById("signUp");
+	signUpBtn.disabled = true;
 	try {
 		const response = await fetch("/signUp", {
 			method: "POST",
@@ -53,11 +56,15 @@ document.getElementById("signUp").onclick = async function () {
 	} catch (error) {
 		alert("Username or email already in use.")
 	}
+	signUpBtn.disabled = false;
 }
 
 
 // Login function
 document.getElementById("login").onclick = async function () {
+	const loginBtn = document.getElementById("login");
+	loginBtn.disabled = true;
+
 	var user = document.getElementById("UsernameLogin")
 	var mdp = document.getElementById("PasswordLogin")
 
@@ -94,4 +101,5 @@ document.getElementById("login").onclick = async function () {
 		}
 	} catch (error) {
 	}
+	loginBtn.disabled = false;
 }
