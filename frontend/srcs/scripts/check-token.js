@@ -19,6 +19,6 @@ export async function check_token() {
 		}
 		return true;
 	} catch (error) {
-		console.error(error);
+		return false;
 	}
 }
