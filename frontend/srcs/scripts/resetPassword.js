@@ -51,6 +51,8 @@ window.addEventListener('load', function () {
 			if (response.status === 200) {
 				alert(`Password successfully changed`);
 				window.location.href = data.redirectPath
+			} else {
+				throw new Error(`Response status: ${response.status}`);
 			}
 		} catch (error) {
 			alert(`Oops, it seems we don’t know each other! Feel free to create an account to join us!`);

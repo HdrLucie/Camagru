@@ -7,6 +7,21 @@ import (
 	"github.com/go-mail/mail"
 )
 
+func sendMailReset(user User) {
+	m := mail.NewMessage()
+	m.SetHeader("From", "camagru@mail.fr")
+	m.SetHeader("To", user.Email)
+	m.SetHeader("Subject", "Reset password")
+	content := fmt.Sprintf("Hi %s, It looks like you requested to reset your password. No worries — just click the link below to set up a new one: <a href=\"http://localhost:8080/resetPassword?email=%s\">here</a> to reset your password\n", user.Username, user.Email)
+	m.SetBody("text/html", content)
+
+	dialer := mail.NewDialer("smtp.mail.fr", 587, "camagru@mail.fr", MailPwd)
+	err := dialer.DialAndSend(m)
+	if err != nil {
+		fmt.Println(Red + "Error : send mail: " + err.Error() + Reset)
+	}
+}
+
 func (app *App) sendResetLink(writer http.ResponseWriter, request *http.Request) {
 	var user User
 
@@ -27,24 +42,21 @@ func (app *App) sendResetLink(writer http.ResponseWriter, request *http.Request)
 		json.NewEncoder(writer).Encode(map[string]string{"message": "Invalid request"})
 		return
 	}
-	m := mail.NewMessage()
-	m.SetHeader("From", "camagru@mail.fr")
-	m.SetHeader("To", user.Email)
-	m.SetHeader("Subject", "Reset password")
-	content := fmt.Sprintf("Hi %s, It looks like you requested to reset your password. No worries — just click the link below to set up a new one: <a href=\"http://localhost:8080/resetPassword?email=%s\">here</a> to reset your password\n", user.Username, user.Email)
-	m.SetBody("text/html", content)
-
-	dialer := mail.NewDialer("smtp.mail.fr", 587, "camagru@mail.fr", MailPwd)
-	err = dialer.DialAndSend(m)
-	if err != nil {
-		fmt.Println(Red + "Error : send mail: " + err.Error() + Reset)
-		writer.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(writer).Encode(map[string]string{"message": "Could not send the email"})
-		return
-	}
 
 	writer.WriteHeader(http.StatusOK)
 	json.NewEncoder(writer).Encode(map[string]string{"message": "Reset link sent"})
+
+	realUser, err := app.getUserByEmail(user.Email)
+	if err != nil {
+		fmt.Println(Red + "Error : No user with email " + user.Email + Reset)
+		return;
+	}
+	if realUser.Username != user.Username {
+		fmt.Println(Red + "Error : username \"" + user.Username + "\" does not match \"" + realUser.Username + "\"" + Reset)
+		return;
+	}
+
+	go sendMailReset(user);
 }
 
 func (app *App) resetPassword(writer http.ResponseWriter, request *http.Request) {
